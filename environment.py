@@ -8,7 +8,6 @@ class CartPoleEnv(Env):
     def __init__(self):
         self._env = gym.make('CartPole-v0')
         self._action_space = IntBox(low=0, high=self._env.action_space.n, dtype="int16")
-        #self._observation_space = IntBox(shape=self._env.observation_space.shape, dtype="float32")
 
     def reset(self):
         return self._env.reset()
