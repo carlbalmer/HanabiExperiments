@@ -1,5 +1,5 @@
 import torch
-from rlpyt.algos.dqn.dqn import DQN
+from rlpyt.algos.dqn.cat_dqn import CategoricalDQN
 from rlpyt.runners.minibatch_rl import MinibatchRlEval
 from rlpyt.samplers.serial.sampler import SerialSampler
 from rlpyt.utils.logging.context import logger_context
@@ -20,11 +20,11 @@ def build_and_train(run_ID=0, cuda_idx=None):
         eval_max_steps=int(10e3),
         eval_max_trajectories=5,
     )
-    algo = DQN(min_steps_learn=1e3,
+    algo = CategoricalDQN(min_steps_learn=1e3,
                double_dqn=True,
                prioritized_replay=True,
                n_step_return=3)  # Run with defaults.
-    agent = CartPoleDQNAgent(model_kwargs=dict(hidden_sizes=24))
+    agent = CartPoleDQNAgent(model_kwargs=dict(hidden_sizes=24, n_atoms=51))
     runner = MinibatchRlEval(
         algo=algo,
         agent=agent,
