@@ -1,6 +1,7 @@
 import gym
 from rlpyt.envs.base import Env, EnvStep
 from rlpyt.spaces.int_box import IntBox
+from rlpyt.utils.logging import logger
 
 
 class CartPoleEnv(Env):
@@ -13,10 +14,10 @@ class CartPoleEnv(Env):
         return self._env.reset()
 
     def step(self, action):
-        observation, reward, done, env_info = self._env.step(action)
-        if not env_info:
-            env_info = None
-        return EnvStep(observation, reward, done, env_info)
+        observation, reward, done, _ = self._env.step(action)
+        return EnvStep(observation, reward, done, None)
+        # env_info is only sometimes not None (in the case when the agent reaches >199 steps)
+        # this causes problems so it is set to be always none
 
     @property
     def observation_space(self):
