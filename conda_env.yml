@@ -1,0 +1,15 @@
+name: HanabiExperiments
+channels:
+- pytorch
+dependencies:
+- python=3.7
+- pytorch
+- cudatoolkit
+- numpy
+- psutil # process and system utilities
+- pip
+- pip:
+  - git+https://github.com/astooke/rlpyt.git
+  - git+https://github.com/carlbalmer/hanabi-learning-environment.git
+  - pyprind  # progbar.
+  - gym
