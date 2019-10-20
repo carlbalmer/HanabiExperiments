@@ -1,7 +1,6 @@
 import gym
 from rlpyt.envs.base import Env, EnvStep
 from rlpyt.spaces.int_box import IntBox
-from rlpyt.utils.logging import logger
 
 
 class CartPoleEnv(Env):

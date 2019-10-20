@@ -1,11 +1,10 @@
-import torch
 from rlpyt.algos.dqn.cat_dqn import CategoricalDQN
 from rlpyt.runners.minibatch_rl import MinibatchRlEval
 from rlpyt.samplers.serial.sampler import SerialSampler
 from rlpyt.utils.logging.context import logger_context
 
-from agent import CartPoleDQNAgent
-from environment import CartPoleEnv
+from HanabiExperiments.agents.cartpole import CartPoleDQNAgent
+from HanabiExperiments.envs.cartpole import CartPoleEnv
 
 
 def build_and_train(run_ID=0, cuda_idx=None):
@@ -13,8 +12,8 @@ def build_and_train(run_ID=0, cuda_idx=None):
         EnvCls=CartPoleEnv,
         env_kwargs=dict(),
         eval_env_kwargs=dict(),
-        batch_T=4,  # Four time-steps per sampler iteration.
-        batch_B=1,
+        batch_T=10,  # Four time-steps per sampler iteration.
+        batch_B=5,
         max_decorrelation_steps=0,
         eval_n_envs=10,
         eval_max_steps=int(10e3),
