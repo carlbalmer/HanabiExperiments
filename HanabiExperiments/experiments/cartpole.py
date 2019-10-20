@@ -33,7 +33,7 @@ def build_and_train(run_ID=0, cuda_idx=None):
         affinity=dict(cuda_idx=cuda_idx),
     )
     name = "dqn_cartpole"
-    log_dir = "dqn_cartpole"
+    log_dir = "../../data/cartpole"
     with logger_context(log_dir, run_ID, name, snapshot_mode="last"):
         runner.train()
 
