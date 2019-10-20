@@ -1,10 +1,14 @@
+from os.path import abspath, join, dirname
+
 from rlpyt.algos.dqn.cat_dqn import CategoricalDQN
 from rlpyt.runners.minibatch_rl import MinibatchRlEval
 from rlpyt.samplers.serial.sampler import SerialSampler
-from rlpyt.utils.logging.context import logger_context
+import rlpyt.utils.logging.context as logContext
 
 from HanabiExperiments.agents.cartpole import CartPoleDQNAgent
 from HanabiExperiments.envs.cartpole import CartPoleEnv
+
+logContext.LOG_DIR = abspath(join(dirname(__file__), '../../data'))
 
 
 def build_and_train(run_ID=0, cuda_idx=None):
@@ -33,8 +37,8 @@ def build_and_train(run_ID=0, cuda_idx=None):
         affinity=dict(cuda_idx=cuda_idx),
     )
     name = "dqn_cartpole"
-    log_dir = "../../data/cartpole"
-    with logger_context(log_dir, run_ID, name, snapshot_mode="last"):
+    log_dir = "cartpole"
+    with logContext.logger_context(log_dir, run_ID, name, snapshot_mode="last"):
         runner.train()
 
 
