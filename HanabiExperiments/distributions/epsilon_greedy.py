@@ -1,6 +1,6 @@
 import numpy
 import torch
-from rlpyt.distributions.epsilon_greedy import EpsilonGreedy
+from rlpyt.distributions.epsilon_greedy import EpsilonGreedy, CategoricalEpsilonGreedy
 from rlpyt.utils.tensor import infer_leading_dims, restore_leading_dims
 
 
@@ -19,3 +19,10 @@ class LegalActionEpsilonGreedy(EpsilonGreedy):
         # remove batch dimension if it was not there in the beginning
         arg_select = restore_leading_dims(arg_select, lead_dim, T, B)
         return arg_select
+
+
+class CategorialLegalActionEpsilonGreedy(LegalActionEpsilonGreedy, CategoricalEpsilonGreedy):
+
+    def sample(self, p, legal_actions, z=None):
+        q = torch.tensordot(p, z or self.z, dims=1)
+        return super().sample(q, legal_actions)
