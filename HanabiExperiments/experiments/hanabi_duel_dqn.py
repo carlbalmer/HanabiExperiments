@@ -1,10 +1,14 @@
+from os.path import abspath, join, dirname
+
 from rlpyt.algos.dqn.dqn import DQN
 from rlpyt.runners.minibatch_rl import MinibatchRlEval
 from rlpyt.samplers.serial.sampler import SerialSampler
-from rlpyt.utils.logging.context import logger_context
+import rlpyt.utils.logging.context as logContext
 
 from HanabiExperiments.agents.hanabi import HanabiDuelDqnAgent
 from HanabiExperiments.envs.hanabi import WrappedHanabiEnv
+
+logContext.LOG_DIR = abspath(join(dirname(__file__), '../../data'))
 
 
 def build_and_train(run_ID=0, cuda_idx=None):
@@ -37,7 +41,7 @@ def build_and_train(run_ID=0, cuda_idx=None):
     )
     name = "hanabi_duel_dqn"
     log_dir = name
-    with logger_context(log_dir, run_ID, name, snapshot_mode="last"):
+    with logContext.logger_context(log_dir, run_ID, name, snapshot_mode="last"):
         runner.train()
 
 

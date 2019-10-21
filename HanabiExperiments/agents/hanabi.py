@@ -25,9 +25,10 @@ class HanabiDuelDqnAgent(HanabiMixin, DqnAgent):
                                  device=self.device)
         q = self.model(*model_inputs)
         q = q.cpu()
-        action = self.distribution.sample(q, observation.legal_actions)
+        _, legal_actions = torch.split(observation, (self.env_spaces.observation.shape[0], self.env_spaces.action.n),
+                                       dim=-1)
+        action = self.distribution.sample(q, legal_actions)
         agent_info = AgentInfo(q=q)
-        action, agent_info = buffer_to((action, agent_info), device="cpu")
         return AgentStep(action=action, agent_info=agent_info)
 
 
@@ -35,4 +36,3 @@ class HanabiCatDqnAgent(HanabiMixin, CatDqnAgent):
 
     def __init__(self, ModelCls=HanabiCatDqnModel, **kwargs):
         super(HanabiCatDqnAgent, self).__init__(ModelCls=ModelCls, **kwargs)
-

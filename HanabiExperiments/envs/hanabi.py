@@ -74,7 +74,7 @@ class WrappedHanabiEnv(Env):
         current_player_obs = all_observations["player_observations"][all_observations["current_player"]]
         legal_moves = self.legal_moves_as_int_to_bool(current_player_obs["legal_moves_as_int"])
         vectorized_obs = numpy.array(current_player_obs["vectorized"])
-        return Observation(vectorized_obs, legal_moves)
+        return numpy.concatenate((vectorized_obs, legal_moves))
 
     @property
     def horizon(self):
