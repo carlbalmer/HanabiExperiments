@@ -3,22 +3,23 @@ from os.path import abspath, join, dirname
 import rlpyt.utils.logging.context as logContext
 from rlpyt.algos.dqn.cat_dqn import CategoricalDQN
 from rlpyt.runners.minibatch_rl import MinibatchRlEval
-from rlpyt.samplers.serial.sampler import SerialSampler
 
 from HanabiExperiments.agents.hanabi import HanabiCatDqnAgent
-from HanabiExperiments.distributions.epsilon_greedy import CategorialLegalActionEpsilonGreedy
 from HanabiExperiments.envs.hanabi import WrappedHanabiEnv
+from HanabiExperiments.samplers.collector import MultiAgentCpuResetCollector
+from HanabiExperiments.samplers.sampler import MultiAgentSerialSampler
 
 logContext.LOG_DIR = abspath(join(dirname(__file__), '../../data'))
 
 
 def build_and_train(run_ID=0, cuda_idx=None):
-    sampler = SerialSampler(
+    sampler = MultiAgentSerialSampler(
         EnvCls=WrappedHanabiEnv,
         env_kwargs=dict(),
         eval_env_kwargs=dict(),
-        batch_T=4,  # Four time-steps per sampler iteration.
-        batch_B=1,
+        CollectorCls=MultiAgentCpuResetCollector,
+        batch_T=10,  # Four time-steps per sampler iteration.
+        batch_B=4,
         max_decorrelation_steps=0,
         eval_n_envs=10,
         eval_max_steps=int(10e3),
