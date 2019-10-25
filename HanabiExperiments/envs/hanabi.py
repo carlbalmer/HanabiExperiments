@@ -59,6 +59,8 @@ class WrappedHanabiEnv(Env):
         sample_obs = numpy.array(HanabiEnv(config).reset()["player_observations"][0]["vectorized"])
         self._observation_space = IntBox(low=0, high=2, shape=sample_obs.shape, dtype=sample_obs.dtype)
 
+        self._n_actors = players
+
     def step(self, action):
         self._current_observation, reward, done, _ = self.env.step(action.item())
         return EnvStep(self.extract_current_player_obs(self._current_observation), reward, done, None)
@@ -83,6 +85,10 @@ class WrappedHanabiEnv(Env):
     @property
     def current_observation(self):
         return self._current_observation
+
+    @property
+    def n_actors(self):
+        return self._n_actors
 
 
 class HanabiMixin:
