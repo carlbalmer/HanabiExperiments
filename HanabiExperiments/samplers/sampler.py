@@ -1,14 +1,16 @@
 import multiprocessing as mp
 
+from rlpyt.agents.base import AgentInputs
 from rlpyt.samplers.buffer import build_samples_buffer
 from rlpyt.samplers.parallel.cpu.sampler import CpuSampler
-from rlpyt.samplers.parallel.gpu.sampler import GpuSampler
+from rlpyt.samplers.parallel.gpu.sampler import GpuSampler, build_step_buffer, GpuSamplerBase
 from rlpyt.samplers.parallel.worker import sampling_process
 from rlpyt.samplers.serial.collectors import SerialEvalCollector
 from rlpyt.samplers.serial.sampler import SerialSampler
+from rlpyt.utils.collections import AttrDict
 from rlpyt.utils.logging import logger
 
-from HanabiExperiments.samplers.collector import MultiAgentCpuResetCollector
+from HanabiExperiments.samplers.collector import MultiAgentCpuResetCollector, MultiAgentGpuResetCollector
 
 
 class MultiAgentSerialSampler(SerialSampler):
@@ -165,3 +167,46 @@ class MultiAgentCpuSampler(MultiAgentParallelSamplerMixin, CpuSampler):
 
     def __init__(self, *args, CollectorCls=MultiAgentCpuResetCollector, **kwargs):
         super(MultiAgentCpuSampler, self).__init__(*args, CollectorCls=CollectorCls, **kwargs)
+
+
+class MultiAgentGpuSampler(MultiAgentParallelSamplerMixin, GpuSampler):
+
+    def __init__(self, *args, CollectorCls=MultiAgentGpuResetCollector, **kwargs):
+        super(MultiAgentGpuSampler, self).__init__(*args, CollectorCls=CollectorCls, **kwargs)
+
+    def _assemble_workers_kwargs(self, affinity, seed, n_envs_list):
+        workers_kwargs = super()._assemble_workers_kwargs(affinity, seed,
+                                                          n_envs_list)
+        i_env = 0
+        for rank, w_kwargs in enumerate(workers_kwargs):
+            n_envs = n_envs_list[rank]
+            slice_B = slice(i_env, i_env + n_envs)
+            w_kwargs["sync"] = AttrDict(
+                stop_eval=self.sync.stop_eval,
+                obs_ready=self.sync.obs_ready[rank],
+                act_ready=self.sync.act_ready[rank],
+            )
+            w_kwargs["step_buffer_np"] = self.step_buffer_np[slice_B]
+            if self.eval_n_envs > 0:
+                eval_slice_B = slice(self.eval_n_envs_per * rank,
+                                     self.eval_n_envs_per * (rank + 1))
+                w_kwargs["eval_step_buffer_np"] = \
+                    self.eval_step_buffer_np[eval_slice_B]
+            i_env += n_envs
+        return workers_kwargs
+
+    def _build_buffers(self, *args, **kwargs):
+        examples = super(GpuSamplerBase, self)._build_buffers(*args, **kwargs)
+        self.step_buffer_pyt, self.step_buffer_np = build_step_buffer(
+            examples, int(self.batch_spec.B/self._n_actors))
+        self.agent_inputs = AgentInputs(self.step_buffer_pyt.observation,
+            self.step_buffer_pyt.action, self.step_buffer_pyt.reward)
+        if self.eval_n_envs > 0:
+            self.eval_step_buffer_pyt, self.eval_step_buffer_np = \
+                build_step_buffer(examples, self.eval_n_envs)
+            self.eval_agent_inputs = AgentInputs(
+                self.eval_step_buffer_pyt.observation,
+                self.eval_step_buffer_pyt.action,
+                self.eval_step_buffer_pyt.reward,
+            )
+        return examples
