@@ -1,23 +1,23 @@
 from os.path import abspath, join, dirname
 
-import rlpyt.utils.logging.context as logContext
 from rlpyt.algos.dqn.cat_dqn import CategoricalDQN
 from rlpyt.runners.minibatch_rl import MinibatchRlEval
+from rlpyt.samplers.serial.sampler import SerialSampler
+import rlpyt.utils.logging.context as logContext
 
-from HanabiExperiments.agents.hanabi import HanabiCatDqnAgent
-from HanabiExperiments.envs.hanabi import WrappedHanabiEnv
-from HanabiExperiments.samplers.sampler import MultiAgentCpuSampler
+from rlpytExperiments.agents.cartpole import CartPoleDQNAgent
+from rlpytExperiments.envs.cartpole import CartPoleEnv
 
 logContext.LOG_DIR = abspath(join(dirname(__file__), '../../data'))
 
 
 def build_and_train(run_ID=0, cuda_idx=None):
-    sampler = MultiAgentCpuSampler(
-        EnvCls=WrappedHanabiEnv,
+    sampler = SerialSampler(
+        EnvCls=CartPoleEnv,
         env_kwargs=dict(),
         eval_env_kwargs=dict(),
         batch_T=10,  # Four time-steps per sampler iteration.
-        batch_B=3,
+        batch_B=5,
         max_decorrelation_steps=0,
         eval_n_envs=10,
         eval_max_steps=int(10e3),
@@ -27,20 +27,17 @@ def build_and_train(run_ID=0, cuda_idx=None):
                double_dqn=True,
                prioritized_replay=True,
                n_step_return=3)  # Run with defaults.
-    agent = HanabiCatDqnAgent(
-        model_kwargs=dict(hidden_sizes=[512, 512]),
-
-    )
+    agent = CartPoleDQNAgent(model_kwargs=dict(hidden_sizes=24, n_atoms=51))
     runner = MinibatchRlEval(
         algo=algo,
         agent=agent,
         sampler=sampler,
-        n_steps=100e6,
-        log_interval_steps=1e4,
-        affinity=dict(cuda_idx=cuda_idx, master_cpus=[0], master_torch_threads=1, workers_cpus=[1,2,3]),
+        n_steps=50e6,
+        log_interval_steps=1e3,
+        affinity=dict(cuda_idx=cuda_idx),
     )
-    name = "hanabi_rainbow_cpu"
-    log_dir = name
+    name = "dqn_cartpole"
+    log_dir = "cartpole"
     with logContext.logger_context(log_dir, run_ID, name, snapshot_mode="last"):
         runner.train()
 

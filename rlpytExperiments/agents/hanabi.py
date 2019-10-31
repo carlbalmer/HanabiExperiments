@@ -4,9 +4,9 @@ from rlpyt.agents.dqn.catdqn_agent import CatDqnAgent, AgentInfo as CatAgentInfo
 from rlpyt.agents.dqn.dqn_agent import DqnAgent, AgentInfo as DqnAgentInfo
 from rlpyt.utils.buffer import buffer_to
 
-from HanabiExperiments.distributions.epsilon_greedy import CategorialLegalActionEpsilonGreedy, LegalActionEpsilonGreedy
-from HanabiExperiments.envs.hanabi import HanabiMixin
-from HanabiExperiments.models.hanabi import HanabiDuelDqnModel, HanabiCatDqnModel
+from rlpytExperiments.distributions.epsilon_greedy import CategorialLegalActionEpsilonGreedy, LegalActionEpsilonGreedy
+from rlpytExperiments.envs.hanabi import HanabiMixin
+from rlpytExperiments.models.hanabi import HanabiDuelDqnModel, HanabiCatDqnModel
 
 
 class LegalActionAgentMixin:
