@@ -9,7 +9,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
     def __init__(self, env_config):
         self.env = HanabiEnv(env_config)
         self.state = self.env.reset()
-        self.cum_reward = numpy.zeros((env_config["players"]), dtype="int")
+        self.cum_reward = numpy.zeros((env_config["players"]), dtype=numpy.float)
 
         n_actions = 2 * env_config["hand_size"] + (env_config["colors"] + env_config["ranks"]) * (
                 env_config["players"] - 1)
@@ -45,7 +45,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
 
     def extract_current_player_obs(self, all_obs):
         current_player = all_obs["current_player"]
-        current_player_obs = numpy.array(all_obs["player_observations"][current_player]["vectorized"])
+        current_player_obs = numpy.array(all_obs["player_observations"][current_player]["vectorized"], dtype=numpy.float)
         return current_player, current_player_obs
 
 
