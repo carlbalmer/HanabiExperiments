@@ -1,7 +1,9 @@
 import numpy
-from gym.spaces import Discrete, Box, Dict
+from gym.spaces import Box, Dict
 from hanabi_learning_environment.rl_env import HanabiEnv
 from ray.rllib import MultiAgentEnv
+
+from rayExperiments.spaces import LegalActionDiscrete
 
 
 class MultiAgentHanabiEnv(MultiAgentEnv):
@@ -38,9 +40,9 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         current_player, _ = self.extract_current_player_obs(self.state)
         current_player_action = action_dict[current_player]
         self.cum_reward[current_player] = 0
-        # assert self.action_space.contains(current_player_action)
+        assert self.action_space.contains(current_player_action)
 
-        self.state, reward, done, _ = self.env.step(self.action_space.sample())  # self.env.step(current_player_action)
+        self.state, reward, done, _ = self.env.step(current_player_action.item())
         self.cum_reward + reward
         next_player, next_player_obs = self.extract_current_player_obs(self.state)
 
@@ -60,28 +62,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         return current_player, {"board": current_player_obs, "legal_actions": legal_actions}
 
     def legal_actions_as_int_to_bool(self, legal_moves_as_int):
-        return numpy.in1d(numpy.arange(self.action_space.n), numpy.array(legal_moves_as_int))
-
-
-class LegalActionDiscrete(Discrete):
-
-    def __init__(self, n, env):
-        super(LegalActionDiscrete, self).__init__(n)
-        self.env = env
-
-    def sample(self):
-        legal_actions = self.env.state["player_observations"][self.env.state["current_player"]]["legal_moves_as_int"]
-        return legal_actions[self.np_random.randint(len(legal_actions))]
-
-    def contains(self, x):
-        if isinstance(x, int):
-            as_int = x
-        elif isinstance(x, (numpy.generic, numpy.ndarray)) and (
-                x.dtype.kind in numpy.typecodes['AllInteger'] and x.shape == ()):
-            as_int = int(x)
-        else:
-            return False
-        return as_int in self.env.state["player_observations"][self.env.state["current_player"]]["legal_moves_as_int"]
+        return (numpy.in1d(numpy.arange(self.action_space.n), numpy.array(legal_moves_as_int))).astype(numpy.int)
 
 
 HANABI_CONF_FULL_4p = {
