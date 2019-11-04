@@ -1,5 +1,5 @@
 import numpy
-from gym.spaces import Discrete, Box
+from gym.spaces import Discrete, Box, Dict
 from hanabi_learning_environment.rl_env import HanabiEnv
 from ray.rllib import MultiAgentEnv
 
@@ -15,9 +15,18 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
                 env_config["players"] - 1)
         self.action_space = LegalActionDiscrete(n_actions, self)
 
-        sample_obs = numpy.array(self.state["player_observations"][0]["vectorized"])
-        self.observation_space = Box(low=sample_obs.min(), high=sample_obs.max(), shape=sample_obs.shape,
-                                     dtype=sample_obs.dtype)
+        sample_obs = self.reset()[0]
+        self.observation_space = Dict({
+            "board": Box(low=sample_obs["board"].min(),
+                         high=sample_obs["board"].max(),
+                         shape=sample_obs["board"].shape,
+                         dtype=sample_obs["board"].dtype),
+            "legal_actions": Box(
+                low=sample_obs["legal_actions"].min(),
+                high=sample_obs["legal_actions"].max(),
+                shape=sample_obs["legal_actions"].shape,
+                dtype=sample_obs["legal_actions"].dtype)
+        })
 
     def reset(self):
         self.state = self.env.reset()  #
@@ -45,8 +54,13 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
 
     def extract_current_player_obs(self, all_obs):
         current_player = all_obs["current_player"]
-        current_player_obs = numpy.array(all_obs["player_observations"][current_player]["vectorized"], dtype=numpy.float)
-        return current_player, current_player_obs
+        current_player_obs = numpy.array(all_obs["player_observations"][current_player]["vectorized"], dtype=numpy.int)
+        legal_actions = self.legal_actions_as_int_to_bool(
+            all_obs["player_observations"][current_player]["legal_moves_as_int"])
+        return current_player, {"board": current_player_obs, "legal_actions": legal_actions}
+
+    def legal_actions_as_int_to_bool(self, legal_moves_as_int):
+        return numpy.in1d(numpy.arange(self.action_space.n), numpy.array(legal_moves_as_int))
 
 
 class LegalActionDiscrete(Discrete):
