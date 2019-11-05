@@ -1,12 +1,12 @@
 name: ray_hanabi
 dependencies:
+- python=3.6
 - pip
 - setuptools
 - pip:
-  - ray
-  - ray[debug]
-  - ray[rllib]
+  - ray[debug,rllib]
   - aiohttp
   - requests
-  - tensorflow
+  - tensorflow==1.15.0
+  - gym
   - git+https://github.com/carlbalmer/hanabi-learning-environment.git
