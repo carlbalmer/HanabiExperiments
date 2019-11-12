@@ -1,3 +1,4 @@
+import ray
 from ray import tune
 from ray.rllib.agents.dqn import DQNTrainer
 from ray.rllib.agents.dqn.dqn_policy import DQNTFPolicy
@@ -22,10 +23,6 @@ LegalActionDQNTrainer = DQNTrainer.with_updates(
 tune.run(LegalActionDQNTrainer, config={
     "env": MultiAgentHanabiEnv,
     "env_config": HANABI_CONF_FULL_4p,
-    "num_workers": 3,
-    "num_gpus": 0.25,
-    "num_gpus_per_worker": 0.25,
-    "num_envs_per_worker": 20,
     "model": {
         "custom_model": "ILA_FC",
         "custom_preprocessor": "OriginalSpaceSamplingPreprocessor",
