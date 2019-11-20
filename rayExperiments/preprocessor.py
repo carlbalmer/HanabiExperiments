@@ -5,7 +5,7 @@ from ray.rllib.utils.annotations import PublicAPI
 from rayExperiments.spaces import OriginalSpaceSamplingBox
 
 
-class OriginalSpaceSamplingPreprocessorMixin():
+class OriginalSpaceSamplingPreprocessorMixin:
 
     @property
     @PublicAPI
@@ -13,5 +13,6 @@ class OriginalSpaceSamplingPreprocessorMixin():
         return OriginalSpaceSamplingBox(self._obs_space, -1., 1., self.shape, dtype=numpy.float32)
 
 
-class OriginalSpaceSamplingDictFlatteningPreprocessor(OriginalSpaceSamplingPreprocessorMixin, DictFlatteningPreprocessor):
+class OriginalSpaceSamplingDictFlatteningPreprocessor(OriginalSpaceSamplingPreprocessorMixin,
+                                                      DictFlatteningPreprocessor):
     pass

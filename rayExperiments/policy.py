@@ -2,7 +2,6 @@ from ray.rllib import SampleBatch
 from ray.rllib.agents.dqn import DQNTrainer
 from ray.rllib.agents.dqn.dqn_policy import _build_parameter_noise, QValuePolicy, QLoss, PRIO_WEIGHTS, DQNTFPolicy
 from ray.rllib.utils import try_import_tf
-from ray.rllib.utils.tf_ops import reduce_mean_ignore_inf
 
 tf = try_import_tf()
 

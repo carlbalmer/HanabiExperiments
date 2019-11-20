@@ -1,3 +1,4 @@
+import ray
 from ray import tune
 from ray.rllib.models import ModelCatalog
 
@@ -7,7 +8,8 @@ from rayExperiments.policy import LegalActionDQNTrainer
 from rayExperiments.preprocessor import OriginalSpaceSamplingDictFlatteningPreprocessor
 
 ModelCatalog.register_custom_model("ILA_FC", IgnoreLegalActionsFCModel)
-ModelCatalog.register_custom_preprocessor("OriginalSpaceSamplingPreprocessor", OriginalSpaceSamplingDictFlatteningPreprocessor)
+ModelCatalog.register_custom_preprocessor("OriginalSpaceSamplingPreprocessor",
+                                          OriginalSpaceSamplingDictFlatteningPreprocessor)
 
 tune.run(LegalActionDQNTrainer, config={
     "env": MultiAgentHanabiEnv,
@@ -15,5 +17,5 @@ tune.run(LegalActionDQNTrainer, config={
     "model": {
         "custom_model": "ILA_FC",
         "custom_preprocessor": "OriginalSpaceSamplingPreprocessor",
-            },
+            }
 })

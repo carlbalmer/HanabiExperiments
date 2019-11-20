@@ -31,7 +31,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         })
 
     def reset(self):
-        self.state = self.env.reset()  #
+        self.state = self.env.reset()
         self.cum_reward[:] = 0
         current_player, current_player_obs = self.extract_current_player_obs(self.state)
         return {current_player: current_player_obs}
@@ -72,7 +72,5 @@ HANABI_CONF_FULL_4p = {
     "hand_size": 4,
     "max_information_tokens": 8,
     "max_life_tokens": 3,
-    "observation_type": 1,
-    #  "random_start_player": None,
-    # "seed": None
+    "observation_type": 1
 }

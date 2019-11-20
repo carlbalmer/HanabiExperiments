@@ -26,7 +26,7 @@ class LegalActionDiscrete(Discrete):
 
 class OriginalSpaceSamplingBox(Box):
 
-    def __init__(self,original_space, low, high, shape=None, dtype=numpy.float32):
+    def __init__(self, original_space, low, high, shape=None, dtype=numpy.float32):
         super(OriginalSpaceSamplingBox, self).__init__(low, high, shape=shape, dtype=dtype)
         self.original_space = original_space
 

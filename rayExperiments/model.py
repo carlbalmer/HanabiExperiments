@@ -10,8 +10,10 @@ tf = try_import_tf()
 class IgnoreLegalActionsFCModel(DistributionalQModel, TFModelV2):
 
     def __init__(self, obs_space, action_space, num_outputs, model_config, name, **kwargs):
-        super(IgnoreLegalActionsFCModel, self).__init__(obs_space, action_space, num_outputs, model_config, name, **kwargs)
-        self.fc = FullyConnectedNetwork(obs_space.original_space["board"], action_space, num_outputs, model_config, name + "fc")
+        super(IgnoreLegalActionsFCModel, self).__init__(obs_space, action_space, num_outputs, model_config, name,
+                                                        **kwargs)
+        self.fc = FullyConnectedNetwork(obs_space.original_space["board"], action_space, num_outputs, model_config,
+                                        name + "fc")
         self.register_variables(self.fc.variables())
         self.q_config = {"num_atoms": kwargs["num_atoms"], "dueling": kwargs["dueling"]}
         self.q_out = None
@@ -32,8 +34,7 @@ class IgnoreLegalActionsFCModel(DistributionalQModel, TFModelV2):
                 support_logits_per_action_mean = tf.reduce_mean(
                     support_logits_per_action, 1)
                 support_logits_per_action_centered = (
-                        support_logits_per_action - tf.expand_dims(
-                    support_logits_per_action_mean, 1))
+                        support_logits_per_action - tf.expand_dims(support_logits_per_action_mean, 1))
                 support_logits_per_action = tf.expand_dims(
                     state_score, 1) + support_logits_per_action_centered
                 support_prob_per_action = tf.nn.softmax(
