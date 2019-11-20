@@ -1,5 +1,6 @@
 from ray.rllib import SampleBatch
-from ray.rllib.agents.dqn.dqn_policy import _build_parameter_noise, QValuePolicy, QLoss, PRIO_WEIGHTS
+from ray.rllib.agents.dqn import DQNTrainer
+from ray.rllib.agents.dqn.dqn_policy import _build_parameter_noise, QValuePolicy, QLoss, PRIO_WEIGHTS, DQNTFPolicy
 from ray.rllib.utils import try_import_tf
 from ray.rllib.utils.tf_ops import reduce_mean_ignore_inf
 
@@ -95,3 +96,13 @@ def _compute_q_values(policy, model, obs, obs_space, action_space):
     q_out = model.get_q_out()
 
     return q_out["value"], q_out["logits"], q_out["dist"]
+
+
+LegalActionDQNPolicy = DQNTFPolicy.with_updates(
+    name="LegalActionDQNPolicy",
+    action_sampler_fn=build_q_networks,
+    loss_fn=build_q_losses)
+
+LegalActionDQNTrainer = DQNTrainer.with_updates(
+    name="LegalActionDQN",
+    default_policy=LegalActionDQNPolicy)
