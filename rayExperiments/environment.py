@@ -43,6 +43,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         assert self.action_space.contains(current_player_action)
 
         self.state, reward, done, _ = self.env.step(current_player_action.item())
+        reward = reward / len(self.cum_reward) # scale the reward for each player - rllib sums up all player rewards
         self.cum_reward += reward
         next_player, next_player_obs = self.extract_current_player_obs(self.state)
 
