@@ -1,6 +1,6 @@
 from rlpyt.agents.dqn.catdqn_agent import CatDqnAgent
-from HanabiExperiments.envs.cartpole import CartPoleMixin
-from HanabiExperiments.models.cartpole import CartPoleDqnModel
+from rlpytExperiments.envs.cartpole import CartPoleMixin
+from rlpytExperiments.models.cartpole import CartPoleDqnModel
 
 
 class CartPoleDQNAgent(CartPoleMixin, CatDqnAgent):

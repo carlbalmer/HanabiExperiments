@@ -1,4 +1,4 @@
-name: HanabiExperiments
+name: rlpyt_hanabi
 channels:
 - pytorch
 dependencies:

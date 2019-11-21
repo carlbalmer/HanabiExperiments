@@ -4,15 +4,15 @@ import rlpyt.utils.logging.context as logContext
 from rlpyt.algos.dqn.cat_dqn import CategoricalDQN
 from rlpyt.runners.minibatch_rl import MinibatchRlEval
 
-from HanabiExperiments.agents.hanabi import HanabiCatDqnAgent
-from HanabiExperiments.envs.hanabi import WrappedHanabiEnv
-from HanabiExperiments.samplers.sampler import MultiAgentSerialSampler
+from rlpytExperiments.agents.hanabi import HanabiCatDqnAgent
+from rlpytExperiments.envs.hanabi import WrappedHanabiEnv
+from rlpytExperiments.samplers.sampler import MultiAgentCpuSampler
 
 logContext.LOG_DIR = abspath(join(dirname(__file__), '../../data'))
 
 
 def build_and_train(run_ID=0, cuda_idx=None):
-    sampler = MultiAgentSerialSampler(
+    sampler = MultiAgentCpuSampler(
         EnvCls=WrappedHanabiEnv,
         env_kwargs=dict(),
         eval_env_kwargs=dict(),
@@ -37,9 +37,9 @@ def build_and_train(run_ID=0, cuda_idx=None):
         sampler=sampler,
         n_steps=100e6,
         log_interval_steps=1e4,
-        affinity=dict(cuda_idx=cuda_idx),
+        affinity=dict(cuda_idx=cuda_idx, master_cpus=[0], master_torch_threads=1, workers_cpus=[1,2,3]),
     )
-    name = "hanabi_rainbow"
+    name = "hanabi_rainbow_cpu"
     log_dir = name
     with logContext.logger_context(log_dir, run_ID, name, snapshot_mode="last"):
         runner.train()
