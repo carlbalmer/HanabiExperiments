@@ -75,3 +75,7 @@ HANABI_CONF_FULL_4p = {
     "max_life_tokens": 3,
     "observation_type": 1
 }
+
+
+def env_creator(env_config):
+    return MultiAgentHanabiEnv(env_config)
