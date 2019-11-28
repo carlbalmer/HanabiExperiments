@@ -3,7 +3,7 @@ from gym.spaces import Box, Dict
 from hanabi_learning_environment.rl_env import HanabiEnv
 from ray.rllib import MultiAgentEnv
 
-from rayExperiments.spaces import LegalActionDiscrete
+from HanabiExperiments.spaces import LegalActionDiscrete
 
 
 class MultiAgentHanabiEnv(MultiAgentEnv):

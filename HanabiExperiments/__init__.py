@@ -1,10 +1,10 @@
 from ray import tune
 from ray.rllib.models import ModelCatalog
 
-from rayExperiments.environment import MultiAgentHanabiEnv, env_creator
-from rayExperiments.model import IgnoreLegalActionsFCModel
-from rayExperiments.preprocessor import OriginalSpaceSamplingDictFlatteningPreprocessor
-from rayExperiments.policy import LegalActionDQNTrainer, LegalActionApexTrainer
+from HanabiExperiments.environment import MultiAgentHanabiEnv, env_creator
+from HanabiExperiments.model import IgnoreLegalActionsFCModel
+from HanabiExperiments.preprocessor import OriginalSpaceSamplingDictFlatteningPreprocessor
+from HanabiExperiments.policy import LegalActionDQNTrainer, LegalActionApexTrainer
 
 ModelCatalog.register_custom_model("ILA_FC", IgnoreLegalActionsFCModel)
 ModelCatalog.register_custom_preprocessor("OriginalSpaceSamplingPreprocessor",

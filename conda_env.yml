@@ -4,9 +4,7 @@ dependencies:
 - pip
 - setuptools
 - pip:
-  - ray[debug,rllib]
-  - aiohttp
+  - ray[debug,rllib,dashboard,tune]
   - requests
   - tensorflow==1.15.0
-  - gym
   - git+https://github.com/carlbalmer/hanabi-learning-environment.git

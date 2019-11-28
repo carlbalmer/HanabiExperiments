@@ -1,7 +1,7 @@
 import ray
 import yaml
 import argparse
-import rayExperiments
+import HanabiExperiments
 from ray import tune
 
 
