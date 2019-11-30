@@ -1,0 +1,55 @@
+cluster_name: basic-gpu
+
+max_workers: 1
+
+provider:
+    type: gcp
+    region: us-central1
+    availability_zone: us-central1-a
+    project_id: hanabi-ma-thesis
+
+auth:
+    ssh_user: ubuntu
+
+head_node:
+    machineType: n1-standard-2
+    disks:
+      - boot: true
+        autoDelete: true
+        type: PERSISTENT
+        initializeParams:
+          diskSizeGb: 50
+          sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
+    guestAccelerators:
+      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-a/acceleratorTypes/nvidia-tesla-k80
+        acceleratorCount: 1
+    metadata:
+      items:
+        - key: install-nvidia-driver
+          value: "True"
+    scheduling:
+      - onHostMaintenance: TERMINATE
+      - preemptible: true
+
+worker_nodes:
+    machineType: n1-standard-2
+    disks:
+      - boot: true
+        autoDelete: true
+        type: PERSISTENT
+        initializeParams:
+          diskSizeGb: 50
+          sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
+    scheduling:
+      - preemptible: true
+
+setup_commands:
+    - pip3 install -U --user https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.8.0.dev6-cp35-cp35m-manylinux1_x86_64.whl git+https://github.com/carlbalmer/hanabi-learning-environment.git
+    - pip3 install --user ray[rllib,debug] gputil
+    - echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.profile
+
+head_setup_commands: []
+
+file_mounts: {
+    "~/": ".",
+}

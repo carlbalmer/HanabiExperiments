@@ -1,4 +1,4 @@
-hanabi-dqn:
+hanabi-apex:
   run: LegalActionApex
   env: Hanabi
   stop:
@@ -16,3 +16,6 @@ hanabi-dqn:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
+  checkpoint_freq: 100
+  checkpoint_at_end: True
+  upload_dir: gs://ray-cluster-out

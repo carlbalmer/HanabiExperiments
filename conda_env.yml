@@ -4,7 +4,11 @@ dependencies:
 - pip
 - setuptools
 - pip:
-  - ray[debug,rllib,dashboard,tune]
-  - requests
+  #- ray[rllib] #,debug,,dashboard]
+  #- requests
   - tensorflow==1.15.0
   - git+https://github.com/carlbalmer/hanabi-learning-environment.git
+  - google-api-python-client
+  - ray[rllib,debug]
+  - gputil
+  - https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.8.0.dev6-cp36-cp36m-manylinux1_x86_64.whl
