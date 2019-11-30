@@ -2,7 +2,7 @@ import numpy
 from ray.rllib.models.preprocessors import DictFlatteningPreprocessor
 from ray.rllib.utils.annotations import PublicAPI
 
-from rayExperiments.spaces import OriginalSpaceSamplingBox
+from HanabiExperiments.spaces import OriginalSpaceSamplingBox
 
 
 class OriginalSpaceSamplingPreprocessorMixin:

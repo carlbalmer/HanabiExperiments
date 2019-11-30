@@ -1,5 +1,6 @@
 from ray.rllib import SampleBatch
 from ray.rllib.agents.dqn import DQNTrainer
+from ray.rllib.agents.dqn.apex import APEX_DEFAULT_CONFIG, APEX_TRAINER_PROPERTIES
 from ray.rllib.agents.dqn.dqn_policy import _build_parameter_noise, QValuePolicy, QLoss, PRIO_WEIGHTS, DQNTFPolicy
 from ray.rllib.utils import try_import_tf
 
@@ -105,3 +106,6 @@ LegalActionDQNPolicy = DQNTFPolicy.with_updates(
 LegalActionDQNTrainer = DQNTrainer.with_updates(
     name="LegalActionDQN",
     default_policy=LegalActionDQNPolicy)
+
+LegalActionApexTrainer = LegalActionDQNTrainer.with_updates(
+    name="LegalActionAPEX", default_config=APEX_DEFAULT_CONFIG, **APEX_TRAINER_PROPERTIES)
