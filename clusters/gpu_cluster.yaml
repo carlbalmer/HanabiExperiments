@@ -1,7 +1,7 @@
 cluster_name: basic-gpu
 
 max_workers: 1
-min_workers: 1
+min_workers: 0
 
 provider:
     type: gcp
@@ -13,48 +13,52 @@ auth:
     ssh_user: ubuntu
 
 head_node:
-    machineType: n1-standard-8
+    machineType: n1-standard-16
     disks:
       - boot: true
         autoDelete: true
         type: PERSISTENT
         initializeParams:
           diskSizeGb: 50
-          sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
+          sourceImage: projects/hanabi-ma-thesis/global/images/ray-08-tf1-15-gpu-node
     guestAccelerators:
-      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-a/acceleratorTypes/nvidia-tesla-k80
+      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-a/acceleratorTypes/nvidia-tesla-p4
         acceleratorCount: 1
     metadata:
       items:
         - key: install-nvidia-driver
           value: "True"
     scheduling:
-      - preemptible: true
+      - onHostMaintenance: TERMINATE
 
 worker_nodes:
-    machineType: n1-highcpu-64
+    machineType: n1-standard-16
     disks:
       - boot: true
         autoDelete: true
         type: PERSISTENT
         initializeParams:
           diskSizeGb: 50
-          sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
+          sourceImage: projects/hanabi-ma-thesis/global/images/ray-08-tf1-15-cpu-node
     scheduling:
       - preemptible: true
-
-setup_commands:
-  - >-
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3.sh
-    || true
-    && bash ~/miniconda3.sh -b -p ~/miniconda3 || true
-    && rm ~/miniconda3.sh
-    && echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.profile
-
-  - pip install -U https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.8.0.dev6-cp37-cp37m-manylinux1_x86_64.whl
-  - pip install ray[rllib,debug] gputil tensorflow==1.15.0 git+https://github.com/carlbalmer/hanabi-learning-environment.git
-
+      - onHostMaintenance: TERMINATE
 
 file_mounts: {
     "~/": ".",
 }
+
+head_setup_commands: []
+
+setup_commands: []
+
+head_start_ray_commands:
+    - ray stop
+    - >-
+      ulimit -n 65536;
+      ray start
+      --head
+      --redis-port=6379
+      --object-manager-port=8076
+      --autoscaling-config=~/ray_bootstrap_config.yaml
+      --include-webui

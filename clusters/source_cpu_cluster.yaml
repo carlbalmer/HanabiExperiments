@@ -1,0 +1,51 @@
+cluster_name: basic-cpu
+
+max_workers: 1
+
+provider:
+    type: gcp
+    region: us-central1
+    availability_zone: us-central1-a
+    project_id: hanabi-ma-thesis
+
+auth:
+    ssh_user: ubuntu
+
+head_node:
+    machineType: n1-standard-2
+    disks:
+      - boot: true
+        autoDelete: true
+        type: PERSISTENT
+        initializeParams:
+          diskSizeGb: 50
+          sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
+
+worker_nodes:
+    machineType: n1-standard-2
+    disks:
+      - boot: true
+        autoDelete: true
+        type: PERSISTENT
+        initializeParams:
+          diskSizeGb: 50
+          sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
+    scheduling:
+      - preemptible: true
+
+setup_commands:
+  - >-
+    wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh -O ~/miniconda3.sh
+    || true
+    && bash ~/miniconda3.sh -b -p ~/miniconda3 || true
+    && rm ~/miniconda3.sh
+    && echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.profile
+
+  - wget https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.8.0.dev7-cp37-cp37m-manylinux1_x86_64.whl
+  - pip install -U ray-0.8.0.dev7-cp37-cp37m-manylinux1_x86_64.whl[rllib,debug]
+  - pip install -U /opt/deeplearning/binaries/tensorflow/tensorflow-1.15.0-cp37-cp37m-linux_x86_64.whl
+  - pip install -U gputil git+https://github.com/deepmind/hanabi-learning-environment.git requests cryptography aiohttp psutil setproctitle
+
+file_mounts: {
+    "~/": ".",
+}

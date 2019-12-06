@@ -19,7 +19,7 @@ head_node:
         type: PERSISTENT
         initializeParams:
           diskSizeGb: 50
-          sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
+          sourceImage: projects/hanabi-ma-thesis/global/images/ray-08-tf1-15-cpu-node
 
 worker_nodes:
     machineType: n1-standard-2
@@ -29,21 +29,25 @@ worker_nodes:
         type: PERSISTENT
         initializeParams:
           diskSizeGb: 50
-          sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
+          sourceImage: projects/hanabi-ma-thesis/global/images/ray-08-tf1-15-cpu-node
     scheduling:
       - preemptible: true
-
-setup_commands:
-  - >-
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3.sh
-    || true
-    && bash ~/miniconda3.sh -b -p ~/miniconda3 || true
-    && rm ~/miniconda3.sh
-    && echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.profile
-
-  - pip install -U https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.8.0.dev6-cp37-cp37m-manylinux1_x86_64.whl
-  - pip install ray[rllib,debug] gputil tensorflow==1.15.0 git+https://github.com/carlbalmer/hanabi-learning-environment.git
 
 file_mounts: {
     "~/": ".",
 }
+
+head_setup_commands: []
+
+setup_commands: []
+
+head_start_ray_commands:
+    - ray stop
+    - >-
+      ulimit -n 65536;
+      ray start
+      --head
+      --redis-port=6379
+      --object-manager-port=8076
+      --autoscaling-config=~/ray_bootstrap_config.yaml
+      --include-webui

@@ -1,5 +1,5 @@
-hanabi-apex:
-  run: LegalActionApex
+hanabi-dqn-deepmind:
+  run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training
   stop:
@@ -22,7 +22,7 @@ hanabi-apex:
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [256, 256]
+      fcnet_hiddens: [512]
       custom_model: ILA_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: tanh
@@ -31,7 +31,7 @@ hanabi-apex:
     # Number of atoms for representing the distribution of return. When
     # this is greater than 1 distributional Q-learning is used.
     # the discrete supports are bounded by v_min and v_max
-    num_atoms: 1
+    num_atoms: 51
     v_min: -10.0
     v_max: 10.0
     # Whether to use noisy network
@@ -44,25 +44,25 @@ hanabi-apex:
     double_q: True
     # Postprocess model outputs with these hidden layers to compute the
     # state and action values. See also the model config in catalog.py.
-    hiddens: [256]
+    hiddens: [512]
     # N-step Q learning
-    n_step: 3
+    n_step: 1
 
     # === Exploration ===
     # Max num timesteps for annealing schedules. Exploration is annealed from
     # 1.0 to exploration_fraction over this number of timesteps scaled by
     # exploration_fraction
-    schedule_max_timesteps: 100000
+    schedule_max_timesteps: 1000
     # Minimum env steps to optimize for per train call. This value does
     # not affect learning only the length of iterations.
-    timesteps_per_iteration: 25000
+    timesteps_per_iteration: 10000
     # Fraction of entire training period over which the exploration rate is
     # annealed
     exploration_fraction: 0.1
     # Final value of random action probability
     exploration_final_eps: 0.02
     # Update the target network every `target_network_update_freq` steps.
-    target_network_update_freq: 500000
+    target_network_update_freq: 500
     # Use softmax for sampling actions. Required for off policy estimation.
     soft_q: False
     # Softmax temperature. Q values are divided by this value prior to softmax.
@@ -79,7 +79,7 @@ hanabi-apex:
     # === Replay buffer ===
     # Size of the replay buffer. Note that if async_updates is set then
     # each worker will have a replay buffer of this size.
-    buffer_size: 2000000
+    buffer_size: 50000
     # If True prioritized replay buffer will be used.
     prioritized_replay: True
     # Alpha parameter for prioritized replay buffer.
@@ -100,45 +100,40 @@ hanabi-apex:
     # Discount factor of the MDP.
     gamma: 0.99
     # Learning rate for adam optimizer
-    lr: 0.0005
+    lr: 0.000025
     # Learning rate schedule
     lr_schedule: # nothing equals None
     # Adam epsilon hyper parameter
-    adam_epsilon: 0.00000001
+    adam_epsilon: 0.00003125
     # If not None clip gradients during optimization at this value
     grad_norm_clipping: 40
     # How many steps of the model to sample before learning starts.
-    learning_starts: 50000
+    learning_starts: 500
     # Update the replay buffer with this many samples at once. Note that
     # this setting applies per-worker if num_workers > 1.
-    sample_batch_size: 50
+    sample_batch_size: 4
     # Size of a batched sampled from replay buffer for training. Note that
     # if async_updates is set then each worker returns gradients for a
     # batch of this size.
-    train_batch_size: 512
-    # optimizer setttings
-    optimizer:
-      max_weight_sync_delay: 400
-      num_replay_buffer_shards: 4
-      debug: False
+    train_batch_size: 32
 
     # === Parallelism ===
     # Number of workers for collecting samples with. This only makes sense
     # to increase if your environment is particularly slow to sample or if
     # youre using the Async or Ape-X optimizers.
-    num_workers: 8
+    num_workers: 0
     # Number of environments to evaluate vectorwise per worker. This enables
     # model inference batching, which can improve performance for inference
     # bottlenecked workloads.
-    num_envs_per_worker: 8
+    num_envs_per_worker: 1
     # number of gpus for training
-    num_gpus: 0
+    num_gpus: 1
     # Whether to use a distribution of epsilons across workers for exploration.
-    per_worker_exploration: True
+    per_worker_exploration: False
     # Whether to compute priorities on workers.
-    worker_side_prioritization: True
+    worker_side_prioritization: False
     # Prevent iterations from going lower than this time span
-    min_iter_time_s: 30
+    min_iter_time_s: 1
 
     # === Advanced Resource Settings ===
     # Number of CPUs to allocate per worker.
@@ -149,4 +144,4 @@ hanabi-apex:
     num_gpus_per_worker: 0
     # Number of CPUs to allocate for the trainer. Note: this only takes effect
     # when running in Tune. Otherwise, the trainer runs in the main program.
-    num_cpus_for_driver: 8
+    num_cpus_for_driver: 1
