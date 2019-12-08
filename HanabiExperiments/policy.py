@@ -84,7 +84,9 @@ def build_q_losses(policy, model, _, train_batch):
                 tf.float32), config["gamma"], config["n_step"],
         config["num_atoms"], config["v_min"], config["v_max"])
 
-    return policy.q_loss.loss
+    loss = model.custom_loss(policy.q_loss.loss, train_batch)
+
+    return loss
 
 
 def _compute_q_values(policy, model, obs, obs_space, action_space):

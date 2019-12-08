@@ -12,6 +12,8 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         self.env = HanabiEnv(env_config)
         self.state = self.env.reset()
         self.cum_reward = numpy.zeros((env_config["players"]), dtype=numpy.float)
+        self.last_action = numpy.zeros((env_config["players"]), dtype=numpy.int)
+        self.last_action[:] = -1
 
         n_actions = 2 * env_config["hand_size"] + (env_config["colors"] + env_config["ranks"]) * (
                 env_config["players"] - 1)
@@ -27,18 +29,26 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
                 low=sample_obs["legal_actions"].min(),
                 high=sample_obs["legal_actions"].max(),
                 shape=sample_obs["legal_actions"].shape,
-                dtype=sample_obs["legal_actions"].dtype)
+                dtype=sample_obs["legal_actions"].dtype),
+            "previous_round": Box(
+                low=0,
+                high=1,
+                shape=sample_obs["previous_round"].shape,
+                dtype=numpy.int)
         })
 
     def reset(self):
         self.state = self.env.reset()
         self.cum_reward[:] = 0
+        self.last_action[:] = -1
+
         current_player, current_player_obs = self.extract_current_player_obs(self.state)
         return {current_player: current_player_obs}
 
     def step(self, action_dict):
-        current_player, _ = self.extract_current_player_obs(self.state)
+        current_player = self.state["current_player"]
         current_player_action = action_dict[current_player]
+        self.last_action[current_player] = current_player_action
         self.cum_reward[current_player] = 0
         assert self.action_space.contains(current_player_action)
 
@@ -60,10 +70,23 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         current_player_obs = numpy.array(all_obs["player_observations"][current_player]["vectorized"], dtype=numpy.int)
         legal_actions = self.legal_actions_as_int_to_bool(
             all_obs["player_observations"][current_player]["legal_moves_as_int"])
-        return current_player, {"board": current_player_obs, "legal_actions": legal_actions}
+        previous_round = self.build_previous_round_actions(current_player)
+        return current_player, {
+            "board": current_player_obs,
+            "legal_actions": legal_actions,
+            "previous_round": previous_round
+        }
 
     def legal_actions_as_int_to_bool(self, legal_moves_as_int):
         return (numpy.in1d(numpy.arange(self.action_space.n), numpy.array(legal_moves_as_int))).astype(numpy.int)
+
+    def build_previous_round_actions(self, current_player):
+        prev_round_int = numpy.roll(self.last_action, -current_player)[1:]
+        prev_round_onehot = numpy.zeros((prev_round_int.size, self.action_space.n), dtype=numpy.int)
+        prev_round_onehot[numpy.arange(prev_round_int.size), prev_round_int] = prev_round_int+1
+        prev_round_onehot[prev_round_onehot > 0] = 1
+        prev_round_onehot[prev_round_onehot < 0] = 0
+        return prev_round_onehot.flatten()
 
 
 HANABI_CONF_FULL_4p = {
