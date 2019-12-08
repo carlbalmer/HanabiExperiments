@@ -1,13 +1,15 @@
-hanabi-dqn-deepmind:
-  run: LegalActionDQN
+hanabi-apex:
+  run: LegalActionApex
   env: Hanabi
   # by what criterion to stop training
+  num_samples: 4
+  restore: ~/resources/restore/checkpoint_740/checkpoint-740
   stop:
     timesteps_total: 100000000
   # checkpointing and uploading of checkpoints
-  checkpoint_freq: 50
+  checkpoint_freq: 20
   checkpoint_at_end: True
-  upload_dir: gs://ray-cluster-out
+  #upload_dir: gs://ray-cluster-out
   #trainer config
   config:
     # environment parameters
@@ -22,18 +24,18 @@ hanabi-dqn-deepmind:
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [512]
+      fcnet_hiddens: [512, 512]
       custom_model: ILA_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
-      fcnet_activation: relu
+      fcnet_activation: tanh
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
     # this is greater than 1 distributional Q-learning is used.
     # the discrete supports are bounded by v_min and v_max
     num_atoms: 51
-    v_min: -10.0
-    v_max: 10.0
+    v_min: -5.0
+    v_max: 5.0
     # Whether to use noisy network
     noisy: False
     # control the initial value of noisy nets
@@ -52,10 +54,10 @@ hanabi-dqn-deepmind:
     # Max num timesteps for annealing schedules. Exploration is annealed from
     # 1.0 to exploration_fraction over this number of timesteps scaled by
     # exploration_fraction
-    schedule_max_timesteps: 1000
+    schedule_max_timesteps: 100000
     # Minimum env steps to optimize for per train call. This value does
     # not affect learning only the length of iterations.
-    timesteps_per_iteration: 10000
+    timesteps_per_iteration: 25000
     # Fraction of entire training period over which the exploration rate is
     # annealed
     exploration_fraction: 0.1
@@ -79,7 +81,7 @@ hanabi-dqn-deepmind:
     # === Replay buffer ===
     # Size of the replay buffer. Note that if async_updates is set then
     # each worker will have a replay buffer of this size.
-    buffer_size: 50000
+    buffer_size: 2000000
     # If True prioritized replay buffer will be used.
     prioritized_replay: True
     # Alpha parameter for prioritized replay buffer.
@@ -108,7 +110,7 @@ hanabi-dqn-deepmind:
     # If not None clip gradients during optimization at this value
     grad_norm_clipping: 40
     # How many steps of the model to sample before learning starts.
-    learning_starts: 500
+    learning_starts: 50000
     # Update the replay buffer with this many samples at once. Note that
     # this setting applies per-worker if num_workers > 1.
     sample_batch_size: 4
@@ -116,24 +118,29 @@ hanabi-dqn-deepmind:
     # if async_updates is set then each worker returns gradients for a
     # batch of this size.
     train_batch_size: 32
+    # optimizer setttings
+    optimizer:
+      max_weight_sync_delay: 400
+      num_replay_buffer_shards: 4
+      debug: False
 
     # === Parallelism ===
     # Number of workers for collecting samples with. This only makes sense
     # to increase if your environment is particularly slow to sample or if
     # youre using the Async or Ape-X optimizers.
-    num_workers: 0
+    num_workers: 8
     # Number of environments to evaluate vectorwise per worker. This enables
     # model inference batching, which can improve performance for inference
     # bottlenecked workloads.
-    num_envs_per_worker: 1
+    num_envs_per_worker: 8
     # number of gpus for training
-    num_gpus: 1
+    num_gpus: 0
     # Whether to use a distribution of epsilons across workers for exploration.
-    per_worker_exploration: False
+    per_worker_exploration: True
     # Whether to compute priorities on workers.
-    worker_side_prioritization: False
+    worker_side_prioritization: True
     # Prevent iterations from going lower than this time span
-    min_iter_time_s: 1
+    min_iter_time_s: 30
 
     # === Advanced Resource Settings ===
     # Number of CPUs to allocate per worker.
@@ -144,4 +151,4 @@ hanabi-dqn-deepmind:
     num_gpus_per_worker: 0
     # Number of CPUs to allocate for the trainer. Note: this only takes effect
     # when running in Tune. Otherwise, the trainer runs in the main program.
-    num_cpus_for_driver: 1
+    num_cpus_for_driver: 8

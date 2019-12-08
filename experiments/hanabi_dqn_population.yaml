@@ -1,13 +1,14 @@
-hanabi-dqn-deepmind:
+hanabi-dqn-population:
   run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training
+  num_samples: 1
   stop:
-    timesteps_total: 100000000
+    timesteps_total: 10000000
   # checkpointing and uploading of checkpoints
-  checkpoint_freq: 50
+  #checkpoint_freq: 50
   checkpoint_at_end: True
-  upload_dir: gs://ray-cluster-out
+  #upload_dir: gs://ray-cluster-out
   #trainer config
   config:
     # environment parameters
@@ -25,15 +26,18 @@ hanabi-dqn-deepmind:
       fcnet_hiddens: [512]
       custom_model: ILA_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
-      fcnet_activation: relu
+      fcnet_activation:
+        grid_search:
+          - tanh
+          - relu
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
     # this is greater than 1 distributional Q-learning is used.
     # the discrete supports are bounded by v_min and v_max
     num_atoms: 51
-    v_min: -10.0
-    v_max: 10.0
+    v_min: -5.0
+    v_max: 5.0
     # Whether to use noisy network
     noisy: False
     # control the initial value of noisy nets
@@ -111,23 +115,23 @@ hanabi-dqn-deepmind:
     learning_starts: 500
     # Update the replay buffer with this many samples at once. Note that
     # this setting applies per-worker if num_workers > 1.
-    sample_batch_size: 4
+    sample_batch_size: 50
     # Size of a batched sampled from replay buffer for training. Note that
     # if async_updates is set then each worker returns gradients for a
     # batch of this size.
-    train_batch_size: 32
+    train_batch_size: 512
 
     # === Parallelism ===
     # Number of workers for collecting samples with. This only makes sense
     # to increase if your environment is particularly slow to sample or if
     # youre using the Async or Ape-X optimizers.
-    num_workers: 0
+    num_workers: 8
     # Number of environments to evaluate vectorwise per worker. This enables
     # model inference batching, which can improve performance for inference
     # bottlenecked workloads.
-    num_envs_per_worker: 1
+    num_envs_per_worker: 8
     # number of gpus for training
-    num_gpus: 1
+    num_gpus: 0
     # Whether to use a distribution of epsilons across workers for exploration.
     per_worker_exploration: False
     # Whether to compute priorities on workers.
@@ -144,4 +148,4 @@ hanabi-dqn-deepmind:
     num_gpus_per_worker: 0
     # Number of CPUs to allocate for the trainer. Note: this only takes effect
     # when running in Tune. Otherwise, the trainer runs in the main program.
-    num_cpus_for_driver: 1
+    num_cpus_for_driver: 8

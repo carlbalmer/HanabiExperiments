@@ -1,6 +1,7 @@
 cluster_name: basic-cpu
 
 max_workers: 1
+min_workers: 0
 
 provider:
     type: gcp
@@ -51,3 +52,4 @@ head_start_ray_commands:
       --object-manager-port=8076
       --autoscaling-config=~/ray_bootstrap_config.yaml
       --include-webui
+      --num-cpus 0
