@@ -67,7 +67,7 @@ class LegalActionsPolicyInferenceModel(DistributionalQModel, TFModelV2):
         q_module_out, state_2 = self.q_module({"obs": obs_module_out}, state_1, seq_lens)
         policy_module_out, state_3 = self.policy_module({"obs": obs_module_out}, state_1, seq_lens)
 
-        model_out = tf.multiply(q_module_out, policy_module_out)
+        model_out = tf.multiply(q_module_out, tf.stop_gradient(policy_module_out))
 
         self.calculate_and_store_q(input_dict, model_out)
 
@@ -125,7 +125,7 @@ class LegalActionsPolicyInferenceModel(DistributionalQModel, TFModelV2):
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.nn.softmax(tf.stop_gradient(previous_round)), logits=policy_head_out)
         self.policy_inference_loss = tf.reduce_mean(cross_entropy)
         self.q_loss = policy_loss
-        self.loss = (1 / tf.math.sqrt(self.policy_inference_loss)) * policy_loss + self.policy_inference_loss
+        self.loss = (1 / tf.math.sqrt(self.policy_inference_loss)) * self.q_loss + self.policy_inference_loss
         return self.loss
 
     def metrics(self):
