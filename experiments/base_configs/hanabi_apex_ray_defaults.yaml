@@ -8,6 +8,7 @@ hanabi-apex-default:
   checkpoint_freq: 50
   checkpoint_at_end: True
   upload_dir: gs://ray-cluster-out
+  max_failures: # none
   #trainer config
   config:
     # environment parameters
@@ -150,3 +151,7 @@ hanabi-apex-default:
     # Number of CPUs to allocate for the trainer. Note: this only takes effect
     # when running in Tune. Otherwise, the trainer runs in the main program.
     num_cpus_for_driver: 1
+    # Whether to attempt to continue training if a worker crashes. The number
+    # of currently healthy workers is reported as the "num_healthy_workers"
+    # metric.
+    ignore_worker_failures: False

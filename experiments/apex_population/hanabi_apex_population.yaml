@@ -27,7 +27,7 @@ hanabi-apex-population:
   checkpoint_freq: 50
   checkpoint_at_end: True
   upload_dir: gs://ray-cluster-out
-  max_failures: 5
+  max_failures: 10
   #trainer config
   config:
     # environment parameters
@@ -173,4 +173,4 @@ hanabi-apex-population:
     # Whether to attempt to continue training if a worker crashes. The number
     # of currently healthy workers is reported as the "num_healthy_workers"
     # metric.
-    ignore_worker_failures: True
+    ignore_worker_failures: False

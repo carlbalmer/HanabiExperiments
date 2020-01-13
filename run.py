@@ -4,6 +4,10 @@ import argparse
 import HanabiExperiments
 from ray import tune
 import ray.tune.schedulers
+import ray.tune.ray_trial_executor
+
+# double the number of start attempts so autoscaler has time to restart workers
+ray.tune.ray_trial_executor.TRIAL_START_ATTEMPTS = 10
 
 
 def create_parser():
