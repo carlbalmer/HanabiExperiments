@@ -1,7 +1,7 @@
-cluster_name: basic-cpu
+cluster_name: hanabi_apex_population
 
 max_workers: 1
-min_workers: 0
+min_workers: 1
 
 provider:
     type: gcp
@@ -23,7 +23,7 @@ head_node:
           sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-cpu-node
 
 worker_nodes:
-    machineType: n1-standard-2
+    machineType: n1-highcpu-64
     disks:
       - boot: true
         autoDelete: true

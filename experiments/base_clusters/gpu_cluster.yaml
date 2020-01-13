@@ -10,7 +10,7 @@ provider:
     project_id: hanabi-ma-thesis
 
 auth:
-    ssh_user: ubuntu
+    ssh_user: carl
 
 head_node:
     machineType: n1-standard-16
@@ -20,7 +20,7 @@ head_node:
         type: PERSISTENT
         initializeParams:
           diskSizeGb: 50
-          sourceImage: projects/hanabi-ma-thesis/global/images/ray-08-tf1-15-gpu-node
+          sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-gpu-node
     guestAccelerators:
       - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-a/acceleratorTypes/nvidia-tesla-p4
         acceleratorCount: 1
@@ -39,7 +39,7 @@ worker_nodes:
         type: PERSISTENT
         initializeParams:
           diskSizeGb: 50
-          sourceImage: projects/hanabi-ma-thesis/global/images/ray-08-tf1-15-cpu-node
+          sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-cpu-node
     scheduling:
       - preemptible: true
       - onHostMaintenance: TERMINATE

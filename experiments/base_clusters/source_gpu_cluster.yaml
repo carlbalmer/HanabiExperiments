@@ -1,4 +1,4 @@
-cluster_name: basic-gpu
+cluster_name: source-gpu
 
 max_workers: 1
 min_workers: 0
@@ -10,7 +10,7 @@ provider:
     project_id: hanabi-ma-thesis
 
 auth:
-    ssh_user: ubuntu
+    ssh_user: carl
 
 head_node:
     machineType: n1-standard-16

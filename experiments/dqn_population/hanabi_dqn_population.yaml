@@ -4,29 +4,30 @@ scheduler:
     time_attr: timesteps_total
     metric: episode_reward_mean
     mode: max
-    perturbation_interval: 300000
-    quantile_fraction: 0.35
+    perturbation_interval: 50000
     hyperparam_mutations:
       n_step: [1, 3, 5]
       # distribution for resampling
       lr: [2.5e-5, 5.e-4, 1.e-5, 5.e-5, 1.e-4, 1.e-3]
       # allow perturbations within this set of categorical values
       adam_epsilon: [3.125e-5, 1.e-8, 1.e-5, 6.e-5, 1.e-4, 1.e-3, 1.e-6]
-      sample_batch_size: [25,50,100]
-      train_batch_size: [256, 512, 1024]
+      sample_batch_size: [4, 8, 16, 32, 64]
+      train_batch_size: [32, 64, 128, 256, 512]
+      num_envs_per_worker: [1, 4, 8]
 
-hanabi-apex:
-  run: LegalActionApex
+hanabi-dqn-population:
+  run: LegalActionDQN
   env: Hanabi
-  # by what criterion to stop training
+  # population size
   num_samples: 4
-  restore: ~/resources/restore/checkpoint_740/checkpoint-740
+  # by what criterion to stop training
   stop:
-    timesteps_total: 100000000
+    timesteps_total: 10000000
   # checkpointing and uploading of checkpoints
-  checkpoint_freq: 20
+  #checkpoint_freq: 50
   checkpoint_at_end: True
-  #upload_dir: gs://ray-cluster-out
+  upload_dir: gs://ray-cluster-out
+  max_failures: 5
   #trainer config
   config:
     # environment parameters
@@ -41,10 +42,13 @@ hanabi-apex:
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [512, 512]
+      fcnet_hiddens: [512]
       custom_model: ILA_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
-      fcnet_activation: tanh
+      fcnet_activation:
+        grid_search:
+          - tanh
+          - relu
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
@@ -71,10 +75,10 @@ hanabi-apex:
     # Max num timesteps for annealing schedules. Exploration is annealed from
     # 1.0 to exploration_fraction over this number of timesteps scaled by
     # exploration_fraction
-    schedule_max_timesteps: 100000
+    schedule_max_timesteps: 1000
     # Minimum env steps to optimize for per train call. This value does
     # not affect learning only the length of iterations.
-    timesteps_per_iteration: 25000
+    timesteps_per_iteration: 10000
     # Fraction of entire training period over which the exploration rate is
     # annealed
     exploration_fraction: 0.1
@@ -98,7 +102,7 @@ hanabi-apex:
     # === Replay buffer ===
     # Size of the replay buffer. Note that if async_updates is set then
     # each worker will have a replay buffer of this size.
-    buffer_size: 2000000
+    buffer_size: 50000
     # If True prioritized replay buffer will be used.
     prioritized_replay: True
     # Alpha parameter for prioritized replay buffer.
@@ -127,19 +131,14 @@ hanabi-apex:
     # If not None clip gradients during optimization at this value
     grad_norm_clipping: 40
     # How many steps of the model to sample before learning starts.
-    learning_starts: 50000
+    learning_starts: 500
     # Update the replay buffer with this many samples at once. Note that
     # this setting applies per-worker if num_workers > 1.
-    sample_batch_size: 4
+    sample_batch_size: 50
     # Size of a batched sampled from replay buffer for training. Note that
     # if async_updates is set then each worker returns gradients for a
     # batch of this size.
-    train_batch_size: 32
-    # optimizer setttings
-    optimizer:
-      max_weight_sync_delay: 400
-      num_replay_buffer_shards: 4
-      debug: False
+    train_batch_size: 512
 
     # === Parallelism ===
     # Number of workers for collecting samples with. This only makes sense
@@ -153,11 +152,11 @@ hanabi-apex:
     # number of gpus for training
     num_gpus: 0
     # Whether to use a distribution of epsilons across workers for exploration.
-    per_worker_exploration: True
+    per_worker_exploration: False
     # Whether to compute priorities on workers.
-    worker_side_prioritization: True
+    worker_side_prioritization: False
     # Prevent iterations from going lower than this time span
-    min_iter_time_s: 30
+    min_iter_time_s: 1
 
     # === Advanced Resource Settings ===
     # Number of CPUs to allocate per worker.
@@ -169,3 +168,7 @@ hanabi-apex:
     # Number of CPUs to allocate for the trainer. Note: this only takes effect
     # when running in Tune. Otherwise, the trainer runs in the main program.
     num_cpus_for_driver: 8
+    # Whether to attempt to continue training if a worker crashes. The number
+    # of currently healthy workers is reported as the "num_healthy_workers"
+    # metric.
+    ignore_worker_failures: True

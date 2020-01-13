@@ -1,4 +1,4 @@
-cluster_name: basic-cpu
+cluster_name: source-cpu
 
 max_workers: 1
 
@@ -9,7 +9,7 @@ provider:
     project_id: hanabi-ma-thesis
 
 auth:
-    ssh_user: ubuntu
+    ssh_user: carl
 
 head_node:
     machineType: n1-standard-2
