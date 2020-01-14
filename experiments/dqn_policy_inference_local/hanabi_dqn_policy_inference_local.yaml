@@ -22,7 +22,7 @@ hanabi-dqn-policy-inference-local:
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [256, 256] # has no effect
+      fcnet_hiddens: [512] # has no effect
       custom_model: PI_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
@@ -36,7 +36,7 @@ hanabi-dqn-policy-inference-local:
     # Number of atoms for representing the distribution of return. When
     # this is greater than 1 distributional Q-learning is used.
     # the discrete supports are bounded by v_min and v_max
-    num_atoms: 1
+    num_atoms: 51
     v_min: -10.0
     v_max: 10.0
     # Whether to use noisy network
@@ -132,7 +132,7 @@ hanabi-dqn-policy-inference-local:
     # bottlenecked workloads.
     num_envs_per_worker: 1
     # number of gpus for training
-    num_gpus: 0
+    num_gpus: 1
     # Whether to use a distribution of epsilons across workers for exploration.
     per_worker_exploration: False
     # Whether to compute priorities on workers.
@@ -149,7 +149,7 @@ hanabi-dqn-policy-inference-local:
     num_gpus_per_worker: 0
     # Number of CPUs to allocate for the trainer. Note: this only takes effect
     # when running in Tune. Otherwise, the trainer runs in the main program.
-    num_cpus_for_driver: 4
+    num_cpus_for_driver: 2
     # Whether to attempt to continue training if a worker crashes. The number
     # of currently healthy workers is reported as the "num_healthy_workers"
     # metric.
