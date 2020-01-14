@@ -115,7 +115,7 @@ class LegalActionsPolicyInferenceModel(DistributionalQModel, TFModelV2):
         self.q_out = None
         return temp
 
-    def custom_loss(self, policy_loss, loss_inputs):
+    def inference_loss(self, policy_loss, loss_inputs):
         obs = restore_original_dimensions(loss_inputs["obs"], self.obs_space, self.framework)["board"]
         previous_round = restore_original_dimensions(loss_inputs["new_obs"], self.obs_space, self.framework)["previous_round"]
         obs_module_out, state_1 = self.obs_module({"obs": obs}, None, None)
@@ -123,14 +123,5 @@ class LegalActionsPolicyInferenceModel(DistributionalQModel, TFModelV2):
         concat = tf.concat([tf.one_hot(tf.stop_gradient(loss_inputs["actions"]), self.action_space.n), policy_module_out], axis=1)
         policy_head_out, _ = self.policy_head({"obs": concat}, state_2, None)
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.nn.softmax(tf.stop_gradient(previous_round)), logits=policy_head_out)
-        self.policy_inference_loss = tf.reduce_mean(cross_entropy)
-        self.q_loss = policy_loss
-        self.loss = (1 / tf.math.sqrt(self.policy_inference_loss)) * self.q_loss + self.policy_inference_loss
-        return self.loss
-
-    def metrics(self):
-        return {
-            "policy_inference_loss": self.policy_inference_loss,
-            "q_loss": self.q_loss,
-            "loss": self.loss
-        }
+        policy_inference_loss = tf.reduce_mean(cross_entropy)
+        return policy_inference_loss, (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
