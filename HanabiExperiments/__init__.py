@@ -3,10 +3,12 @@ from ray.rllib.models import ModelCatalog
 
 from HanabiExperiments.environment import MultiAgentHanabiEnv, env_creator
 from HanabiExperiments.model import IgnoreLegalActionsFCModel
+from HanabiExperiments.model_policy_inference import LegalActionsPolicyInferenceModel
 from HanabiExperiments.preprocessor import OriginalSpaceSamplingDictFlatteningPreprocessor
 from HanabiExperiments.policy import LegalActionDQNTrainer, LegalActionApexTrainer
 
 ModelCatalog.register_custom_model("ILA_FC", IgnoreLegalActionsFCModel)
+ModelCatalog.register_custom_model("PI_FC", LegalActionsPolicyInferenceModel)
 ModelCatalog.register_custom_preprocessor("OriginalSpaceSamplingPreprocessor",
                                           OriginalSpaceSamplingDictFlatteningPreprocessor)
 
