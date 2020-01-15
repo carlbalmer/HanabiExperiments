@@ -1,6 +1,7 @@
-cluster_name: basic-gpu
+cluster_name: source-gpu
 
 max_workers: 1
+min_workers: 0
 
 provider:
     type: gcp
@@ -9,10 +10,10 @@ provider:
     project_id: hanabi-ma-thesis
 
 auth:
-    ssh_user: ubuntu
+    ssh_user: carl
 
 head_node:
-    machineType: n1-standard-2
+    machineType: n1-standard-16
     disks:
       - boot: true
         autoDelete: true
@@ -21,7 +22,7 @@ head_node:
           diskSizeGb: 50
           sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
     guestAccelerators:
-      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-a/acceleratorTypes/nvidia-tesla-k80
+      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-a/acceleratorTypes/nvidia-tesla-p4
         acceleratorCount: 1
     metadata:
       items:
@@ -29,10 +30,9 @@ head_node:
           value: "True"
     scheduling:
       - onHostMaintenance: TERMINATE
-      - preemptible: true
 
 worker_nodes:
-    machineType: n1-standard-2
+    machineType: n1-standard-16
     disks:
       - boot: true
         autoDelete: true
@@ -42,13 +42,19 @@ worker_nodes:
           sourceImage: projects/deeplearning-platform-release/global/images/family/tf-1-15-cu100
     scheduling:
       - preemptible: true
+      - onHostMaintenance: TERMINATE
 
 setup_commands:
-    - pip3 install -U --user https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-0.8.0.dev6-cp35-cp35m-manylinux1_x86_64.whl git+https://github.com/carlbalmer/hanabi-learning-environment.git
-    - pip3 install --user ray[rllib,debug] gputil
-    - echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.profile
+  - >-
+    wget https://repo.continuum.io/miniconda/Miniconda3-4.7.12.1-Linux-x86_64.sh -O ~/miniconda3.sh
+    || true
+    && bash ~/miniconda3.sh -b -p ~/miniconda3 || true
+    && rm ~/miniconda3.sh
+    && echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.profile
 
-head_setup_commands: []
+  - pip install -U ray[rllib,debug]==0.8.0
+  - pip install -U /opt/deeplearning/binaries/tensorflow/tensorflow_gpu-1.15.0-cp37-cp37m-linux_x86_64.whl
+  - pip install -U gputil git+https://github.com/deepmind/hanabi-learning-environment.git requests cryptography aiohttp psutil setproctitle
 
 file_mounts: {
     "~/": ".",

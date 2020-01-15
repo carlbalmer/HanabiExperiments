@@ -3,6 +3,11 @@ import yaml
 import argparse
 import HanabiExperiments
 from ray import tune
+import ray.tune.schedulers
+import ray.tune.ray_trial_executor
+
+# double the number of start attempts so autoscaler has time to restart workers
+ray.tune.ray_trial_executor.TRIAL_START_ATTEMPTS = 10
 
 
 def create_parser():
@@ -12,7 +17,7 @@ def create_parser():
         default=None,
         type=str,
         help="Connect to an existing Ray cluster at this address instead "
-        "of starting a new one."
+             "of starting a new one."
     )
     parser.add_argument(
         "-f",
@@ -20,7 +25,7 @@ def create_parser():
         default=None,
         type=str,
         help="If specified, use config options from this file. Note that this "
-        "overrides any trial-specific options set via flags above."
+             "overrides any trial-specific options set via flags above."
     )
     parser.add_argument(
         "--debug",
@@ -41,10 +46,18 @@ def create_parser():
 
 
 def run(args, parser):
-    with open(args.config_file) as f:
-        experiments = yaml.safe_load(f)
     ray_config = {}
     tune_args = {}
+
+    with open(args.config_file) as f:
+        experiments = yaml.safe_load(f)
+
+    if "scheduler" in experiments:
+        scheduler_config = experiments.pop("scheduler")
+        scheduler = getattr(ray.tune.schedulers, scheduler_config["scheduler_cls"])(**scheduler_config["scheduler_args"])
+    else:
+        scheduler = None
+
     if args.ray_address:
         ray_config.update({"address": args.ray_address})
         if args.ray_address == "auto":
@@ -55,8 +68,9 @@ def run(args, parser):
             exp["config"].update({"eager": True})
     if args.resume:
         tune_args.update({"resume": args.resume})
+
     ray.init(**ray_config)
-    tune.run_experiments(experiments, **tune_args)
+    tune.run_experiments(experiments, scheduler=scheduler, **tune_args)
 
 
 if __name__ == "__main__":
