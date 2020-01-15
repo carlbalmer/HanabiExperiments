@@ -122,6 +122,6 @@ class LegalActionsPolicyInferenceModel(DistributionalQModel, TFModelV2):
         policy_module_out, state_2 = self.policy_module({"obs": obs_module_out}, state_1, None)
         concat = tf.concat([tf.one_hot(tf.stop_gradient(loss_inputs["actions"]), self.action_space.n), policy_module_out], axis=1)
         policy_head_out, _ = self.policy_head({"obs": concat}, state_2, None)
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.nn.softmax(tf.stop_gradient(previous_round)), logits=policy_head_out)
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round), logits=policy_head_out)
         policy_inference_loss = tf.reduce_mean(cross_entropy)
         return policy_inference_loss, (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
