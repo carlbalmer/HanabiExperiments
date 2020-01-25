@@ -14,6 +14,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         self.cum_reward = numpy.zeros((env_config["players"]), dtype=numpy.float)
         self.last_action = numpy.zeros((env_config["players"]), dtype=numpy.int)
         self.last_action[:] = -1
+        self.n_players = env_config["players"]
 
         n_actions = 2 * env_config["hand_size"] + (env_config["colors"] + env_config["ranks"]) * (
                 env_config["players"] - 1)
@@ -34,7 +35,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
                 low=0,
                 high=1,
                 shape=sample_obs["previous_round"].shape,
-                dtype=numpy.int)
+                dtype=sample_obs["previous_round"].dtype)
         })
 
     def reset(self):
@@ -53,7 +54,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         assert self.action_space.contains(current_player_action)
 
         self.state, reward, done, _ = self.env.step(current_player_action.item())
-        reward = reward / len(self.cum_reward) # scale the reward for each player - rllib sums up all player rewards
+        reward = reward / self.n_players # scale the reward for each player - rllib sums up all player rewards
         self.cum_reward += reward
         next_player, next_player_obs = self.extract_current_player_obs(self.state)
 
@@ -61,7 +62,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         reward_dict = {next_player: self.cum_reward[next_player]}
         done_dict = {"__all__": done}
         if done:
-            obs_dict = {player: next_player_obs for player in range(len(self.cum_reward))}
+            obs_dict = {player: next_player_obs for player in range(self.n_players)}
             reward_dict = {player: reward for player, reward in enumerate(self.cum_reward)}
         return obs_dict, reward_dict, done_dict, {}
 
@@ -82,9 +83,9 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
 
     def build_previous_round_actions(self, current_player):
         prev_round_int = numpy.roll(self.last_action, -current_player)[1:]
-        prev_round_onehot = numpy.zeros((prev_round_int.size, self.action_space.n), dtype=numpy.int)
+        prev_round_onehot = numpy.zeros((prev_round_int.size, self.action_space.n), dtype=numpy.float)
         prev_round_onehot[numpy.arange(prev_round_int.size), prev_round_int] = prev_round_int+1
-        prev_round_onehot[prev_round_onehot > 0] = 1
+        prev_round_onehot[prev_round_onehot > 0] = 1/(self.n_players-1)
         prev_round_onehot[prev_round_onehot < 0] = 0
         return prev_round_onehot.flatten()
 
