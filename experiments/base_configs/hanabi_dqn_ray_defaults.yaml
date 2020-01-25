@@ -24,7 +24,7 @@ hanabi-dqn-default:
     model:
       # n hidden layers
       fcnet_hiddens: [256, 256]
-      custom_model: ILA_FC
+      custom_model: Hanabi_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: tanh
     # q-head hidden size

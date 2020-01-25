@@ -24,7 +24,7 @@ hanabi-dqn-deepmind:
     model:
       # n hidden layers
       fcnet_hiddens: [512]
-      custom_model: ILA_FC
+      custom_model: Hanabi_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
     # q-head hidden size

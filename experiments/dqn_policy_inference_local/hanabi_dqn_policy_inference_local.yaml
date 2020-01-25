@@ -23,7 +23,7 @@ hanabi-dqn-policy-inference-local:
     model:
       # n hidden layers
       fcnet_hiddens: [512] # has no effect
-      custom_model: PI_FC
+      custom_model: Hanabi_PolicyInference_3step
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
       custom_options:

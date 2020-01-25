@@ -84,12 +84,12 @@ def build_q_losses(policy, model, _, train_batch):
                 tf.float32), config["gamma"], config["n_step"],
         config["num_atoms"], config["v_min"], config["v_max"])
 
-    policy_inference_loss, loss = policy.q_model.inference_loss(policy.q_loss.loss, train_batch)
+    loss = policy.q_model.extra_loss(policy.q_loss.loss, train_batch)
 
     policy.q_loss.stats.update({
         "q_loss": policy.q_loss.loss,
         "loss": loss,
-        "policy_inference_loss": policy_inference_loss# policy.q_model.policy_inference_loss
+        "extra_loss": policy.q_model.stat_extra_loss
     })
 
     return loss

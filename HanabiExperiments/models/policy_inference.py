@@ -1,21 +1,20 @@
 import numpy
-from ray.rllib.agents.dqn.distributional_q_model import DistributionalQModel
-from ray.rllib.models.tf.fcnet_v2 import FullyConnectedNetwork
-from ray.rllib.models.tf.tf_modelv2 import TFModelV2
-from ray.rllib.utils import try_import_tf
-from ray.rllib.utils.tf_ops import reduce_mean_ignore_inf
 from ray.rllib.models.model import restore_original_dimensions
+from ray.rllib.models.tf.fcnet_v2 import FullyConnectedNetwork
+from ray.rllib.utils import try_import_tf
+
+from HanabiExperiments.models.base import LegalActionsDistributionalQModel
 
 tf = try_import_tf()
 
 
-class LegalActionsPolicyInferenceModel(DistributionalQModel, TFModelV2):
+class HanabiPolicyInference3Step(LegalActionsDistributionalQModel):
 
     def __init__(self, obs_space, action_space, num_outputs, model_config, name, **kwargs):
-        super(LegalActionsPolicyInferenceModel, self).__init__(obs_space, action_space,
-                                                               model_config["custom_options"]["q_module_hiddens"][-1],
-                                                               model_config, name,
-                                                               **kwargs)
+        super(HanabiPolicyInference3Step, self).__init__(obs_space, action_space,
+                                                         model_config["custom_options"]["q_module_hiddens"][-1],
+                                                         model_config, name,
+                                                         **kwargs)
         self.obs_module = FullyConnectedNetwork(obs_space.original_space["board"],
                                                 None,
                                                 model_config["custom_options"]["obs_module_hiddens"][-1],
@@ -59,8 +58,6 @@ class LegalActionsPolicyInferenceModel(DistributionalQModel, TFModelV2):
         self.register_variables(self.q_module.variables())
         self.register_variables(self.policy_module.variables())
         self.register_variables(self.policy_head.variables())
-        self.q_config = {"num_atoms": kwargs["num_atoms"], "dueling": kwargs["dueling"]}
-        self.q_out = None
 
     def forward(self, input_dict, state, seq_lens):
         obs_module_out, state_1 = self.obs_module({"obs": input_dict["obs"]["board"]}, state, seq_lens)
@@ -73,55 +70,17 @@ class LegalActionsPolicyInferenceModel(DistributionalQModel, TFModelV2):
 
         return model_out, state_2
 
-    def calculate_and_store_q(self, input_dict, model_out):
-        if self.q_config["num_atoms"] > 1:
-            (action_scores, z, support_logits_per_action, logits,
-             dist) = self.get_q_value_distributions(model_out)
-        else:
-            (action_scores, logits,
-             dist) = self.get_q_value_distributions(model_out)
-        if self.q_config["dueling"]:
-            state_score = self.get_state_value(model_out)
-            if self.q_config["num_atoms"] > 1:
-                support_logits_per_action_mean = tf.reduce_mean(
-                    support_logits_per_action, 1)
-                support_logits_per_action_centered = (
-                        support_logits_per_action - tf.expand_dims(support_logits_per_action_mean, 1))
-                support_logits_per_action = tf.expand_dims(
-                    state_score, 1) + support_logits_per_action_centered
-                support_prob_per_action = tf.nn.softmax(
-                    logits=support_logits_per_action)
-                value = tf.reduce_sum(
-                    input_tensor=z * support_prob_per_action, axis=-1)
-                logits = support_logits_per_action
-                dist = support_prob_per_action
-            else:
-                action_scores_mean = reduce_mean_ignore_inf(action_scores, 1)
-                action_scores_centered = action_scores - tf.expand_dims(
-                    action_scores_mean, 1)
-                value = state_score + action_scores_centered
-        else:
-            value = action_scores
-        # Mask out invalid actions (use tf.float32.min for stability)
-        inf_mask = tf.cast(tf.maximum(tf.log(input_dict["obs"]["legal_actions"]), tf.float32.min), dtype=tf.float32)
-        value = value + inf_mask
-        self.q_out = {"value": value, "logits": logits, "dist": dist}
-
-    def value_function(self):
-        return self.fc.value_function()
-
-    def get_q_out(self):
-        temp = self.q_out
-        self.q_out = None
-        return temp
-
-    def inference_loss(self, policy_loss, loss_inputs):
+    def extra_loss(self, policy_loss, loss_inputs):
         obs = restore_original_dimensions(loss_inputs["obs"], self.obs_space, self.framework)["board"]
-        previous_round = restore_original_dimensions(loss_inputs["new_obs"], self.obs_space, self.framework)["previous_round"]
+        previous_round = restore_original_dimensions(loss_inputs["new_obs"], self.obs_space, self.framework)[
+            "previous_round"]
         obs_module_out, state_1 = self.obs_module({"obs": obs}, None, None)
         policy_module_out, state_2 = self.policy_module({"obs": obs_module_out}, state_1, None)
-        concat = tf.concat([tf.one_hot(tf.stop_gradient(loss_inputs["actions"]), self.action_space.n), policy_module_out], axis=1)
+        concat = tf.concat(
+            [tf.one_hot(tf.stop_gradient(loss_inputs["actions"]), self.action_space.n), policy_module_out], axis=1)
         policy_head_out, _ = self.policy_head({"obs": concat}, state_2, None)
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round), logits=policy_head_out)
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round),
+                                                                logits=policy_head_out)
         policy_inference_loss = tf.reduce_mean(cross_entropy)
-        return policy_inference_loss, (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
+        self.stat_extra_loss = policy_inference_loss
+        return (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss

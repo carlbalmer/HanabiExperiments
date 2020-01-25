@@ -43,7 +43,7 @@ hanabi-apex-population:
     model:
       # n hidden layers
       fcnet_hiddens: [512, 512]
-      custom_model: ILA_FC
+      custom_model: Hanabi_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: tanh
     # q-head hidden size

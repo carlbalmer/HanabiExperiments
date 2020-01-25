@@ -15,14 +15,17 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         self.last_action = numpy.zeros((env_config["players"]), dtype=numpy.int)
         self.last_action[:] = -1
         self.n_players = env_config["players"]
+        self.extras = env_config["extras"]
 
         n_actions = 2 * env_config["hand_size"] + (env_config["colors"] + env_config["ranks"]) * (
                 env_config["players"] - 1)
         self.action_space = LegalActionDiscrete(n_actions, self)
 
         sample_obs = self.reset()[0]
-        self.observation_space = Dict({
-            "board": Box(low=sample_obs["board"].min(),
+        self.observation_space = self.build_observation_space(sample_obs)
+
+    def build_observation_space(self, sample_obs):
+        spaces = {"board": Box(low=sample_obs["board"].min(),
                          high=sample_obs["board"].max(),
                          shape=sample_obs["board"].shape,
                          dtype=sample_obs["board"].dtype),
@@ -30,13 +33,14 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
                 low=sample_obs["legal_actions"].min(),
                 high=sample_obs["legal_actions"].max(),
                 shape=sample_obs["legal_actions"].shape,
-                dtype=sample_obs["legal_actions"].dtype),
-            "previous_round": Box(
+                dtype=sample_obs["legal_actions"].dtype)}
+        if "previous_round" in self.extras:
+            spaces.update({"previous_round": Box(
                 low=0,
                 high=1,
                 shape=sample_obs["previous_round"].shape,
-                dtype=sample_obs["previous_round"].dtype)
-        })
+                dtype=sample_obs["previous_round"].dtype)})
+        return Dict(spaces)
 
     def reset(self):
         self.state = self.env.reset()
