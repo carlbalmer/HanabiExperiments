@@ -19,11 +19,12 @@ hanabi-dqn-policy-inference-local:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
+      extras: ["previous_round"]
     # model parameters
     model:
       # n hidden layers
       fcnet_hiddens: [512] # has no effect
-      custom_model: PI_FC
+      custom_model: Hanabi_PolicyInference_3step
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
       custom_options:
@@ -132,7 +133,7 @@ hanabi-dqn-policy-inference-local:
     # bottlenecked workloads.
     num_envs_per_worker: 1
     # number of gpus for training
-    num_gpus: 1
+    num_gpus: 0.25
     # Whether to use a distribution of epsilons across workers for exploration.
     per_worker_exploration: False
     # Whether to compute priorities on workers.
@@ -149,7 +150,7 @@ hanabi-dqn-policy-inference-local:
     num_gpus_per_worker: 0
     # Number of CPUs to allocate for the trainer. Note: this only takes effect
     # when running in Tune. Otherwise, the trainer runs in the main program.
-    num_cpus_for_driver: 2
+    num_cpus_for_driver: 1
     # Whether to attempt to continue training if a worker crashes. The number
     # of currently healthy workers is reported as the "num_healthy_workers"
     # metric.

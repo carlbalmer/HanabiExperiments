@@ -15,28 +15,33 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         self.last_action = numpy.zeros((env_config["players"]), dtype=numpy.int)
         self.last_action[:] = -1
         self.n_players = env_config["players"]
+        self.extras = env_config.get("extras", [])
 
         n_actions = 2 * env_config["hand_size"] + (env_config["colors"] + env_config["ranks"]) * (
                 env_config["players"] - 1)
         self.action_space = LegalActionDiscrete(n_actions, self)
 
+        self.observation_space = self.build_observation_space()
+
+    def build_observation_space(self):
         sample_obs = self.reset()[0]
-        self.observation_space = Dict({
-            "board": Box(low=sample_obs["board"].min(),
-                         high=sample_obs["board"].max(),
-                         shape=sample_obs["board"].shape,
-                         dtype=sample_obs["board"].dtype),
+        spaces = {"board": Box(
+            low=sample_obs["board"].min(),
+            high=sample_obs["board"].max(),
+            shape=sample_obs["board"].shape,
+            dtype=sample_obs["board"].dtype),
             "legal_actions": Box(
                 low=sample_obs["legal_actions"].min(),
                 high=sample_obs["legal_actions"].max(),
                 shape=sample_obs["legal_actions"].shape,
-                dtype=sample_obs["legal_actions"].dtype),
-            "previous_round": Box(
+                dtype=sample_obs["legal_actions"].dtype)}
+        if "previous_round" in self.extras:
+            spaces.update({"previous_round": Box(
                 low=0,
                 high=1,
                 shape=sample_obs["previous_round"].shape,
-                dtype=sample_obs["previous_round"].dtype)
-        })
+                dtype=sample_obs["previous_round"].dtype)})
+        return Dict(spaces)
 
     def reset(self):
         self.state = self.env.reset()
@@ -54,7 +59,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         assert self.action_space.contains(current_player_action)
 
         self.state, reward, done, _ = self.env.step(current_player_action.item())
-        reward = reward / self.n_players # scale the reward for each player - rllib sums up all player rewards
+        reward = reward / self.n_players  # scale the reward for each player - rllib sums up all player rewards
         self.cum_reward += reward
         next_player, next_player_obs = self.extract_current_player_obs(self.state)
 
@@ -71,12 +76,17 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         current_player_obs = numpy.array(all_obs["player_observations"][current_player]["vectorized"], dtype=numpy.int)
         legal_actions = self.legal_actions_as_int_to_bool(
             all_obs["player_observations"][current_player]["legal_moves_as_int"])
-        previous_round = self.build_previous_round_actions(current_player)
-        return current_player, {
+        obs = {
             "board": current_player_obs,
             "legal_actions": legal_actions,
-            "previous_round": previous_round
         }
+        obs = self.add_extras_to_obs(obs, current_player)
+        return current_player, obs
+
+    def add_extras_to_obs(self, obs, current_player):
+        if "previous_round" in self.extras:
+            obs.update({"previous_round": self.build_previous_round_actions(current_player)})
+        return obs
 
     def legal_actions_as_int_to_bool(self, legal_moves_as_int):
         return (numpy.in1d(numpy.arange(self.action_space.n), numpy.array(legal_moves_as_int))).astype(numpy.int)
@@ -84,21 +94,10 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
     def build_previous_round_actions(self, current_player):
         prev_round_int = numpy.roll(self.last_action, -current_player)[1:]
         prev_round_onehot = numpy.zeros((prev_round_int.size, self.action_space.n), dtype=numpy.float)
-        prev_round_onehot[numpy.arange(prev_round_int.size), prev_round_int] = prev_round_int+1
-        prev_round_onehot[prev_round_onehot > 0] = 1/(self.n_players-1)
+        prev_round_onehot[numpy.arange(prev_round_int.size), prev_round_int] = prev_round_int + 1
+        prev_round_onehot[prev_round_onehot > 0] = 1 / (self.n_players - 1)
         prev_round_onehot[prev_round_onehot < 0] = 0
         return prev_round_onehot.flatten()
-
-
-HANABI_CONF_FULL_4p = {
-    "colors": 5,
-    "ranks": 5,
-    "players": 4,
-    "hand_size": 4,
-    "max_information_tokens": 8,
-    "max_life_tokens": 3,
-    "observation_type": 1
-}
 
 
 def env_creator(env_config):
