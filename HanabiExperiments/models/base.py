@@ -12,7 +12,6 @@ class LegalActionsDistributionalQModel(DistributionalQModel):
                                                         **kwargs)
         self.q_config = {"num_atoms": kwargs["num_atoms"], "dueling": kwargs["dueling"]}
         self.q_out = None
-        self.stat_extra_loss = None
 
     def forward(self, input_dict, state, seq_lens):
         raise NotImplementedError
@@ -59,5 +58,5 @@ class LegalActionsDistributionalQModel(DistributionalQModel):
         self.q_out = None
         return temp
 
-    def extra_loss(self, policy_loss, loss_inputs):
+    def extra_loss(self, policy_loss, loss_inputs, stats):
         return policy_loss

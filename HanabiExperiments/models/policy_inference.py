@@ -70,7 +70,7 @@ class HanabiPolicyInference3Step(LegalActionsDistributionalQModel):
 
         return model_out, state_2
 
-    def extra_loss(self, policy_loss, loss_inputs):
+    def extra_loss(self, policy_loss, loss_inputs, stats):
         obs = restore_original_dimensions(loss_inputs["obs"], self.obs_space, self.framework)["board"]
         previous_round = restore_original_dimensions(loss_inputs["new_obs"], self.obs_space, self.framework)[
             "previous_round"]
@@ -82,5 +82,9 @@ class HanabiPolicyInference3Step(LegalActionsDistributionalQModel):
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round),
                                                                 logits=policy_head_out)
         policy_inference_loss = tf.reduce_mean(cross_entropy)
-        self.stat_extra_loss = policy_inference_loss
-        return (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
+        combined_loss = (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
+        stats.update({
+            "combined_loss": combined_loss,
+            "policy_inference_loss": policy_inference_loss
+        })
+        return combined_loss
