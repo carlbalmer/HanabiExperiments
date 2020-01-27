@@ -11,6 +11,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
     def __init__(self, env_config):
         self.env = HanabiEnv(env_config)
         self.state = self.env.reset()
+        self.env_config = env_config
         self.cum_reward = numpy.zeros((env_config["players"]), dtype=numpy.float)
         self.last_action = numpy.zeros((env_config["players"]), dtype=numpy.int)
         self.last_action[:] = -1
@@ -20,8 +21,13 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         n_actions = 2 * env_config["hand_size"] + (env_config["colors"] + env_config["ranks"]) * (
                 env_config["players"] - 1)
         self.action_space = LegalActionDiscrete(n_actions, self)
-
+        self.card_map = self.build_card_map(env_config)
+        self.n_cards = env_config["colors"] * env_config["ranks"]
         self.observation_space = self.build_observation_space()
+
+    def build_card_map(self, env_config):
+        combinations = [str(x)+str(y) for x in self.state["player_observations"][0]["fireworks"].keys() for y in range(env_config["ranks"])]
+        return {value: key for key, value in enumerate(combinations)}
 
     def build_observation_space(self):
         sample_obs = self.reset()[0]
@@ -41,6 +47,12 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
                 high=1,
                 shape=sample_obs["previous_round"].shape,
                 dtype=sample_obs["previous_round"].dtype)})
+        if "hidden_hand" in self.extras:
+            spaces.update({"hidden_hand": Box(
+                low=sample_obs["hidden_hand"].min(),
+                high=sample_obs["hidden_hand"].max(),
+                shape=sample_obs["hidden_hand"].shape,
+                dtype=sample_obs["hidden_hand"].dtype)})
         return Dict(spaces)
 
     def reset(self):
@@ -86,6 +98,8 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
     def add_extras_to_obs(self, obs, current_player):
         if "previous_round" in self.extras:
             obs.update({"previous_round": self.build_previous_round_actions(current_player)})
+        if "hidden_hand" in self.extras:
+            obs.update({"hidden_hand": self.build_hidden_hand(current_player)})
         return obs
 
     def legal_actions_as_int_to_bool(self, legal_moves_as_int):
@@ -93,12 +107,26 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
 
     def build_previous_round_actions(self, current_player):
         prev_round_int = numpy.roll(self.last_action, -current_player)[1:]
-        prev_round_onehot = numpy.zeros((prev_round_int.size, self.action_space.n), dtype=numpy.float)
-        prev_round_onehot[numpy.arange(prev_round_int.size), prev_round_int] = prev_round_int + 1
-        prev_round_onehot[prev_round_onehot > 0] = 1 / (self.n_players - 1)
-        prev_round_onehot[prev_round_onehot < 0] = 0
+        prev_round_onehot = to_onehot(prev_round_int, self.action_space.n) / (self.n_players - 1)
         return prev_round_onehot.flatten()
+
+    def build_hidden_hand(self, current_player):
+        player_hand = self.state["player_observations"][(current_player + 1) % self.n_players]["observed_hands"][
+            self.n_players - 1]
+        cards_as_int = numpy.array([self.card_map[str(card["color"])+str(card["rank"])] for card in player_hand])
+        padded_cards_as_int = numpy.full(self.env_config["hand_size"], -1)
+        padded_cards_as_int[:cards_as_int.shape[0]] = cards_as_int
+        return to_onehot(padded_cards_as_int, self.n_cards)
 
 
 def env_creator(env_config):
     return MultiAgentHanabiEnv(env_config)
+
+
+def to_onehot(indexes, n_classes):
+    indexes = numpy.array(indexes)
+    one_hots = numpy.zeros((indexes.size, n_classes), dtype=numpy.int)
+    one_hots[numpy.arange(indexes.size), indexes] = indexes + 1
+    one_hots[one_hots > 0] = 1
+    one_hots[one_hots < 0] = 0
+    return one_hots
