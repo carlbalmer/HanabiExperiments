@@ -8,13 +8,16 @@ from HanabiExperiments.models.base import LegalActionsDistributionalQModel
 tf = try_import_tf()
 
 
-class HanabiPolicyInference3Step(LegalActionsDistributionalQModel):
+class HanabiPolicyInference(LegalActionsDistributionalQModel):
 
     def __init__(self, obs_space, action_space, num_outputs, model_config, name, **kwargs):
-        super(HanabiPolicyInference3Step, self).__init__(obs_space, action_space,
+        super(HanabiPolicyInference, self).__init__(obs_space, action_space,
                                                          model_config["custom_options"]["q_module_hiddens"][-1],
                                                          model_config, name,
                                                          **kwargs)
+        assert 0 < model_config["custom_options"]["inception_steps"] <= obs_space.original_space["previous_round"].shape[0]
+        self.inception_steps = model_config["custom_options"]["inception_steps"]
+
         self.obs_module = FullyConnectedNetwork(obs_space.original_space["board"],
                                                 None,
                                                 model_config["custom_options"]["obs_module_hiddens"][-1],
@@ -47,7 +50,7 @@ class HanabiPolicyInference3Step(LegalActionsDistributionalQModel):
         aux_head_input_dummy = numpy.zeros(
             action_space.n + model_config["custom_options"]["aux_module_hiddens"][-1])
         self.aux_head = FullyConnectedNetwork(aux_head_input_dummy, None,
-                                              numpy.prod(obs_space.original_space["previous_round"].shape),
+                                              obs_space.original_space["previous_round"].shape[-1] * self.inception_steps,
                                               {"fcnet_activation": model_config["fcnet_activation"],
                                                   "fcnet_hiddens": model_config["custom_options"][
                                                       "aux_head_hiddens"],
@@ -74,6 +77,7 @@ class HanabiPolicyInference3Step(LegalActionsDistributionalQModel):
         obs = restore_original_dimensions(loss_inputs["obs"], self.obs_space, self.framework)["board"]
         previous_round = restore_original_dimensions(loss_inputs["new_obs"], self.obs_space, self.framework)[
             "previous_round"]
+        previous_round = previous_round[:,:self.inception_steps]
         previous_round = tf.reshape(previous_round, [tf.shape(previous_round)[0], previous_round.shape[1] * previous_round.shape[2]])  # reshape so all hands are in one vector
         previous_round = tf.math.divide_no_nan(previous_round, tf.expand_dims(tf.reduce_sum(previous_round, 1), 1))
         obs_module_out, state_1 = self.obs_module({"obs": obs}, None, None)
