@@ -74,7 +74,7 @@ class HanabiHandInference(LegalActionsDistributionalQModel):
         hidden_hand = restore_original_dimensions(loss_inputs["obs"], self.obs_space, self.framework)[
             "hidden_hand"]
         hidden_hand = tf.reshape(hidden_hand,[tf.shape(hidden_hand)[0],hidden_hand.shape[1]*hidden_hand.shape[2]])  # reshape so all hands are in one vector
-        hidden_hand = hidden_hand / tf.expand_dims(tf.reduce_sum(hidden_hand, 1), 1)  # normalize so sum of vector is 1
+        hidden_hand = tf.math.divide_no_nan(hidden_hand, tf.expand_dims(tf.reduce_sum(hidden_hand, 1), 1))  # normalize so sum of vector is 1
         obs_module_out, state_1 = self.obs_module({"obs": obs}, None, None)
         aux_module_out, state_2 = self.aux_module({"obs": obs_module_out}, state_1, None)
         aux_head_out, _ = self.aux_head({"obs": aux_module_out}, state_2, None)
