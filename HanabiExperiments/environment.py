@@ -32,13 +32,13 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
     def build_observation_space(self):
         sample_obs = self.reset()[0]
         spaces = {"board": Box(
-            low=sample_obs["board"].min(),
-            high=sample_obs["board"].max(),
+            low=0,
+            high=1,
             shape=sample_obs["board"].shape,
             dtype=sample_obs["board"].dtype),
             "legal_actions": Box(
-                low=sample_obs["legal_actions"].min(),
-                high=sample_obs["legal_actions"].max(),
+                low=0,
+                high=1,
                 shape=sample_obs["legal_actions"].shape,
                 dtype=sample_obs["legal_actions"].dtype)}
         if "previous_round" in self.extras:
@@ -49,8 +49,8 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
                 dtype=sample_obs["previous_round"].dtype)})
         if "hidden_hand" in self.extras:
             spaces.update({"hidden_hand": Box(
-                low=sample_obs["hidden_hand"].min(),
-                high=sample_obs["hidden_hand"].max(),
+                low=0,
+                high=1,
                 shape=sample_obs["hidden_hand"].shape,
                 dtype=sample_obs["hidden_hand"].dtype)})
         return Dict(spaces)
@@ -107,8 +107,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
 
     def build_previous_round_actions(self, current_player):
         prev_round_int = numpy.roll(self.last_action, -current_player)[1:]
-        prev_round_onehot = to_onehot(prev_round_int, self.action_space.n) / (self.n_players - 1)
-        return prev_round_onehot.flatten()
+        return to_onehot(prev_round_int, self.action_space.n)
 
     def build_hidden_hand(self, current_player):
         player_hand = self.state["player_observations"][(current_player + 1) % self.n_players]["observed_hands"][

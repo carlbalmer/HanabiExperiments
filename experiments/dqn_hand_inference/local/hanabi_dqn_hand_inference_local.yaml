@@ -1,4 +1,4 @@
-hanabi-dqn-hand-inference-local:
+dqn-hand-inference-local:
   run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training
