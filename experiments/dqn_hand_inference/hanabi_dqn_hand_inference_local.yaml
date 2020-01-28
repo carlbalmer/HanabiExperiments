@@ -19,14 +19,19 @@ hanabi-dqn-hand-inference-local:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
-      extras: ["hidden_hand", "previous_round"]
+      extras: ["hidden_hand"]
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [512]
-      custom_model: Hanabi_FC
+      fcnet_hiddens: [512] # has no effect
+      custom_model: Hanabi_HandInference
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
+      custom_options:
+        obs_module_hiddens: [512]
+        q_module_hiddens: [512]
+        aux_module_hiddens: [512]
+        aux_head_hiddens: [512]
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
