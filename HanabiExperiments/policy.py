@@ -79,7 +79,7 @@ def build_q_losses(policy, model, _, train_batch):
 
     policy.q_loss = QLoss(
         q_t_selected, q_logits_t_selected, q_tp1_best, q_dist_tp1_best,
-        train_batch[PRIO_WEIGHTS], train_batch[SampleBatch.REWARDS],
+        tf.cast(train_batch[PRIO_WEIGHTS], tf.float32), train_batch[SampleBatch.REWARDS],
         tf.cast(train_batch[SampleBatch.DONES],
                 tf.float32), config["gamma"], config["n_step"],
         config["num_atoms"], config["v_min"], config["v_max"])
