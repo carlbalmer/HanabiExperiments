@@ -94,3 +94,26 @@ class HanabiPolicyInference(LegalActionsDistributionalQModel):
             "policy_inference_loss": policy_inference_loss
         })
         return combined_loss
+
+
+class HanabiTargetNNPolicyInference(HanabiPolicyInference):
+
+    def extra_loss(self, policy_loss, loss_inputs, previous_round, stats):
+        obs = restore_original_dimensions(loss_inputs["obs"], self.obs_space, self.framework)["board"]
+        previous_round = previous_round[:,:self.inception_steps]
+        previous_round = tf.reshape(previous_round, [tf.shape(previous_round)[0], previous_round.shape[1] * previous_round.shape[2]])  # reshape so all hands are in one vector
+        previous_round = tf.math.divide_no_nan(previous_round, tf.expand_dims(tf.reduce_sum(previous_round, 1), 1))
+        obs_module_out, state_1 = self.obs_module({"obs": obs}, None, None)
+        aux_module_out, state_2 = self.aux_module({"obs": obs_module_out}, state_1, None)
+        concat = tf.concat(
+            [tf.one_hot(tf.stop_gradient(loss_inputs["actions"]), self.action_space.n), aux_module_out], axis=1)
+        aux_head_out, _ = self.aux_head({"obs": concat}, state_2, None)
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round),
+                                                                logits=aux_head_out)
+        policy_inference_loss = tf.reduce_mean(cross_entropy)
+        combined_loss = (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
+        stats.update({
+            "combined_loss": combined_loss,
+            "policy_inference_loss": policy_inference_loss
+        })
+        return combined_loss

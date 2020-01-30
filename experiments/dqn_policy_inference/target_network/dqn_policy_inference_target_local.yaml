@@ -1,5 +1,5 @@
 dqn-policy-inference-target-local:
-  run: LegalActionDQN
+  run: TargetPolicyInferenceDQN
   env: Hanabi
   # by what criterion to stop training
   stop:
@@ -19,12 +19,12 @@ dqn-policy-inference-target-local:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
-      extras: ["previous_round" ,"previous_round_ops"]
+      extras: ["previous_round", "previous_round_ops"]
     # model parameters
     model:
       # n hidden layers
       fcnet_hiddens: [512] # has no effect
-      custom_model: Hanabi_PolicyInference
+      custom_model: Hanabi_TargetPolicyInference
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
       custom_options:
@@ -33,6 +33,7 @@ dqn-policy-inference-target-local:
         aux_module_hiddens: [512]
         aux_head_hiddens: [512]
         inception_steps: 1
+        infer_target_actions: #True
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
