@@ -62,19 +62,19 @@ def build_q_losses(policy, model, _, train_batch):
         "q_loss": policy.q_loss.loss
     })
 
-    targets = get_actions_from_target_net(train_batch, policy, policy.target_q_model, policy.observation_space)
+    targets = get_actions_from_target_net(train_batch, policy, policy.target_q_model, policy.observation_space, policy.action_space)
     loss = policy.q_model.extra_loss(policy.q_loss.loss, train_batch, targets, policy.q_loss.stats)
 
     return loss
 
 
-def get_actions_from_target_net(train_batch, policy, target_q_model, observation_space):
+def get_actions_from_target_net(train_batch, policy, target_q_model, observation_space, action_space):
     restored =restore_original_dimensions(train_batch[SampleBatch.NEXT_OBS], observation_space, target_q_model.framework)
     previous_round_obs = {}
-    previous_round_obs["board"] = tf.reshape(restored["previous_round_board"],
-                                   [tf.shape(restored["previous_round_board"])[0]*
-                                    restored["previous_round_board"].shape[1],
-                                    restored["previous_round_board"].shape[2]])
+    previous_round_obs["board"] = tf.reshape(restored["previous_round"],
+                                   [tf.shape(restored["previous_round"])[0]*
+                                    restored["previous_round"].shape[1],
+                                    restored["previous_round"].shape[2]])
     previous_round_obs["legal_actions"] = tf.reshape(restored["previous_round_legal_actions"],
                                            [tf.shape(restored["previous_round_legal_actions"])[0]*
                                             restored["previous_round_legal_actions"].shape[1],
@@ -86,7 +86,7 @@ def get_actions_from_target_net(train_batch, policy, target_q_model, observation
     previous_round = tf.reshape(previous_round,
                                 [tf.shape(restored["previous_round"])[0],
                                  restored["previous_round"].shape[1],
-                                 restored["previous_round"].shape[2]])
+                                 action_space.n])
     return previous_round
 
 

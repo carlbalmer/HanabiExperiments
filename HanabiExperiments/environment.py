@@ -89,13 +89,13 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         return (numpy.in1d(numpy.arange(self.action_space.n), numpy.array(legal_moves_as_int))).astype(numpy.int)
 
     def __add_extras_to_obs(self, obs, current_player):
-        if "previous_round" in self.extras:
+        if "previous_round" == self.extras:
             obs.update({"previous_round": self.__build_previous_round_actions(current_player)})
-        if "hidden_hand" in self.extras:
+        if "hidden_hand" == self.extras:
             obs.update({"hidden_hand": self.__build_hidden_hand(current_player)})
-        if "previous_round_ops" in self.extras:
+        if "previous_round_ops" == self.extras:
             previous_round_board, previous_round_legal_actions = self.__build_previous_round_ops(obs, current_player)
-            obs.update({"previous_round_board": previous_round_board, "previous_round_legal_actions": previous_round_legal_actions})
+            obs.update({"previous_round": previous_round_board, "previous_round_legal_actions": previous_round_legal_actions})
         return obs
 
     def __build_previous_round_actions(self, current_player):

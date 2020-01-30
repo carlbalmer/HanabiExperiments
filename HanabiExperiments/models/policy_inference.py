@@ -15,7 +15,7 @@ class HanabiPolicyInference(LegalActionsDistributionalQModel):
                                                          model_config["custom_options"]["q_module_hiddens"][-1],
                                                          model_config, name,
                                                          **kwargs)
-        assert 0 < model_config["custom_options"]["inception_steps"] <= obs_space.original_space["previous_round"].shape[0]
+        #assert 0 < model_config["custom_options"]["inception_steps"] <= obs_space.original_space["previous_round"].shape[0]
         self.inception_steps = model_config["custom_options"]["inception_steps"]
 
         self.obs_module = FullyConnectedNetwork(obs_space.original_space["board"],
@@ -50,7 +50,7 @@ class HanabiPolicyInference(LegalActionsDistributionalQModel):
         aux_head_input_dummy = numpy.zeros(
             action_space.n + model_config["custom_options"]["aux_module_hiddens"][-1])
         self.aux_head = FullyConnectedNetwork(aux_head_input_dummy, None,
-                                              obs_space.original_space["previous_round"].shape[-1] * self.inception_steps,
+                                              action_space.n * self.inception_steps,
                                               {"fcnet_activation": model_config["fcnet_activation"],
                                                   "fcnet_hiddens": model_config["custom_options"][
                                                       "aux_head_hiddens"],
