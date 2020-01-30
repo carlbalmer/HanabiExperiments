@@ -20,7 +20,7 @@ hanabi-dqn-hand-inference-local:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
-      extras: ["hidden_hand"]
+      extras: hidden_hand
     # model parameters
     model:
       # n hidden layers
