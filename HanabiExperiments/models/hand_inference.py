@@ -88,3 +88,26 @@ class HanabiHandInference(LegalActionsDistributionalQModel):
             "hand_inference_loss": hand_inference_loss
         })
         return combined_loss
+
+
+class HanabiHandInferenceIndependentLoss(HanabiHandInference):
+
+    def extra_loss(self, policy_loss, loss_inputs, stats):
+        obs = restore_original_dimensions(loss_inputs["obs"], self.obs_space, self.framework)["board"]
+        hidden_hand = restore_original_dimensions(loss_inputs["obs"], self.obs_space, self.framework)[
+            "hidden_hand"]
+        hidden_hand = tf.reshape(hidden_hand,[tf.shape(hidden_hand)[0] * hidden_hand.shape[1], hidden_hand.shape[2]])  # reshape so all hands are in one batch
+        obs_module_out, state_1 = self.obs_module({"obs": obs}, None, None)
+        aux_module_out, state_2 = self.aux_module({"obs": obs_module_out}, state_1, None)
+        aux_head_out, _ = self.aux_head({"obs": aux_module_out}, state_2, None)
+        aux_head_out = tf.reshape(aux_head_out, tf.shape(hidden_hand))
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(
+            labels=tf.stop_gradient(hidden_hand),
+            logits=aux_head_out)
+        hand_inference_loss = tf.reduce_mean(cross_entropy)
+        combined_loss = (1 / tf.math.sqrt(hand_inference_loss)) * policy_loss + hand_inference_loss
+        stats.update({
+            "combined_loss": combined_loss,
+            "hand_inference_loss": hand_inference_loss
+        })
+        return combined_loss
