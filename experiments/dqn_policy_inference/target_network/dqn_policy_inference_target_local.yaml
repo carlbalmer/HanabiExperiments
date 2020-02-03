@@ -7,7 +7,7 @@ dqn-policy-inference-target-local:
   # checkpointing and uploading of checkpoints
   checkpoint_freq: 50
   checkpoint_at_end: True
-  max_failures:
+  max_failures: 10
   #trainer config
   config:
     # environment parameters
@@ -19,6 +19,7 @@ dqn-policy-inference-target-local:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
+      turn_stacking: 0
       extras: previous_round_ops
     # model parameters
     model:

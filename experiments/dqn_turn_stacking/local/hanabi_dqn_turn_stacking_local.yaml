@@ -1,4 +1,4 @@
-dqn-hand-inference-local:
+hanabi-dqn-turn-stacking-local:
   run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training
@@ -19,20 +19,14 @@ dqn-hand-inference-local:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
-      turn_stacking: 0
-      extras: hidden_hand
+      turn_stacking: 2
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [512] # has no effect
-      custom_model: Hanabi_HandInference
+      fcnet_hiddens: [512]
+      custom_model: Hanabi_FC
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
-      custom_options:
-        obs_module_hiddens: [512]
-        q_module_hiddens: [512]
-        aux_module_hiddens: [512]
-        aux_head_hiddens: [512]
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
