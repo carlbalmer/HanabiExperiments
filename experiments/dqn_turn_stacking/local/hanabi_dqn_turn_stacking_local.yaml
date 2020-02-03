@@ -1,4 +1,4 @@
-hanabi-dqn-deepmind-local:
+hanabi-dqn-turn-stacking-local:
   run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training

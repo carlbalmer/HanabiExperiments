@@ -27,7 +27,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         # fields to track extras
         self.last_action = numpy.full(self.n_players, -1, dtype=numpy.int)  # used for previous_round
         self.card_map = self.__build_card_map(env_config)  # used for hidden_hand
-        self.last_obs = numpy.zeros([self.n_players, len(self.state["player_observations"][0]["vectorized"])], dtype=numpy.int)
+        self.last_obs = numpy.zeros([self.n_players, (env_config["turn_stacking"]*self.n_players +1)* len(self.state["player_observations"][0]["vectorized"])], dtype=numpy.int)
         self.last_legal_actions = numpy.zeros([self.n_players, n_actions], dtype=numpy.int)
         # create spaces
         self.action_space = LegalActionDiscrete(n_actions, self)
@@ -115,7 +115,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         return to_onehot(padded_cards_as_int, self.n_cards)
 
     def __build_previous_round_ops(self, obs, current_player):
-        self.last_obs[current_player,:] = obs["board"]
+        self.last_obs[current_player] = obs["board"]
         self.last_legal_actions[current_player,:] = obs["legal_actions"]
         return numpy.roll(self.last_obs, -current_player)[1:], numpy.roll(self.last_legal_actions, -current_player, axis=0)[1:]
 
@@ -144,7 +144,7 @@ class ObsStacker:
         self.obs[:, 0, :] = player_observations
 
     def get(self, current_player):
-        return self.obs[current_player]
+        return self.obs[current_player].flatten()
 
     def reset(self):
         self.obs[:] = 0
