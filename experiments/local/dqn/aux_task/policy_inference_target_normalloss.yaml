@@ -1,5 +1,5 @@
-hanabi-dqn-deepmind-local:
-  run: LegalActionDQN
+local-dqn-auxtask-policy-inference-target-normalloss:
+  run: TargetPolicyInferenceDQN
   env: Hanabi
   # by what criterion to stop training
   stop:
@@ -20,13 +20,21 @@ hanabi-dqn-deepmind-local:
       max_life_tokens: 3
       observation_type: 1
       turn_stacking: 0
+      extras: previous_round_ops
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [512]
-      custom_model: Hanabi_FC
+      fcnet_hiddens: [512] # has no effect
+      custom_model: Hanabi_TargetPolicyInference
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
+      custom_options:
+        obs_module_hiddens: [512]
+        q_module_hiddens: [512]
+        aux_module_hiddens: [512]
+        aux_head_hiddens: [512]
+        inception_steps: 1
+        infer_target_actions: #True
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When

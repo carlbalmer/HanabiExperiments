@@ -1,5 +1,5 @@
-dqn-hand-inference-independent-loss-local:
-  run: LegalActionDQN
+local-dqn-auxtask-policy-inference-target-batchloss:
+  run: TargetPolicyInferenceDQN
   env: Hanabi
   # by what criterion to stop training
   stop:
@@ -20,12 +20,12 @@ dqn-hand-inference-independent-loss-local:
       max_life_tokens: 3
       observation_type: 1
       turn_stacking: 0
-      extras: hidden_hand
+      extras: previous_round_ops
     # model parameters
     model:
       # n hidden layers
       fcnet_hiddens: [512] # has no effect
-      custom_model: Hanabi_HandInference_independent_loss
+      custom_model: Hanabi_TargetPolicyInference_independent_loss
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
       custom_options:
@@ -33,6 +33,8 @@ dqn-hand-inference-independent-loss-local:
         q_module_hiddens: [512]
         aux_module_hiddens: [512]
         aux_head_hiddens: [512]
+        inception_steps: 1
+        infer_target_actions: #True
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
