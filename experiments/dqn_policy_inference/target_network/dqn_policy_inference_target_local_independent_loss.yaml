@@ -33,7 +33,7 @@ dqn-policy-inference-target-independent-loss-local:
         q_module_hiddens: [512]
         aux_module_hiddens: [512]
         aux_head_hiddens: [512]
-        inception_steps: 3
+        inception_steps: 1
         infer_target_actions: #True
     # q-head hidden size
     # === Model ===
