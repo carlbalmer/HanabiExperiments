@@ -1,4 +1,4 @@
-cluster_name: hanabi-dqn-deepmind
+cluster_name: apex-default-cpu
 
 max_workers: 1
 min_workers: 1
@@ -13,7 +13,7 @@ auth:
     ssh_user: carl
 
 head_node:
-    machineType: n1-standard-1
+    machineType: n1-standard-2
     disks:
       - boot: true
         autoDelete: true
@@ -23,7 +23,7 @@ head_node:
           sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-cpu-node
 
 worker_nodes:
-    machineType: n1-standard-2
+    machineType: n1-standard-16
     disks:
       - boot: true
         autoDelete: true

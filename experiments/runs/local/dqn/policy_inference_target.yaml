@@ -1,5 +1,5 @@
-cluster-dqn-deepmind:
-  run: LegalActionDQN
+local-dqn-auxtask-policy-inference-target:
+  run: TargetPolicyInferenceDQN
   env: Hanabi
   # by what criterion to stop training
   stop:
@@ -7,7 +7,6 @@ cluster-dqn-deepmind:
   # checkpointing and uploading of checkpoints
   checkpoint_freq: 50
   checkpoint_at_end: True
-  upload_dir: gs://ray-cluster-out
   max_failures: 10
   #trainer config
   config:
@@ -20,13 +19,25 @@ cluster-dqn-deepmind:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
+      turn_stacking: 0
+      extras: previous_round_ops
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [512]
-      custom_model: Hanabi_FC
+      fcnet_hiddens: [512] # has no effect
+      custom_model:
+        grid_search:
+          - Hanabi_TargetPolicyInference_independent_loss
+          - Hanabi_TargetPolicyInference
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
+      custom_options:
+        obs_module_hiddens: [512]
+        q_module_hiddens: [512]
+        aux_module_hiddens: [512]
+        aux_head_hiddens: [512]
+        inception_steps:
+          grid_search: [1,3]
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
@@ -128,7 +139,7 @@ cluster-dqn-deepmind:
     # bottlenecked workloads.
     num_envs_per_worker: 1
     # number of gpus for training
-    num_gpus: 0
+    num_gpus: 0.2
     # Whether to use a distribution of epsilons across workers for exploration.
     per_worker_exploration: False
     # Whether to compute priorities on workers.
@@ -145,7 +156,7 @@ cluster-dqn-deepmind:
     num_gpus_per_worker: 0
     # Number of CPUs to allocate for the trainer. Note: this only takes effect
     # when running in Tune. Otherwise, the trainer runs in the main program.
-    num_cpus_for_driver: 2
+    num_cpus_for_driver: 1
     # Whether to attempt to continue training if a worker crashes. The number
     # of currently healthy workers is reported as the "num_healthy_workers"
     # metric.
