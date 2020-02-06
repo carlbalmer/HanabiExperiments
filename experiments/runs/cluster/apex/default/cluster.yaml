@@ -1,7 +1,7 @@
 cluster_name: apex-default-cpu
 
-max_workers: 1
-min_workers: 1
+max_workers: 0
+min_workers: 0
 
 provider:
     type: gcp
@@ -13,16 +13,6 @@ auth:
     ssh_user: carl
 
 head_node:
-    machineType: n1-standard-2
-    disks:
-      - boot: true
-        autoDelete: true
-        type: PERSISTENT
-        initializeParams:
-          diskSizeGb: 50
-          sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-cpu-node
-
-worker_nodes:
     machineType: n1-standard-16
     disks:
       - boot: true
@@ -31,8 +21,6 @@ worker_nodes:
         initializeParams:
           diskSizeGb: 50
           sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-cpu-node
-    scheduling:
-      - preemptible: true
 
 file_mounts: {
     "~/": ".",
@@ -52,4 +40,3 @@ head_start_ray_commands:
       --object-manager-port=8076
       --autoscaling-config=~/ray_bootstrap_config.yaml
       --include-webui
-      --num-cpus 0
