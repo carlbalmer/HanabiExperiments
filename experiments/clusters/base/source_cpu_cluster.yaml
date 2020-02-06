@@ -41,9 +41,9 @@ setup_commands:
     && rm ~/miniconda3.sh
     && echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.profile
 
-  - pip install -U ray[rllib,debug]==0.8.0
-  - pip install -U /opt/deeplearning/binaries/tensorflow/tensorflow-1.15.0-cp37-cp37m-linux_x86_64.whl
-  - pip install -U gputil git+https://github.com/deepmind/hanabi-learning-environment.git requests cryptography aiohttp psutil setproctitle
+  - pip install -U ray[rllib,debug]==0.8.1
+  - pip install -U tensorflow==1.15
+  - pip install -U gputil git+https://github.com/deepmind/hanabi-learning-environment.git requests cryptography aiohttp psutil setproctitle pandas
 
 file_mounts: {
     "~/": ".",
