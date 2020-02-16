@@ -1,4 +1,4 @@
-cluster_name: apex-default-cpu
+cluster_name: cpu-16-persistent
 
 max_workers: 0
 min_workers: 0
