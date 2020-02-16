@@ -1,9 +1,9 @@
-dqn-policy-inference-target-independent-loss-local:
-  run: TargetPolicyInferenceDQN
+local-dqn-auxtask-policy-inference:
+  run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training
   stop:
-    timesteps_total: 100000000
+    timesteps_total: 30000000
   # checkpointing and uploading of checkpoints
   checkpoint_freq: 50
   checkpoint_at_end: True
@@ -20,12 +20,15 @@ dqn-policy-inference-target-independent-loss-local:
       max_life_tokens: 3
       observation_type: 1
       turn_stacking: 0
-      extras: previous_round_ops
+      extras: previous_round
     # model parameters
     model:
       # n hidden layers
       fcnet_hiddens: [512] # has no effect
-      custom_model: Hanabi_TargetPolicyInference_independent_loss
+      custom_model:
+        grid_search:
+          - Hanabi_PolicyInference_independent_loss
+          - Hanabi_PolicyInference
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
       custom_options:
@@ -33,8 +36,8 @@ dqn-policy-inference-target-independent-loss-local:
         q_module_hiddens: [512]
         aux_module_hiddens: [512]
         aux_head_hiddens: [512]
-        inception_steps: 1
-        infer_target_actions: #True
+        inception_steps:
+          grid_search: [1,3]
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
@@ -136,7 +139,7 @@ dqn-policy-inference-target-independent-loss-local:
     # bottlenecked workloads.
     num_envs_per_worker: 1
     # number of gpus for training
-    num_gpus: 0.25
+    num_gpus: 0.2
     # Whether to use a distribution of epsilons across workers for exploration.
     per_worker_exploration: False
     # Whether to compute priorities on workers.

@@ -1,9 +1,9 @@
-hanabi-dqn-deepmind-local:
+local-dqn-auxtask-hand-inference:
   run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training
   stop:
-    timesteps_total: 100000000
+    timesteps_total: 30000000
   # checkpointing and uploading of checkpoints
   checkpoint_freq: 50
   checkpoint_at_end: True
@@ -20,13 +20,22 @@ hanabi-dqn-deepmind-local:
       max_life_tokens: 3
       observation_type: 1
       turn_stacking: 0
+      extras: hidden_hand
     # model parameters
     model:
       # n hidden layers
-      fcnet_hiddens: [512]
-      custom_model: Hanabi_FC
+      fcnet_hiddens: [512] # has no effect
+      custom_model:
+        grid_search:
+          - Hanabi_HandInference_independent_loss
+          - Hanabi_HandInference
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
+      custom_options:
+        obs_module_hiddens: [512]
+        q_module_hiddens: [512]
+        aux_module_hiddens: [512]
+        aux_head_hiddens: [512]
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
@@ -128,7 +137,7 @@ hanabi-dqn-deepmind-local:
     # bottlenecked workloads.
     num_envs_per_worker: 1
     # number of gpus for training
-    num_gpus: 0.25
+    num_gpus: 0.2
     # Whether to use a distribution of epsilons across workers for exploration.
     per_worker_exploration: False
     # Whether to compute priorities on workers.

@@ -1,4 +1,4 @@
-hanabi-dqn-turn-stacking-local:
+local-dqn-deepmind:
   run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training
@@ -19,7 +19,7 @@ hanabi-dqn-turn-stacking-local:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
-      turn_stacking: 2
+      turn_stacking: 0
     # model parameters
     model:
       # n hidden layers
@@ -128,7 +128,7 @@ hanabi-dqn-turn-stacking-local:
     # bottlenecked workloads.
     num_envs_per_worker: 1
     # number of gpus for training
-    num_gpus: 0.25
+    num_gpus: 0.2
     # Whether to use a distribution of epsilons across workers for exploration.
     per_worker_exploration: False
     # Whether to compute priorities on workers.
