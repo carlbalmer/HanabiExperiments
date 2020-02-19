@@ -1,5 +1,4 @@
-cluster_name: apex-population-cpu
-
+cluster_name: cpu-64-persistent
 max_workers: 0
 min_workers: 0
 
@@ -39,4 +38,4 @@ head_start_ray_commands:
       --redis-port=6379
       --object-manager-port=8076
       --autoscaling-config=~/ray_bootstrap_config.yaml
-      --include-webui
+      --include-webui TRUE
