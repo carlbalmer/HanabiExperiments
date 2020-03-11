@@ -1,0 +1,160 @@
+{
+  "checkpoints": [
+    {
+      "trainable_name": "LegalActionDQN",
+      "trial_id": "7ec8ffcc",
+      "config": {
+        "env_config": {
+          "colors": 5,
+          "ranks": 5,
+          "players": 4,
+          "hand_size": 4,
+          "max_information_tokens": 8,
+          "max_life_tokens": 3,
+          "observation_type": 1,
+          "turn_stacking": 0
+        },
+        "model": {
+          "fcnet_hiddens": [
+            512
+          ],
+          "custom_model": "Hanabi_FC",
+          "custom_preprocessor": "OriginalSpaceSamplingPreprocessor",
+          "fcnet_activation": "relu"
+        },
+        "num_atoms": 51,
+        "v_min": -10.0,
+        "v_max": 10.0,
+        "noisy": false,
+        "sigma0": 0.5,
+        "dueling": true,
+        "double_q": true,
+        "hiddens": [
+          512
+        ],
+        "n_step": 1,
+        "schedule_max_timesteps": 1000,
+        "timesteps_per_iteration": 10000,
+        "exploration_fraction": 0.1,
+        "exploration_final_eps": 0.02,
+        "target_network_update_freq": 500,
+        "soft_q": false,
+        "softmax_temp": 1.0,
+        "parameter_noise": false,
+        "evaluation_config": {
+          "exploration_fraction": 0,
+          "exploration_final_eps": 0
+        },
+        "buffer_size": 50000,
+        "prioritized_replay": true,
+        "prioritized_replay_alpha": 0.6,
+        "prioritized_replay_beta": 0.4,
+        "beta_annealing_fraction": 0.2,
+        "final_prioritized_replay_beta": 0.4,
+        "prioritized_replay_eps": 1e-06,
+        "compress_observations": true,
+        "gamma": 0.99,
+        "lr": 2.5e-05,
+        "lr_schedule": null,
+        "adam_epsilon": 3.125e-05,
+        "grad_norm_clipping": 40,
+        "learning_starts": 500,
+        "sample_batch_size": 4,
+        "train_batch_size": 32,
+        "num_workers": 0,
+        "num_envs_per_worker": 1,
+        "num_gpus": 0.25,
+        "per_worker_exploration": false,
+        "worker_side_prioritization": false,
+        "min_iter_time_s": 1,
+        "num_cpus_per_worker": 1,
+        "num_gpus_per_worker": 0,
+        "num_cpus_for_driver": 1,
+        "ignore_worker_failures": false,
+        "env": "Hanabi"
+      },
+      "local_dir": "/home/carl/ray_results/hanabi-dqn-deepmind-local",
+      "evaluated_params": {},
+      "experiment_tag": "0",
+      "address": {
+        "_type": "CLOUDPICKLE_FALLBACK",
+        "value": "8004953a000000000000008c0e7261792e74756e652e747269616c948c084c6f636174696f6e9493942981947d94288c08686f73746e616d65944e8c03706964944e75622e"
+      },
+      "resources": {
+        "cpu": 1,
+        "gpu": 0.25,
+        "memory": 0,
+        "object_store_memory": 0,
+        "extra_cpu": 0,
+        "extra_gpu": 0,
+        "extra_memory": 0,
+        "extra_object_store_memory": 0,
+        "custom_resources": {},
+        "extra_custom_resources": {}
+      },
+      "stopping_criterion": {
+        "timesteps_total": 100000000
+      },
+      "loggers": "80044e2e",
+      "sync_to_driver_fn": "80044e2e",
+      "verbose": true,
+      "max_failures": 10,
+      "last_result": {},
+      "last_update_time": -Infinity,
+      "checkpoint_freq": 50,
+      "checkpoint_at_end": true,
+      "metric_analysis": {},
+      "sync_on_checkpoint": true,
+      "checkpoint_manager": {
+        "_type": "CLOUDPICKLE_FALLBACK",
+        "value": "8004951d010000000000008c1b7261792e74756e652e636865636b706f696e745f6d616e61676572948c11436865636b706f696e744d616e616765729493942981947d94288c146b6565705f636865636b706f696e74735f6e756d94477ff00000000000008c165f636865636b706f696e745f73636f72655f6465736394898c165f636865636b706f696e745f73636f72655f61747472948c12747261696e696e675f697465726174696f6e948c116e65776573745f636865636b706f696e749468008c0a436865636b706f696e749493942981947d94288c0773746f72616765948c046469736b948c0576616c7565944e8c06726573756c74947d9475628c115f626573745f636865636b706f696e7473945d948c0b5f6d656d62657273686970948f9475622e"
+      },
+      "export_formats": [],
+      "status": "RUNNING",
+      "start_time": 1580800259.4965384,
+      "logdir": "/home/carl/ray_results/hanabi-dqn-deepmind-local/LegalActionDQN_Hanabi_7ec8ffcc_2020-02-04_08-10-59asy3xvnu",
+      "runner": null,
+      "result_logger": null,
+      "last_debug": 0,
+      "error_file": null,
+      "error_msg": null,
+      "num_failures": 0,
+      "custom_trial_name": null,
+      "results": "80044e2e",
+      "best_result": "80044e2e",
+      "param_config": "80044e2e",
+      "extra_arg": "80044e2e",
+      "_nonjson_fields": [
+        "checkpoint",
+        "loggers",
+        "sync_to_driver_fn",
+        "results",
+        "best_result",
+        "param_config",
+        "extra_arg"
+      ],
+      "checkpoint": "80044e2e",
+      "__logger_started__": true
+    }
+  ],
+  "runner_data": {
+    "_global_time_limit": Infinity,
+    "_total_time": 614.2714335918427,
+    "_iteration": 10,
+    "_verbose": true,
+    "_server_port": 4321,
+    "_local_checkpoint_dir": "/home/carl/ray_results/hanabi-dqn-deepmind-local",
+    "_remote_checkpoint_dir": null,
+    "_resumed": false,
+    "_start_time": 1580800259.4828863,
+    "_last_checkpoint_time": 1580821133.7251532,
+    "_checkpoint_period": 10,
+    "_session_str": "2020-02-04_08-10-59",
+    "checkpoint_file": "/home/carl/ray_results/hanabi-dqn-deepmind-local/experiment_state-2020-02-04_08-10-59.json",
+    "launch_web_server": false
+  },
+  "stats": {
+    "start_time": 1580800259.4828863,
+    "timestamp": 1580821133.7251532
+  }
+}
