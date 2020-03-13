@@ -1,6 +1,6 @@
-cluster_name: basic-gpu
+cluster_name: gpu-8-persistent
 
-max_workers: 1
+max_workers: 0
 min_workers: 0
 
 provider:
@@ -13,7 +13,7 @@ auth:
     ssh_user: carl
 
 head_node:
-    machineType: n1-standard-16
+    machineType: n1-standard-8
     disks:
       - boot: true
         autoDelete: true
@@ -29,19 +29,6 @@ head_node:
         - key: install-nvidia-driver
           value: "True"
     scheduling:
-      - onHostMaintenance: TERMINATE
-
-worker_nodes:
-    machineType: n1-standard-16
-    disks:
-      - boot: true
-        autoDelete: true
-        type: PERSISTENT
-        initializeParams:
-          diskSizeGb: 50
-          sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-cpu-node
-    scheduling:
-      - preemptible: true
       - onHostMaintenance: TERMINATE
 
 file_mounts: {
