@@ -1,11 +1,11 @@
-local-dqn-auxtask-policy-inference-target:
-  run: TargetPolicyInferenceDQN
+local-dqn-auxtask-policy-inference-fixed-ratio:
+  run: LegalActionDQN
   env: Hanabi
   # by what criterion to stop training
   stop:
     timesteps_total: 30000000
   # checkpointing and uploading of checkpoints
-  checkpoint_freq: 50
+  checkpoint_freq: 500
   checkpoint_at_end: True
   max_failures: 10
   #trainer config
@@ -20,15 +20,12 @@ local-dqn-auxtask-policy-inference-target:
       max_life_tokens: 3
       observation_type: 1
       turn_stacking: 0
-      extras: previous_round_ops
+      extras: previous_round
     # model parameters
     model:
       # n hidden layers
       fcnet_hiddens: [512] # has no effect
-      custom_model:
-        grid_search:
-          - Hanabi_TargetPolicyInference_independent_loss
-          - Hanabi_TargetPolicyInference
+      custom_model: Hanabi_PolicyInference_independent_loss
       custom_preprocessor: OriginalSpaceSamplingPreprocessor
       fcnet_activation: relu
       custom_options:
@@ -36,9 +33,9 @@ local-dqn-auxtask-policy-inference-target:
         q_module_hiddens: [512]
         aux_module_hiddens: [512]
         aux_head_hiddens: [512]
-        inception_steps:
-          grid_search: [1,3]
-        aux_loss_formula: sqrt
+        inception_steps: 1
+        aux_loss_formula:
+          grid_search: [0.01, 0.05, 0.2, 0.6]
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When

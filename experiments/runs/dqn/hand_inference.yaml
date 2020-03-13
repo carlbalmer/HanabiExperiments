@@ -36,6 +36,7 @@ local-dqn-auxtask-hand-inference:
         q_module_hiddens: [512]
         aux_module_hiddens: [512]
         aux_head_hiddens: [512]
+        aux_loss_formula: sqrt
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
