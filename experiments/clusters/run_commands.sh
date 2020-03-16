@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-ray exec --start --stop --tmux experiments/runs/cluster/apex/default/cluster.yaml 'python run.py -f experiments/runs/cluster/apex/default/config.yaml --ray-address auto'
-ray exec experiments/runs/cluster/apex/default/cluster.yaml 'tensorboard --logdir ~/ray_results/ --port 6006' --port-forward 6006 --port-forward 8081
-# ray attach experiments/runs/cluster/apex/default/cluster.yaml --tmux
+ray exec --start --stop --tmux {cluster_config} -n {cluster_name} 'python run.py -f {experiment_config} --ray-address auto'
+ray exec {cluster_config} -n {cluster_name} 'tensorboard --logdir ~/ray_results/ --port 6007' --port-forward 6007 --port-forward 8265
+ray attach {cluster_config} -n {cluster_name} --tmux

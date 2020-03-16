@@ -1,11 +1,11 @@
-cluster-apex-gpu-test-2:
+cluster-apex-default-nstep-1-larger-epsilon-gpu:
   run: LegalActionApex
   env: Hanabi
   # by what criterion to stop training
   stop:
     timesteps_total: 50000000
   # checkpointing and uploading of checkpoints
-  checkpoint_freq: 200
+  checkpoint_freq: 500
   checkpoint_at_end: True
   upload_dir: gs://ray-cluster-out
   max_failures: 10
@@ -34,8 +34,8 @@ cluster-apex-gpu-test-2:
     # this is greater than 1 distributional Q-learning is used.
     # the discrete supports are bounded by v_min and v_max
     num_atoms: 51
-    v_min: -5.0
-    v_max: 5.0
+    v_min: -7.0
+    v_max: 7.0
     # Whether to use noisy network
     noisy: False
     # control the initial value of noisy nets
@@ -48,7 +48,7 @@ cluster-apex-gpu-test-2:
     # state and action values. See also the model config in catalog.py.
     hiddens: [512]
     # N-step Q learning
-    n_step: 3
+    n_step: 1
 
     # === Exploration ===
     # Max num timesteps for annealing schedules. Exploration is annealed from
@@ -106,7 +106,7 @@ cluster-apex-gpu-test-2:
     # Learning rate schedule
     lr_schedule: # nothing equals None
     # Adam epsilon hyper parameter
-    adam_epsilon: 0.00000001
+    adam_epsilon: 0.00003125
     # If not None clip gradients during optimization at this value
     grad_norm_clipping: 40
     # How many steps of the model to sample before learning starts.

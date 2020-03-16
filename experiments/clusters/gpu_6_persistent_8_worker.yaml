@@ -1,12 +1,12 @@
 cluster_name: gpu-6-persistent-16-woker
 
-max_workers: 1
-min_workers: 1
+max_workers: 3
+min_workers: 3
 
 provider:
     type: gcp
     region: us-central1
-    availability_zone: us-central1-a
+    availability_zone: us-central1-c
     project_id: hanabi-ma-thesis
 
 auth:
@@ -22,7 +22,7 @@ head_node:
           diskSizeGb: 50
           sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-gpu-node
     guestAccelerators:
-      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-a/acceleratorTypes/nvidia-tesla-p4
+      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-c/acceleratorTypes/nvidia-tesla-k80
         acceleratorCount: 1
     metadata:
       items:
@@ -32,7 +32,7 @@ head_node:
       - onHostMaintenance: TERMINATE
 
 worker_nodes:
-    machineType: n1-standard-16
+    machineType: n1-highcpu-8
     disks:
       - boot: true
         autoDelete: true
