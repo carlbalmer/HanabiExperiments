@@ -32,7 +32,7 @@ head_node:
       - onHostMaintenance: TERMINATE
 
 worker_nodes:
-    machineType: n1-highcpu-8
+    machineType: n1-standard-8
     disks:
       - boot: true
         autoDelete: true
