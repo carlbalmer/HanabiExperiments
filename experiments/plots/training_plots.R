@@ -8,6 +8,11 @@ library("tidyverse")
 cols = cols(experiment_tag = col_character())
 baseline = read_csv("experiments/runs/dqn/local-dqn-deepmind/LegalActionDQN_Hanabi_a47106c6_2020-01-26_21-15-48bkgpc4fw/progress.csv",col_names = T, cols) %>% add_column(name =  "baseline")
 
+stack_round_1 = read_csv("experiments/runs/dqn/local-dqn-turn-stacking/1_turn/progress.csv") %>% add_column(name =  "1 round")
+stack_round_3 = read_csv("experiments/runs/dqn/local-dqn-turn-stacking/3_turn/progress.csv") %>% add_column(name =  "3 rounds")
+stack_round_6 = read_csv("experiments/runs/dqn/local-dqn-turn-stacking/6_turn/progress.csv") %>% add_column(name =  "6 rounds")
+stack_round_1_deeper = read_csv("experiments/runs/dqn/local-dqn-turn-stacking-deeper/LegalActionDQN_Hanabi_0f119e68_2020-03-14_11-46-28hpd71rwd/progress.csv", col_names = T, cols) %>% add_column(name =  "1 round deeper")
+
 hand_adaptive = read_csv("experiments/runs/dqn/local-dqn-auxtask-hand-inference/independant_loss/progress.csv") %>% add_column(name =  "adaptive")
 hand_1 = read_csv("experiments/runs/dqn/local-dqn-auxtask-hand-inference-fixed-ratio/1/progress.csv") %>% add_column(name =  "1%")
 hand_5 = read_csv("experiments/runs/dqn/local-dqn-auxtask-hand-inference-fixed-ratio/5/progress.csv") %>% add_column(name =  "5%")
@@ -78,3 +83,8 @@ apex_time_plot = base_plot +
   labs(x = "training time (days)")
 ggsave("apex_time.pdf", plot = apex_time_plot, width = 5, height = 5)
 
+round_stacking_plot = base_plot +
+  stat_smooth(data = bind_rows(stack_round_1, stack_round_3, stack_round_6, stack_round_1_deeper), mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean, color = name), method = "loess", span = 0.05, n = 1000, se = F) +
+  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000, se = F) +
+  lims(x = c(0,30))
+ggsave("round_stacking.pdf", plot = round_stacking_plot, width = 5, height = 5)
