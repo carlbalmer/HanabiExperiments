@@ -3,7 +3,7 @@ cluster-apex-default-nstep-1-larger-epsilon-gpu:
   env: Hanabi
   # by what criterion to stop training
   stop:
-    timesteps_total: 50000000
+    timesteps_total: 100000000
   # checkpointing and uploading of checkpoints
   checkpoint_freq: 500
   checkpoint_at_end: True
