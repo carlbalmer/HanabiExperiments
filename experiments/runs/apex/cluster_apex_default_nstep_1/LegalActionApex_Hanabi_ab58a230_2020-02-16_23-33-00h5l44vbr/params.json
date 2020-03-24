@@ -1,0 +1,75 @@
+{
+  "adam_epsilon": 1e-08,
+  "beta_annealing_fraction": 0.2,
+  "buffer_size": 2000000,
+  "compress_observations": true,
+  "double_q": true,
+  "dueling": true,
+  "env": "Hanabi",
+  "env_config": {
+    "colors": 5,
+    "hand_size": 4,
+    "max_information_tokens": 8,
+    "max_life_tokens": 3,
+    "observation_type": 1,
+    "players": 4,
+    "ranks": 5,
+    "turn_stacking": 0
+  },
+  "evaluation_config": {
+    "exploration_final_eps": 0,
+    "exploration_fraction": 0
+  },
+  "exploration_final_eps": 0.02,
+  "exploration_fraction": 0.1,
+  "final_prioritized_replay_beta": 0.4,
+  "gamma": 0.99,
+  "grad_norm_clipping": 40,
+  "hiddens": [
+    512
+  ],
+  "ignore_worker_failures": false,
+  "learning_starts": 50000,
+  "lr": 0.0005,
+  "lr_schedule": null,
+  "min_iter_time_s": 30,
+  "model": {
+    "custom_model": "Hanabi_FC",
+    "custom_preprocessor": "OriginalSpaceSamplingPreprocessor",
+    "fcnet_activation": "relu",
+    "fcnet_hiddens": [
+      512
+    ]
+  },
+  "n_step": 1,
+  "noisy": false,
+  "num_atoms": 51,
+  "num_cpus_for_driver": 8,
+  "num_cpus_per_worker": 1,
+  "num_envs_per_worker": 8,
+  "num_gpus": 0,
+  "num_gpus_per_worker": 0,
+  "num_workers": 8,
+  "optimizer": {
+    "debug": false,
+    "max_weight_sync_delay": 400,
+    "num_replay_buffer_shards": 4
+  },
+  "parameter_noise": false,
+  "per_worker_exploration": true,
+  "prioritized_replay": true,
+  "prioritized_replay_alpha": 0.6,
+  "prioritized_replay_beta": 0.4,
+  "prioritized_replay_eps": 1e-06,
+  "sample_batch_size": 50,
+  "schedule_max_timesteps": 100000,
+  "sigma0": 0.5,
+  "soft_q": false,
+  "softmax_temp": 1.0,
+  "target_network_update_freq": 500000,
+  "timesteps_per_iteration": 25000,
+  "train_batch_size": 512,
+  "v_max": 5.0,
+  "v_min": -5.0,
+  "worker_side_prioritization": true
+}
