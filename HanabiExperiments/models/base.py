@@ -328,3 +328,12 @@ class LegalActionsDistributionalQModel(DistributionalQModel):
 
     def extra_loss(self, policy_loss, loss_inputs, stats):
         return policy_loss
+
+
+def get_aux_loss_formula(config):
+    if isinstance(config, str) and config == "sqrt":
+        return lambda policy_loss, aux_loss: (1 / tf.math.sqrt(aux_loss)) * policy_loss + aux_loss
+    elif isinstance(config, float) and 0 <= config <= 1:
+        return lambda policy_loss, aux_loss: policy_loss * (1-config) + aux_loss * config
+    else:
+        raise ValueError("config must either be 'sqrt' or an float between 0 and 1.")

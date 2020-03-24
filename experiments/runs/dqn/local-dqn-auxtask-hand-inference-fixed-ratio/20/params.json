@@ -1,0 +1,86 @@
+{
+  "adam_epsilon": 3.125e-05,
+  "beta_annealing_fraction": 0.2,
+  "buffer_size": 50000,
+  "compress_observations": true,
+  "double_q": true,
+  "dueling": true,
+  "env": "Hanabi",
+  "env_config": {
+    "colors": 5,
+    "extras": "hidden_hand",
+    "hand_size": 4,
+    "max_information_tokens": 8,
+    "max_life_tokens": 3,
+    "observation_type": 1,
+    "players": 4,
+    "ranks": 5,
+    "turn_stacking": 0
+  },
+  "evaluation_config": {
+    "exploration_final_eps": 0,
+    "exploration_fraction": 0
+  },
+  "exploration_final_eps": 0.02,
+  "exploration_fraction": 0.1,
+  "final_prioritized_replay_beta": 0.4,
+  "gamma": 0.99,
+  "grad_norm_clipping": 40,
+  "hiddens": [
+    512
+  ],
+  "ignore_worker_failures": false,
+  "learning_starts": 500,
+  "lr": 2.5e-05,
+  "lr_schedule": null,
+  "min_iter_time_s": 1,
+  "model": {
+    "custom_model": "Hanabi_HandInference_independent_loss",
+    "custom_options": {
+      "aux_head_hiddens": [
+        512
+      ],
+      "aux_loss_formula": 0.2,
+      "aux_module_hiddens": [
+        512
+      ],
+      "obs_module_hiddens": [
+        512
+      ],
+      "q_module_hiddens": [
+        512
+      ]
+    },
+    "custom_preprocessor": "OriginalSpaceSamplingPreprocessor",
+    "fcnet_activation": "relu",
+    "fcnet_hiddens": [
+      512
+    ]
+  },
+  "n_step": 1,
+  "noisy": false,
+  "num_atoms": 51,
+  "num_cpus_for_driver": 1,
+  "num_cpus_per_worker": 1,
+  "num_envs_per_worker": 1,
+  "num_gpus": 0.2,
+  "num_gpus_per_worker": 0,
+  "num_workers": 0,
+  "parameter_noise": false,
+  "per_worker_exploration": false,
+  "prioritized_replay": true,
+  "prioritized_replay_alpha": 0.6,
+  "prioritized_replay_beta": 0.4,
+  "prioritized_replay_eps": 1e-06,
+  "sample_batch_size": 4,
+  "schedule_max_timesteps": 1000,
+  "sigma0": 0.5,
+  "soft_q": false,
+  "softmax_temp": 1.0,
+  "target_network_update_freq": 500,
+  "timesteps_per_iteration": 10000,
+  "train_batch_size": 32,
+  "v_max": 10.0,
+  "v_min": -10.0,
+  "worker_side_prioritization": false
+}

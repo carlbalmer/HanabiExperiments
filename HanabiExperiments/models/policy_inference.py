@@ -3,7 +3,7 @@ from ray.rllib.models.model import restore_original_dimensions
 from ray.rllib.models.tf.fcnet_v2 import FullyConnectedNetwork
 from ray.rllib.utils import try_import_tf
 
-from HanabiExperiments.models.base import LegalActionsDistributionalQModel
+from HanabiExperiments.models.base import LegalActionsDistributionalQModel, get_aux_loss_formula
 
 tf = try_import_tf()
 
@@ -61,6 +61,7 @@ class HanabiPolicyInference(LegalActionsDistributionalQModel):
         self.register_variables(self.q_module.variables())
         self.register_variables(self.aux_module.variables())
         self.register_variables(self.aux_head.variables())
+        self.aux_loss_formula = get_aux_loss_formula(model_config["custom_options"]["aux_loss_formula"])
 
     def forward(self, input_dict, state, seq_lens):
         obs_module_out, state_1 = self.obs_module({"obs": input_dict["obs"]["board"]}, state, seq_lens)
@@ -88,7 +89,7 @@ class HanabiPolicyInference(LegalActionsDistributionalQModel):
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round),
                                                                 logits=aux_head_out)
         policy_inference_loss = tf.reduce_mean(cross_entropy)
-        combined_loss = (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
+        combined_loss = self.aux_loss_formula(policy_loss, policy_inference_loss)
         stats.update({
             "combined_loss": combined_loss,
             "policy_inference_loss": policy_inference_loss
@@ -111,7 +112,7 @@ class HanabiTargetNNPolicyInference(HanabiPolicyInference):
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round),
                                                                 logits=aux_head_out)
         policy_inference_loss = tf.reduce_mean(cross_entropy)
-        combined_loss = (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
+        combined_loss = self.aux_loss_formula(policy_loss, policy_inference_loss)
         stats.update({
             "combined_loss": combined_loss,
             "policy_inference_loss": policy_inference_loss
@@ -138,7 +139,7 @@ class HanabiPolicyInferenceIndependentLoss(HanabiPolicyInference):
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round),
                                                                 logits=aux_head_out)
         policy_inference_loss = tf.reduce_mean(cross_entropy)
-        combined_loss = (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
+        combined_loss = self.aux_loss_formula(policy_loss, policy_inference_loss)
         stats.update({
             "combined_loss": combined_loss,
             "policy_inference_loss": policy_inference_loss
@@ -161,7 +162,7 @@ class HanabiTargetNNPolicyInferenceIndependentLoss(HanabiPolicyInference):
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.stop_gradient(previous_round),
                                                                 logits=aux_head_out)
         policy_inference_loss = tf.reduce_mean(cross_entropy)
-        combined_loss = (1 / tf.math.sqrt(policy_inference_loss)) * policy_loss + policy_inference_loss
+        combined_loss = self.aux_loss_formula(policy_loss, policy_inference_loss)
         stats.update({
             "combined_loss": combined_loss,
             "policy_inference_loss": policy_inference_loss
