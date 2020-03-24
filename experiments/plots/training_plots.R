@@ -28,24 +28,40 @@ base_plot = ggplot() + lims(y = c(0,25)) + labs(x = "timesteps (million)", y = "
 
 baseline_plot = base_plot +
   geom_line(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "lightblue") +
-  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000)
+  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000, se = F)
 
 ggsave("baseline.pdf", plot = baseline_plot, width = 5, height = 5)
 
 hand_inference_plot = base_plot +
-  stat_smooth(data = bind_rows(hand_adaptive, hand_1, hand_5, hand_20, hand_60), mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean, color = name), method = "loess", span = 0.05, n = 1000) +
-  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000) +
+  stat_smooth(data = bind_rows(hand_adaptive, hand_1, hand_5, hand_20, hand_60), mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean, color = name), method = "loess", span = 0.05, n = 1000, se = F) +
+  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000, se = F) +
   lims(x = c(0,30))
 ggsave("hand_inference.pdf", plot = hand_inference_plot, width = 5, height = 5)
 
 policy_inference_plot = base_plot +
-  stat_smooth(data = bind_rows(policy_1, policy_3, target_policy_3, target_policy_1), mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean, color = name), method = "loess", span = 0.05, n = 1000) +
-  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000) +
+  stat_smooth(data = bind_rows(policy_1, policy_3, target_policy_3, target_policy_1), mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean, color = name), method = "loess", span = 0.05, n = 1000, se = F) +
+  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000, se = F) +
   lims(x = c(0,30))
 ggsave("policy_inference.pdf", plot = policy_inference_plot, width = 5, height = 5)
 
 policy_inference_fixed_plot = base_plot +
-  stat_smooth(data = bind_rows(policy_1 %>% mutate(name = "adaptive"), policy_fixed_1, policy_fixed_5, policy_fixed_20, policy_fixed_60), mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean, color = name), method = "loess", span = 0.05, n = 1000) +
-  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000) +
+  stat_smooth(data = bind_rows(policy_1 %>% mutate(name = "adaptive"), policy_fixed_1, policy_fixed_5, policy_fixed_20, policy_fixed_60), mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean, color = name), method = "loess", span = 0.05, n = 1000, se = F) +
+  stat_smooth(data = baseline, mapping = aes(x = timesteps_total / 1e6, y = episode_reward_mean), color = "black", method = "loess", span = 0.05, n = 1000, se = F) +
   lims(x = c(0,30))
 ggsave("policy_inference_fixed.pdf", plot = policy_inference_fixed_plot, width = 5, height = 5)
+
+policy_inference_loss_plot = base_plot +
+  stat_smooth(data = bind_rows(policy_1, policy_3, target_policy_3, target_policy_1),mapping = aes(x = timesteps_total / 1e6, y = `info/learner/default_policy/policy_inference_loss`, color = name), method = "loess", span = 0.05, n = 1000, se = F) +
+  lims(x = c(0,30), y = c(0,4)) + labs(y = "auxiliary loss (cross entropy)")
+ggsave("policy_inference_loss.pdf", plot = policy_inference_loss_plot, width = 5, height = 5)
+
+policy_inference_fixed_loss_plot = base_plot +
+  stat_smooth(data = bind_rows(policy_1 %>% mutate(name = "adaptive"), policy_fixed_1, policy_fixed_5, policy_fixed_20, policy_fixed_60), mapping = aes(x = timesteps_total / 1e6, y = `info/learner/default_policy/policy_inference_loss`, color = name), method = "loess", span = 0.05, n = 1000, se = F) +
+  lims(x = c(0,30), y = c(0,4)) + labs(y = "auxiliary loss (cross entropy)")
+ggsave("policy_inference_fixed_loss.pdf", plot = policy_inference_fixed_loss_plot, width = 5, height = 5)
+
+hand_inference_loss_plot = base_plot +
+  stat_smooth(data = bind_rows(hand_adaptive, hand_1, hand_5, hand_20, hand_60),  mapping = aes(x = timesteps_total / 1e6, y = `info/learner/default_policy/hand_inference_loss`, color = name), method = "loess", span = 0.05, n = 1000, se = F) +
+  lims(x = c(0,30), y = c(0,4)) + labs(y = "auxiliary loss (cross entropy)")
+ggsave("hand_inference_loss.pdf", plot = hand_inference_loss_plot, width = 5, height = 5)
+
