@@ -22,7 +22,7 @@ head_node:
           diskSizeGb: 50
           sourceImage: projects/hanabi-ma-thesis/global/images/family/ray-gpu-node
     guestAccelerators:
-      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-c/acceleratorTypes/nvidia-tesla-k80
+      - acceleratorType: projects/hanabi-ma-thesis/zones/us-central1-c/acceleratorTypes/nvidia-tesla-p4
         acceleratorCount: 1
     metadata:
       items:
