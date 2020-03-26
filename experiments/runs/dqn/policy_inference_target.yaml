@@ -19,7 +19,6 @@ local-dqn-auxtask-policy-inference-target:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
-      turn_stacking: 0
       extras: previous_round_ops
     # model parameters
     model:

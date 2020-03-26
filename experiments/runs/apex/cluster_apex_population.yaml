@@ -39,7 +39,6 @@ cluster-apex-population:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
-      turn_stacking: 0
     # model parameters
     model:
       # n hidden layers
