@@ -33,7 +33,6 @@ local-dqn-auxtask-policy-inference_step_1:
         aux_module_hiddens: [512]
         aux_head_hiddens: [512]
         inception_steps: 1
-        aux_loss_formula: sqrt
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When
