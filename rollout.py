@@ -249,8 +249,6 @@ def run(args, parser):
             parser.error("the following arguments are required: --env")
         args.env = config.get("env")
 
-    ray.init()
-
     cls = get_trainable_cls(args.run)
     agent = cls(env=args.env, config=config)
     agent.restore(args.checkpoint)
@@ -421,7 +419,7 @@ if __name__ == "__main__":
 
     args_list = []
     for checkpoint in checkpoints:
-        if (os.path.exists(os.path.join(checkpoint.parent, "rollout.pkl")) or os.path.exists(os.path.join(checkpoint.parent, "rollout_episode_rewards.txt"))) and not override_existing:
+        if os.path.exists(os.path.join(checkpoint.parent, "rollout_episode_rewards.txt")) and not override_existing:
             print("rollout exists " + str(checkpoint))
             continue
 
@@ -434,6 +432,9 @@ if __name__ == "__main__":
         args = {"checkpoint": str(checkpoint), "run": trainable_name, "out": str(os.path.join(checkpoint.parent, "rollout.pkl"))}
         args.update(default_args)
         args_list.append(AttrDict(args))
+
+    ray.init()
+
     for args in args_list:
         run(args, parser)
         if not keep_pkl:
