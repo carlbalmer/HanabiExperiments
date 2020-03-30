@@ -19,7 +19,6 @@ local-dqn-auxtask-policy-inference_step_1:
       max_information_tokens: 8
       max_life_tokens: 3
       observation_type: 1
-      turn_stacking: 0
       extras: previous_round
     # model parameters
     model:
@@ -34,7 +33,6 @@ local-dqn-auxtask-policy-inference_step_1:
         aux_module_hiddens: [512]
         aux_head_hiddens: [512]
         inception_steps: 1
-        aux_loss_formula: sqrt
     # q-head hidden size
     # === Model ===
     # Number of atoms for representing the distribution of return. When

@@ -57,7 +57,7 @@ class HanabiHandInference(LegalActionsDistributionalQModel):
         self.register_variables(self.q_module.variables())
         self.register_variables(self.aux_module.variables())
         self.register_variables(self.aux_head.variables())
-        self.aux_loss_formula = get_aux_loss_formula(model_config["custom_options"]["aux_loss_formula"])
+        self.aux_loss_formula = get_aux_loss_formula(model_config["custom_options"].get("aux_loss_formula", "sqrt"))
 
     def forward(self, input_dict, state, seq_lens):
         obs_module_out, state_1 = self.obs_module({"obs": input_dict["obs"]["board"]}, state, seq_lens)

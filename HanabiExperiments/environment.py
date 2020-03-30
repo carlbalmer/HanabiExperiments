@@ -18,7 +18,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         self.env = HanabiEnv(env_config)
         self.state = self.env.reset()
         # create observation stacker
-        self.obs_stacker = ObsStacker(env_config["turn_stacking"], self.n_players, len(self.state["player_observations"][0]["vectorized"]))
+        self.obs_stacker = ObsStacker(env_config.get("turn_stacking", 0), self.n_players, len(self.state["player_observations"][0]["vectorized"]))
         # create array to track the cumulative reward
         self.cum_reward = numpy.zeros(self.n_players, dtype=numpy.float)
         # used to instanciate fields
@@ -27,7 +27,7 @@ class MultiAgentHanabiEnv(MultiAgentEnv):
         # fields to track extras
         self.last_action = numpy.full(self.n_players, -1, dtype=numpy.int)  # used for previous_round
         self.card_map = self.__build_card_map(env_config)  # used for hidden_hand
-        self.last_obs = numpy.zeros([self.n_players, (env_config["turn_stacking"]*self.n_players +1)* len(self.state["player_observations"][0]["vectorized"])], dtype=numpy.int)
+        self.last_obs = numpy.zeros([self.n_players, (env_config.get("turn_stacking", 0)*self.n_players +1)* len(self.state["player_observations"][0]["vectorized"])], dtype=numpy.int)
         self.last_legal_actions = numpy.zeros([self.n_players, n_actions], dtype=numpy.int)
         # create spaces
         self.action_space = LegalActionDiscrete(n_actions, self)
