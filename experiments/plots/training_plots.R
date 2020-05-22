@@ -53,7 +53,7 @@ plot_timesteps = function (...){
     theme(aspect.ratio=1, legend.position = c(0.85,0.85), legend.title = element_blank(), legend.background =  element_rect(fill="transparent"))+
     scale_y_continuous(limits = c(0,25), sec.axis = dup_axis(labels = NULL, name = NULL)) +
     scale_x_continuous(limits = c(0, min_timesteps), sec.axis = dup_axis(labels = NULL, name = NULL)) +
-    labs(x = "Timesteps (million)", y = "Game score")
+    labs(x = "Timesteps (million)", y = "Game score (points)")
   plot = plot + geom_line(data, mapping = aes(x = x, y = y, color = name)) +
     scale_color_manual(values = cbp2)
   plot
@@ -122,7 +122,7 @@ plot_time = function (...){
     theme(aspect.ratio=1, legend.position = c(0.85,0.85), legend.title = element_blank(), legend.background =  element_rect(fill="transparent"))+
     scale_y_continuous(limits = c(0,25), sec.axis = dup_axis(labels = NULL, name = NULL)) +
     scale_x_continuous(breaks = seq(0,7, 1), sec.axis = dup_axis(labels = NULL, name = NULL)) +
-    labs(x = "Training time (days)", y = "Game score")
+    labs(x = "Training time (days)", y = "Game score (points)")
   plot = plot + geom_line(data, mapping = aes(x = x, y = y, color = name)) +
     scale_color_manual(values = cbp2)
   plot

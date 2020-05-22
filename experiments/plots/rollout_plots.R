@@ -46,7 +46,7 @@ plot_histogram = function (...) {
     theme(aspect.ratio=1) +
     scale_y_continuous(sec.axis = dup_axis(labels = NULL, name = NULL)) +
     scale_x_continuous(breaks = seq(0,25, 5), sec.axis = dup_axis(labels = NULL, name = NULL)) +
-    labs(x = "Game score", y = "Proportion of games")
+    labs(x = "Game score (points)", y = "Proportion of games")
   plot = plot +
     geom_col(data = histogram, mapping = aes(x = game_score, y = p), fill = "Black")
   if(n_distinct(data$name) > 1){
