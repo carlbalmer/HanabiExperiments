@@ -1,0 +1,1151 @@
+{
+  "checkpoints": [
+    {
+      "trainable_name": "LegalActionApex",
+      "trial_id": "eb394412",
+      "config": {
+        "env_config": {
+          "colors": 5,
+          "ranks": 5,
+          "players": 4,
+          "hand_size": 4,
+          "max_information_tokens": 8,
+          "max_life_tokens": 3,
+          "observation_type": 1,
+          "turn_stacking": 0
+        },
+        "model": {
+          "fcnet_hiddens": [
+            512
+          ],
+          "custom_model": "Hanabi_FC",
+          "custom_preprocessor": "OriginalSpaceSamplingPreprocessor",
+          "fcnet_activation": "relu"
+        },
+        "num_atoms": 51,
+        "v_min": -7.0,
+        "v_max": 7.0,
+        "noisy": false,
+        "sigma0": 0.5,
+        "dueling": true,
+        "double_q": true,
+        "hiddens": [
+          512
+        ],
+        "n_step": 1,
+        "schedule_max_timesteps": 100000,
+        "timesteps_per_iteration": 25000,
+        "exploration_fraction": 0.1,
+        "exploration_final_eps": 0.02,
+        "target_network_update_freq": 500000,
+        "soft_q": false,
+        "softmax_temp": 1.0,
+        "parameter_noise": false,
+        "evaluation_config": {
+          "exploration_fraction": 0,
+          "exploration_final_eps": 0
+        },
+        "buffer_size": 2000000,
+        "prioritized_replay": true,
+        "prioritized_replay_alpha": 0.6,
+        "prioritized_replay_beta": 0.4,
+        "beta_annealing_fraction": 0.2,
+        "final_prioritized_replay_beta": 0.4,
+        "prioritized_replay_eps": 1e-06,
+        "compress_observations": true,
+        "gamma": 0.99,
+        "lr": 0.0005,
+        "lr_schedule": null,
+        "adam_epsilon": 3.125e-05,
+        "grad_norm_clipping": 40,
+        "learning_starts": 50000,
+        "sample_batch_size": 50,
+        "train_batch_size": 512,
+        "optimizer": {
+          "max_weight_sync_delay": 400,
+          "num_replay_buffer_shards": 4,
+          "debug": false
+        },
+        "num_workers": 24,
+        "num_envs_per_worker": 8,
+        "num_gpus": 1,
+        "per_worker_exploration": true,
+        "worker_side_prioritization": true,
+        "min_iter_time_s": 30,
+        "num_cpus_per_worker": 1,
+        "num_gpus_per_worker": 0,
+        "num_cpus_for_driver": 6,
+        "ignore_worker_failures": true,
+        "env": "Hanabi"
+      },
+      "local_dir": "/home/carl/ray_results/cluster-apex-default-nstep-1-larger-epsilon-gpu",
+      "evaluated_params": {},
+      "experiment_tag": "0",
+      "location": {
+        "_type": "CLOUDPICKLE_FALLBACK",
+        "value": "8004954b000000000000008c0e7261792e74756e652e747269616c948c084c6f636174696f6e9493942981947d94288c08686f73746e616d65948c0d31302e3132382e31352e323232948c03706964944ded0575622e"
+      },
+      "resources": {
+        "cpu": 6,
+        "gpu": 1,
+        "memory": 0,
+        "object_store_memory": 0,
+        "extra_cpu": 24,
+        "extra_gpu": 0,
+        "extra_memory": 0,
+        "extra_object_store_memory": 0,
+        "custom_resources": {},
+        "extra_custom_resources": {}
+      },
+      "stopping_criterion": {
+        "timesteps_total": 100000000
+      },
+      "loggers": "80044e2e",
+      "sync_to_driver_fn": "80044e2e",
+      "verbose": true,
+      "max_failures": 10,
+      "last_result": {
+        "episode_reward_max": 20.0,
+        "episode_reward_min": 0.0,
+        "episode_reward_mean": 14.2475442043222,
+        "episode_len_mean": 63.222003929273086,
+        "episodes_this_iter": 509,
+        "policy_reward_min": {},
+        "policy_reward_max": {},
+        "policy_reward_mean": {},
+        "custom_metrics": {},
+        "sampler_perf": {
+          "mean_env_wait_ms": 42.65732624718889,
+          "mean_processing_ms": 14.286529623617007,
+          "mean_inference_ms": 5.921227291820498
+        },
+        "off_policy_estimator": {},
+        "info": {
+          "min_exploration": 0.0,
+          "max_exploration": 0.4,
+          "num_target_updates": 452,
+          "num_steps_trained": 226685440,
+          "num_steps_sampled": 100028209,
+          "sample_throughput": 0.0,
+          "train_throughput": 0.0,
+          "num_weight_syncs": 225830,
+          "num_samples_dropped": 7327,
+          "learner_queue": {
+            "size_count": 1534165,
+            "size_mean": 0.88,
+            "size_std": 1.351147660324363,
+            "size_quantiles": [
+              0.0,
+              0.0,
+              0.0,
+              2.1000000000000014,
+              5.0
+            ]
+          },
+          "replay_shard_0": {
+            "add_batch_time_ms": 43.888,
+            "replay_time_ms": 139.719,
+            "update_priorities_time_ms": 96.383,
+            "policy_default_policy": {
+              "added_count": 25043447,
+              "sampled_count": 57051136,
+              "est_size_bytes": 1395596676,
+              "num_entries": 500000
+            }
+          },
+          "learner": {
+            "default_policy": {
+              "cur_lr": 0.0005000000237487257,
+              "mean_td_error": {
+                "_type": "CLOUDPICKLE_FALLBACK",
+                "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243044abd0c4094869452942e"
+              },
+              "q_loss": {
+                "_type": "CLOUDPICKLE_FALLBACK",
+                "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243045cab963d94869452942e"
+              },
+              "model": {}
+            }
+          }
+        },
+        "timesteps_this_iter": 96578,
+        "done": true,
+        "timesteps_total": 100028209,
+        "episodes_total": 517822,
+        "training_iteration": 1027,
+        "experiment_id": "ee4a5c2d8cec4721b209bc068ffca885",
+        "date": "2020-03-25_05-54-14",
+        "timestamp": 1585115654,
+        "time_this_iter_s": 34.71198892593384,
+        "time_total_s": 36500.881721019745,
+        "pid": 1517,
+        "hostname": "ray-apex-gpu-head-46595829",
+        "node_ip": "10.128.15.222",
+        "config": {
+          "num_workers": 24,
+          "num_envs_per_worker": 8,
+          "sample_batch_size": 50,
+          "batch_mode": "truncate_episodes",
+          "num_gpus": 1,
+          "train_batch_size": 512,
+          "model": {
+            "conv_filters": null,
+            "conv_activation": "relu",
+            "fcnet_activation": "relu",
+            "fcnet_hiddens": [
+              512
+            ],
+            "free_log_std": false,
+            "no_final_linear": false,
+            "vf_share_layers": true,
+            "use_lstm": false,
+            "max_seq_len": 20,
+            "lstm_cell_size": 256,
+            "lstm_use_prev_action_reward": false,
+            "state_shape": null,
+            "framestack": true,
+            "dim": 84,
+            "grayscale": false,
+            "zero_mean": true,
+            "custom_preprocessor": "OriginalSpaceSamplingPreprocessor",
+            "custom_model": "Hanabi_FC",
+            "custom_action_dist": null,
+            "custom_options": {}
+          },
+          "optimizer": {
+            "max_weight_sync_delay": 400,
+            "num_replay_buffer_shards": 4,
+            "debug": false
+          },
+          "gamma": 0.99,
+          "horizon": null,
+          "soft_horizon": false,
+          "no_done_at_end": false,
+          "env_config": {
+            "colors": 5,
+            "ranks": 5,
+            "players": 4,
+            "hand_size": 4,
+            "max_information_tokens": 8,
+            "max_life_tokens": 3,
+            "observation_type": 1,
+            "turn_stacking": 0
+          },
+          "env": "Hanabi",
+          "normalize_actions": false,
+          "clip_rewards": null,
+          "clip_actions": true,
+          "preprocessor_pref": "deepmind",
+          "lr": 0.0005,
+          "monitor": false,
+          "log_level": "WARN",
+          "callbacks": {
+            "on_episode_start": null,
+            "on_episode_step": null,
+            "on_episode_end": null,
+            "on_sample_end": null,
+            "on_train_result": null,
+            "on_postprocess_traj": null
+          },
+          "ignore_worker_failures": true,
+          "log_sys_usage": true,
+          "eager": false,
+          "eager_tracing": false,
+          "no_eager_on_workers": false,
+          "evaluation_interval": null,
+          "evaluation_num_episodes": 10,
+          "evaluation_config": {
+            "exploration_fraction": 0,
+            "exploration_final_eps": 0
+          },
+          "sample_async": false,
+          "observation_filter": "NoFilter",
+          "synchronize_filters": true,
+          "tf_session_args": {
+            "intra_op_parallelism_threads": 2,
+            "inter_op_parallelism_threads": 2,
+            "gpu_options": {
+              "allow_growth": true
+            },
+            "log_device_placement": false,
+            "device_count": {
+              "CPU": 1
+            },
+            "allow_soft_placement": true
+          },
+          "local_tf_session_args": {
+            "intra_op_parallelism_threads": 8,
+            "inter_op_parallelism_threads": 8
+          },
+          "compress_observations": true,
+          "collect_metrics_timeout": 180,
+          "metrics_smoothing_episodes": 100,
+          "remote_worker_envs": false,
+          "remote_env_batch_wait_ms": 0,
+          "min_iter_time_s": 30,
+          "timesteps_per_iteration": 25000,
+          "seed": null,
+          "num_cpus_per_worker": 1,
+          "num_gpus_per_worker": 0,
+          "custom_resources_per_worker": {},
+          "num_cpus_for_driver": 6,
+          "memory": 0,
+          "object_store_memory": 0,
+          "memory_per_worker": 0,
+          "object_store_memory_per_worker": 0,
+          "input": "sampler",
+          "input_evaluation": [
+            "is",
+            "wis"
+          ],
+          "postprocess_inputs": false,
+          "shuffle_buffer_size": 0,
+          "output": null,
+          "output_compress_columns": [
+            "obs",
+            "new_obs"
+          ],
+          "output_max_file_size": 67108864,
+          "multiagent": {
+            "policies": {},
+            "policy_mapping_fn": null,
+            "policies_to_train": null
+          },
+          "num_atoms": 51,
+          "v_min": -7.0,
+          "v_max": 7.0,
+          "noisy": false,
+          "sigma0": 0.5,
+          "dueling": true,
+          "double_q": true,
+          "hiddens": [
+            512
+          ],
+          "n_step": 1,
+          "schedule_max_timesteps": 100000,
+          "exploration_fraction": 0.1,
+          "exploration_final_eps": 0.02,
+          "target_network_update_freq": 500000,
+          "soft_q": false,
+          "softmax_temp": 1.0,
+          "parameter_noise": false,
+          "buffer_size": 2000000,
+          "prioritized_replay": true,
+          "prioritized_replay_alpha": 0.6,
+          "prioritized_replay_beta": 0.4,
+          "beta_annealing_fraction": 0.2,
+          "final_prioritized_replay_beta": 0.4,
+          "prioritized_replay_eps": 1e-06,
+          "lr_schedule": null,
+          "adam_epsilon": 3.125e-05,
+          "grad_norm_clipping": 40,
+          "learning_starts": 50000,
+          "per_worker_exploration": true,
+          "worker_side_prioritization": true
+        },
+        "time_since_restore": 36500.881721019745,
+        "timesteps_since_restore": 100028209,
+        "iterations_since_restore": 1027,
+        "perf": {
+          "cpu_util_percent": 80.56590909090909,
+          "ram_util_percent": 75.23409090909092,
+          "gpu_util_percent0": 0.17636363636363636,
+          "vram_util_percent0": 0.025085219823441997
+        },
+        "num_healthy_workers": 24,
+        "trial_id": "eb394412",
+        "experiment_tag": "0"
+      },
+      "last_update_time": 1585115654.1251876,
+      "metric_analysis": {
+        "episode_reward_max": {
+          "max": 23.0,
+          "min": 0.0,
+          "last": 20.0
+        },
+        "episode_reward_min": {
+          "max": 8.0,
+          "min": 0.0,
+          "last": 0.0
+        },
+        "episode_reward_mean": {
+          "max": 14.47337278106509,
+          "min": 0.0,
+          "last": 14.2475442043222
+        },
+        "episode_len_mean": {
+          "max": 73.85653104925053,
+          "min": 9.082737487231869,
+          "last": 63.222003929273086
+        },
+        "episodes_this_iter": {
+          "max": 2105,
+          "min": 436,
+          "last": 509
+        },
+        "timesteps_this_iter": {
+          "max": 104191,
+          "min": 25366,
+          "last": 96578
+        },
+        "done": {
+          "max": true,
+          "min": false,
+          "last": true
+        },
+        "timesteps_total": {
+          "max": 100028209,
+          "min": 25366,
+          "last": 100028209
+        },
+        "episodes_total": {
+          "max": 517822,
+          "min": 979,
+          "last": 517822
+        },
+        "training_iteration": {
+          "max": 1027,
+          "min": 1,
+          "last": 1027
+        },
+        "timestamp": {
+          "max": 1585115654,
+          "min": 1585079455,
+          "last": 1585115654
+        },
+        "time_this_iter_s": {
+          "max": 326.50084233283997,
+          "min": 33.830284118652344,
+          "last": 34.71198892593384
+        },
+        "time_total_s": {
+          "max": 36500.881721019745,
+          "min": 326.50084233283997,
+          "last": 36500.881721019745
+        },
+        "pid": {
+          "max": 1517,
+          "min": 1517,
+          "last": 1517
+        },
+        "time_since_restore": {
+          "max": 36500.881721019745,
+          "min": 326.50084233283997,
+          "last": 36500.881721019745
+        },
+        "timesteps_since_restore": {
+          "max": 100028209,
+          "min": 25366,
+          "last": 100028209
+        },
+        "iterations_since_restore": {
+          "max": 1027,
+          "min": 1,
+          "last": 1027
+        },
+        "num_healthy_workers": {
+          "max": 24,
+          "min": 24,
+          "last": 24
+        },
+        "sampler_perf/mean_env_wait_ms": {
+          "max": 42.65732624718889,
+          "min": 40.259352541335765,
+          "last": 42.65732624718889
+        },
+        "sampler_perf/mean_processing_ms": {
+          "max": 40.133118506099564,
+          "min": 13.953672862671924,
+          "last": 14.286529623617007
+        },
+        "sampler_perf/mean_inference_ms": {
+          "max": 6.8188823241723515,
+          "min": 5.741299875455933,
+          "last": 5.921227291820498
+        },
+        "info/min_exploration": {
+          "max": 0.0,
+          "min": 0.0,
+          "last": 0.0
+        },
+        "info/max_exploration": {
+          "max": 0.4,
+          "min": 0.4,
+          "last": 0.4
+        },
+        "info/num_target_updates": {
+          "max": 452,
+          "min": 0,
+          "last": 452
+        },
+        "info/num_steps_trained": {
+          "max": 226685440,
+          "min": 0,
+          "last": 226685440
+        },
+        "info/num_steps_sampled": {
+          "max": 100028209,
+          "min": 25366,
+          "last": 100028209
+        },
+        "info/sample_throughput": {
+          "max": 13988.523,
+          "min": 0.0,
+          "last": 0.0
+        },
+        "info/train_throughput": {
+          "max": 159794.899,
+          "min": 0.0,
+          "last": 0.0
+        },
+        "info/num_weight_syncs": {
+          "max": 225830,
+          "min": 46,
+          "last": 225830
+        },
+        "info/num_samples_dropped": {
+          "max": 7327,
+          "min": 3354,
+          "last": 7327
+        },
+        "config/num_workers": {
+          "max": 24,
+          "min": 24,
+          "last": 24
+        },
+        "config/num_envs_per_worker": {
+          "max": 8,
+          "min": 8,
+          "last": 8
+        },
+        "config/sample_batch_size": {
+          "max": 50,
+          "min": 50,
+          "last": 50
+        },
+        "config/num_gpus": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        },
+        "config/train_batch_size": {
+          "max": 512,
+          "min": 512,
+          "last": 512
+        },
+        "config/gamma": {
+          "max": 0.99,
+          "min": 0.99,
+          "last": 0.99
+        },
+        "config/soft_horizon": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/no_done_at_end": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/normalize_actions": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/clip_actions": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/lr": {
+          "max": 0.0005,
+          "min": 0.0005,
+          "last": 0.0005
+        },
+        "config/monitor": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/ignore_worker_failures": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/log_sys_usage": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/eager": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/eager_tracing": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/no_eager_on_workers": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/evaluation_num_episodes": {
+          "max": 10,
+          "min": 10,
+          "last": 10
+        },
+        "config/sample_async": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/synchronize_filters": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/compress_observations": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/collect_metrics_timeout": {
+          "max": 180,
+          "min": 180,
+          "last": 180
+        },
+        "config/metrics_smoothing_episodes": {
+          "max": 100,
+          "min": 100,
+          "last": 100
+        },
+        "config/remote_worker_envs": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/remote_env_batch_wait_ms": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/min_iter_time_s": {
+          "max": 30,
+          "min": 30,
+          "last": 30
+        },
+        "config/timesteps_per_iteration": {
+          "max": 25000,
+          "min": 25000,
+          "last": 25000
+        },
+        "config/num_cpus_per_worker": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        },
+        "config/num_gpus_per_worker": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/num_cpus_for_driver": {
+          "max": 6,
+          "min": 6,
+          "last": 6
+        },
+        "config/memory": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/object_store_memory": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/memory_per_worker": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/object_store_memory_per_worker": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/postprocess_inputs": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/shuffle_buffer_size": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/output_max_file_size": {
+          "max": 67108864,
+          "min": 67108864,
+          "last": 67108864
+        },
+        "config/num_atoms": {
+          "max": 51,
+          "min": 51,
+          "last": 51
+        },
+        "config/v_min": {
+          "max": -7.0,
+          "min": -7.0,
+          "last": -7.0
+        },
+        "config/v_max": {
+          "max": 7.0,
+          "min": 7.0,
+          "last": 7.0
+        },
+        "config/noisy": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/sigma0": {
+          "max": 0.5,
+          "min": 0.5,
+          "last": 0.5
+        },
+        "config/dueling": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/double_q": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/n_step": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        },
+        "config/schedule_max_timesteps": {
+          "max": 100000,
+          "min": 100000,
+          "last": 100000
+        },
+        "config/exploration_fraction": {
+          "max": 0.1,
+          "min": 0.1,
+          "last": 0.1
+        },
+        "config/exploration_final_eps": {
+          "max": 0.02,
+          "min": 0.02,
+          "last": 0.02
+        },
+        "config/target_network_update_freq": {
+          "max": 500000,
+          "min": 500000,
+          "last": 500000
+        },
+        "config/soft_q": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/softmax_temp": {
+          "max": 1.0,
+          "min": 1.0,
+          "last": 1.0
+        },
+        "config/parameter_noise": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/buffer_size": {
+          "max": 2000000,
+          "min": 2000000,
+          "last": 2000000
+        },
+        "config/prioritized_replay": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/prioritized_replay_alpha": {
+          "max": 0.6,
+          "min": 0.6,
+          "last": 0.6
+        },
+        "config/prioritized_replay_beta": {
+          "max": 0.4,
+          "min": 0.4,
+          "last": 0.4
+        },
+        "config/beta_annealing_fraction": {
+          "max": 0.2,
+          "min": 0.2,
+          "last": 0.2
+        },
+        "config/final_prioritized_replay_beta": {
+          "max": 0.4,
+          "min": 0.4,
+          "last": 0.4
+        },
+        "config/prioritized_replay_eps": {
+          "max": 1e-06,
+          "min": 1e-06,
+          "last": 1e-06
+        },
+        "config/adam_epsilon": {
+          "max": 3.125e-05,
+          "min": 3.125e-05,
+          "last": 3.125e-05
+        },
+        "config/grad_norm_clipping": {
+          "max": 40,
+          "min": 40,
+          "last": 40
+        },
+        "config/learning_starts": {
+          "max": 50000,
+          "min": 50000,
+          "last": 50000
+        },
+        "config/per_worker_exploration": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/worker_side_prioritization": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "perf/cpu_util_percent": {
+          "max": 82.43409090909091,
+          "min": 59.89144144144144,
+          "last": 80.56590909090909
+        },
+        "perf/ram_util_percent": {
+          "max": 75.3177777777778,
+          "min": 11.02815315315315,
+          "last": 75.23409090909092
+        },
+        "perf/gpu_util_percent0": {
+          "max": 0.24851063829787234,
+          "min": 0.00036036036036036037,
+          "last": 0.17636363636363636
+        },
+        "perf/vram_util_percent0": {
+          "max": 0.025085219823442004,
+          "min": 0.02491040992920198,
+          "last": 0.025085219823441997
+        },
+        "info/learner_queue/size_count": {
+          "max": 1534165,
+          "min": 1073522,
+          "last": 1534165
+        },
+        "info/learner_queue/size_mean": {
+          "max": 1.26,
+          "min": 0.1,
+          "last": 0.88
+        },
+        "info/learner_queue/size_std": {
+          "max": 1.6809521111560555,
+          "min": 0.3,
+          "last": 1.351147660324363
+        },
+        "info/replay_shard_0/add_batch_time_ms": {
+          "max": 54.046,
+          "min": 29.853,
+          "last": 43.888
+        },
+        "info/replay_shard_0/replay_time_ms": {
+          "max": 161.293,
+          "min": 111.773,
+          "last": 139.719
+        },
+        "info/replay_shard_0/update_priorities_time_ms": {
+          "max": 114.702,
+          "min": 80.116,
+          "last": 96.383
+        },
+        "config/model/free_log_std": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/no_final_linear": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/vf_share_layers": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/model/use_lstm": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/max_seq_len": {
+          "max": 20,
+          "min": 20,
+          "last": 20
+        },
+        "config/model/lstm_cell_size": {
+          "max": 256,
+          "min": 256,
+          "last": 256
+        },
+        "config/model/lstm_use_prev_action_reward": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/framestack": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/model/dim": {
+          "max": 84,
+          "min": 84,
+          "last": 84
+        },
+        "config/model/grayscale": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/model/zero_mean": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/optimizer/max_weight_sync_delay": {
+          "max": 400,
+          "min": 400,
+          "last": 400
+        },
+        "config/optimizer/num_replay_buffer_shards": {
+          "max": 4,
+          "min": 4,
+          "last": 4
+        },
+        "config/optimizer/debug": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/env_config/colors": {
+          "max": 5,
+          "min": 5,
+          "last": 5
+        },
+        "config/env_config/ranks": {
+          "max": 5,
+          "min": 5,
+          "last": 5
+        },
+        "config/env_config/players": {
+          "max": 4,
+          "min": 4,
+          "last": 4
+        },
+        "config/env_config/hand_size": {
+          "max": 4,
+          "min": 4,
+          "last": 4
+        },
+        "config/env_config/max_information_tokens": {
+          "max": 8,
+          "min": 8,
+          "last": 8
+        },
+        "config/env_config/max_life_tokens": {
+          "max": 3,
+          "min": 3,
+          "last": 3
+        },
+        "config/env_config/observation_type": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        },
+        "config/env_config/turn_stacking": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/evaluation_config/exploration_fraction": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/evaluation_config/exploration_final_eps": {
+          "max": 0,
+          "min": 0,
+          "last": 0
+        },
+        "config/tf_session_args/intra_op_parallelism_threads": {
+          "max": 2,
+          "min": 2,
+          "last": 2
+        },
+        "config/tf_session_args/inter_op_parallelism_threads": {
+          "max": 2,
+          "min": 2,
+          "last": 2
+        },
+        "config/tf_session_args/log_device_placement": {
+          "max": false,
+          "min": false,
+          "last": false
+        },
+        "config/tf_session_args/allow_soft_placement": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/local_tf_session_args/intra_op_parallelism_threads": {
+          "max": 8,
+          "min": 8,
+          "last": 8
+        },
+        "config/local_tf_session_args/inter_op_parallelism_threads": {
+          "max": 8,
+          "min": 8,
+          "last": 8
+        },
+        "info/replay_shard_0/policy_default_policy/added_count": {
+          "max": 25043447,
+          "min": 6098,
+          "last": 25043447
+        },
+        "info/replay_shard_0/policy_default_policy/sampled_count": {
+          "max": 57051136,
+          "min": 0,
+          "last": 57051136
+        },
+        "info/replay_shard_0/policy_default_policy/est_size_bytes": {
+          "max": 1395596676,
+          "min": 15559642,
+          "last": 1395596676
+        },
+        "info/replay_shard_0/policy_default_policy/num_entries": {
+          "max": 500000,
+          "min": 6098,
+          "last": 500000
+        },
+        "config/tf_session_args/gpu_options/allow_growth": {
+          "max": true,
+          "min": true,
+          "last": true
+        },
+        "config/tf_session_args/device_count/CPU": {
+          "max": 1,
+          "min": 1,
+          "last": 1
+        },
+        "info/learner/default_policy/cur_lr": {
+          "max": 0.0005000000237487257,
+          "min": 0.0005000000237487257,
+          "last": 0.0005000000237487257
+        },
+        "info/learner/default_policy/mean_td_error": {
+          "max": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304a8916b4094869452942e"
+          },
+          "min": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304fcd7b63f94869452942e"
+          },
+          "last": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243044abd0c4094869452942e"
+          }
+        },
+        "info/learner/default_policy/q_loss": {
+          "max": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243044eb4713f94869452942e"
+          },
+          "min": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624304bf82863d94869452942e"
+          },
+          "last": {
+            "_type": "CLOUDPICKLE_FALLBACK",
+            "value": "80049567000000000000008c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026634944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b0074946243045cab963d94869452942e"
+          }
+        }
+      },
+      "export_formats": [],
+      "status": "TERMINATED",
+      "start_time": 1585079087.864965,
+      "logdir": "/home/carl/ray_results/cluster-apex-default-nstep-1-larger-epsilon-gpu/LegalActionApex_Hanabi_eb394412_2020-03-24_19-44-47apxr_1_q",
+      "runner": null,
+      "result_logger": null,
+      "last_debug": 1585115654.1251633,
+      "error_file": null,
+      "error_msg": null,
+      "custom_trial_name": null,
+      "remote_checkpoint_dir_prefix": "gs://ray-cluster-out/cluster-apex-default-nstep-1-larger-epsilon-gpu",
+      "checkpoint_freq": 500,
+      "checkpoint_at_end": true,
+      "sync_on_checkpoint": true,
+      "checkpoint_manager": {
+        "_type": "CLOUDPICKLE_FALLBACK",
+        "value": "800495373c0000000000008c1b7261792e74756e652e636865636b706f696e745f6d616e61676572948c11436865636b706f696e744d616e616765729493942981947d94288c146b6565705f636865636b706f696e74735f6e756d94477ff00000000000008c165f636865636b706f696e745f73636f72655f6465736394898c165f636865636b706f696e745f73636f72655f61747472948c12747261696e696e675f697465726174696f6e948c1c6e65776573745f70657273697374656e745f636865636b706f696e749468008c0a436865636b706f696e749493942981947d94288c0773746f72616765948c0a70657273697374656e74948c0576616c7565948ca22f686f6d652f6361726c2f7261795f726573756c74732f636c75737465722d617065782d64656661756c742d6e737465702d312d6c61726765722d657073696c6f6e2d6770752f4c6567616c416374696f6e417065785f48616e6162695f65623339343431325f323032302d30332d32345f31392d34342d3437617078725f315f712f636865636b706f696e745f313032372f636865636b706f696e742d31303237948c06726573756c74947d94288c12657069736f64655f7265776172645f6d6178948c156e756d70792e636f72652e6d756c74696172726179948c067363616c61729493948c056e756d7079948c0564747970659493948c026638944b004b0187945294284b038c013c944e4e4e4affffffff4affffffff4b007494624308000000000000344094869452948c12657069736f64655f7265776172645f6d696e946817681d4308000000000000000094869452948c13657069736f64655f7265776172645f6d65616e946817681d4308a2c12b1dbe7e2c4094869452948c10657069736f64655f6c656e5f6d65616e946817681d4308dce7ef9f6a9c4f4094869452948c12657069736f6465735f746869735f69746572944dfd018c11706f6c6963795f7265776172645f6d696e947d948c11706f6c6963795f7265776172645f6d6178947d948c12706f6c6963795f7265776172645f6d65616e947d948c0e637573746f6d5f6d657472696373947d948c0c73616d706c65725f70657266947d94288c106d65616e5f656e765f776169745f6d73946817681d4308463d37442354454094869452948c126d65616e5f70726f63657373696e675f6d73946817681d43085c8ac502b4922c4094869452948c116d65616e5f696e666572656e63655f6d73946817681d4308ed340a3556af17409486945294758c146f66665f706f6c6963795f657374696d61746f72947d948c04696e666f947d94288c0f6d696e5f6578706c6f726174696f6e944700000000000000008c0f6d61785f6578706c6f726174696f6e94473fd999999999999a8c126e756d5f7461726765745f75706461746573944dc4018c116e756d5f73746570735f747261696e6564944a00f2820d8c116e756d5f73746570735f73616d706c6564944a314ff6058c1173616d706c655f7468726f756768707574944700000000000000008c10747261696e5f7468726f756768707574944700000000000000008c106e756d5f7765696768745f73796e6373944a267203008c136e756d5f73616d706c65735f64726f70706564944d9f1c8c0d6c6561726e65725f7175657565947d94288c0a73697a655f636f756e74944ad56817008c0973697a655f6d65616e94473fec28f5c28f5c298c0873697a655f73746494473ff59e4d02528f978c0e73697a655f7175616e74696c6573945d9428470000000000000000470000000000000000470000000000000000474000ccccccccccd047401400000000000065758c0e7265706c61795f73686172645f30947d94288c116164645f62617463685f74696d655f6d73946817681d43088b6ce7fba9f1454094869452948c0e7265706c61795f74696d655f6d73946817681d43085eba490c0277614094869452948c197570646174655f7072696f7269746965735f74696d655f6d73946817681d43088d976e128318584094869452948c15706f6c6963795f64656661756c745f706f6c696379947d94288c0b61646465645f636f756e74944af7217e018c0d73616d706c65645f636f756e74944a008866038c0e6573745f73697a655f6279746573944a841d2f538c0b6e756d5f656e7472696573944a20a1070075758c076c6561726e6572947d948c0e64656661756c745f706f6c696379947d94288c066375725f6c72946817681d4308000000e04d62403f94869452948c0d6d65616e5f74645f6572726f72946817681a8c026634944b004b0187945294284b03681e4e4e4e4affffffff4affffffff4b0074946243044abd0c4094869452948c06715f6c6f7373946817687943045cab963d94869452948c056d6f64656c947d947573758c1374696d6573746570735f746869735f69746572944a427901008c04646f6e6594888c0f74696d6573746570735f746f74616c944a314ff6058c0e657069736f6465735f746f74616c944abee607008c12747261696e696e675f697465726174696f6e944d03048c0d6578706572696d656e745f6964948c206565346135633264386365633437323162323039626330363866666361383835948c0464617465948c13323032302d30332d32355f30352d35342d3134948c0974696d657374616d70944a06f27a5e8c1074696d655f746869735f697465725f73944740415b22740000008c0c74696d655f746f74616c5f73944740e1d29c370f00008c03706964944ded058c08686f73746e616d65948c1a7261792d617065782d6770752d686561642d3436353935383239948c076e6f64655f6970948c0d31302e3132382e31352e323232948c06636f6e666967947d94288c0b6e756d5f776f726b657273944b188c136e756d5f656e76735f7065725f776f726b6572944b088c1173616d706c655f62617463685f73697a65944b328c0a62617463685f6d6f6465948c117472756e636174655f657069736f646573948c086e756d5f67707573944b018c10747261696e5f62617463685f73697a65944d00028c056d6f64656c947d94288c0c636f6e765f66696c74657273944e8c0f636f6e765f61637469766174696f6e948c0472656c75948c1066636e65745f61637469766174696f6e948c0472656c75948c0d66636e65745f68696464656e73945d944d0002618c0c667265655f6c6f675f73746494898c0f6e6f5f66696e616c5f6c696e65617294898c0f76665f73686172655f6c617965727394888c087573655f6c73746d94898c0b6d61785f7365715f6c656e944b148c0e6c73746d5f63656c6c5f73697a65944d00018c1b6c73746d5f7573655f707265765f616374696f6e5f72657761726494898c0b73746174655f7368617065944e8c0a6672616d65737461636b94888c0364696d944b548c09677261797363616c6594898c097a65726f5f6d65616e94888c13637573746f6d5f70726570726f636573736f72948c214f726967696e616c537061636553616d706c696e6750726570726f636573736f72948c0c637573746f6d5f6d6f64656c948c0948616e6162695f4643948c12637573746f6d5f616374696f6e5f64697374944e8c0e637573746f6d5f6f7074696f6e73947d94758c096f7074696d697a6572947d94288c156d61785f7765696768745f73796e635f64656c6179944d90018c186e756d5f7265706c61795f6275666665725f736861726473944b048c0564656275679489758c0567616d6d6194473fefae147ae147ae8c07686f72697a6f6e944e8c0c736f66745f686f72697a6f6e94898c0e6e6f5f646f6e655f61745f656e6494898c0a656e765f636f6e666967947d94288c06636f6c6f7273944b058c0572616e6b73944b058c07706c6179657273944b048c0968616e645f73697a65944b048c166d61785f696e666f726d6174696f6e5f746f6b656e73944b088c0f6d61785f6c6966655f746f6b656e73944b038c106f62736572766174696f6e5f74797065944b018c0d7475726e5f737461636b696e67944b00758c03656e76948c0648616e616269948c116e6f726d616c697a655f616374696f6e7394898c0c636c69705f72657761726473944e8c0c636c69705f616374696f6e7394888c1170726570726f636573736f725f70726566948c08646565706d696e64948c026c7294473f40624dd2f1a9fc8c076d6f6e69746f7294898c096c6f675f6c6576656c948c045741524e948c0963616c6c6261636b73947d94288c106f6e5f657069736f64655f7374617274944e8c0f6f6e5f657069736f64655f73746570944e8c0e6f6e5f657069736f64655f656e64944e8c0d6f6e5f73616d706c655f656e64944e8c0f6f6e5f747261696e5f726573756c74944e8c136f6e5f706f737470726f636573735f7472616a944e758c1669676e6f72655f776f726b65725f6661696c7572657394888c0d6c6f675f7379735f757361676594888c05656167657294898c0d65616765725f74726163696e6794898c136e6f5f65616765725f6f6e5f776f726b65727394898c136576616c756174696f6e5f696e74657276616c944e8c176576616c756174696f6e5f6e756d5f657069736f646573944b0a8c116576616c756174696f6e5f636f6e666967947d94288c146578706c6f726174696f6e5f6672616374696f6e944b008c156578706c6f726174696f6e5f66696e616c5f657073944b00758c0c73616d706c655f6173796e6394898c126f62736572766174696f6e5f66696c746572948c084e6f46696c746572948c1373796e6368726f6e697a655f66696c7465727394888c0f74665f73657373696f6e5f61726773947d94288c1c696e7472615f6f705f706172616c6c656c69736d5f74687265616473944b028c1c696e7465725f6f705f706172616c6c656c69736d5f74687265616473944b028c0b6770755f6f7074696f6e73947d948c0c616c6c6f775f67726f7774689488738c146c6f675f6465766963655f706c6163656d656e7494898c0c6465766963655f636f756e74947d948c03435055944b01738c14616c6c6f775f736f66745f706c6163656d656e749488758c156c6f63616c5f74665f73657373696f6e5f61726773947d942868f14b0868f24b08758c15636f6d70726573735f6f62736572766174696f6e7394888c17636f6c6c6563745f6d6574726963735f74696d656f7574944bb48c1a6d6574726963735f736d6f6f7468696e675f657069736f646573944b648c1272656d6f74655f776f726b65725f656e767394898c1872656d6f74655f656e765f62617463685f776169745f6d73944b008c0f6d696e5f697465725f74696d655f73944b1e8c1774696d6573746570735f7065725f697465726174696f6e944da8618c0473656564944e8c136e756d5f637075735f7065725f776f726b6572944b018c136e756d5f677075735f7065725f776f726b6572944b008c1b637573746f6d5f7265736f75726365735f7065725f776f726b6572947d948c136e756d5f637075735f666f725f647269766572944b068c066d656d6f7279944b008c136f626a6563745f73746f72655f6d656d6f7279944b008c116d656d6f72795f7065725f776f726b6572944b008c1e6f626a6563745f73746f72655f6d656d6f72795f7065725f776f726b6572944b008c05696e707574948c0773616d706c6572948c10696e7075745f6576616c756174696f6e945d94288c026973948c0377697394658c12706f737470726f636573735f696e7075747394898c1373687566666c655f6275666665725f73697a65944b008c066f7574707574944e8c176f75747075745f636f6d70726573735f636f6c756d6e73945d94288c036f6273948c076e65775f6f627394658c146f75747075745f6d61785f66696c655f73697a65944a000000048c0a6d756c74696167656e74947d94288c08706f6c6963696573947d948c11706f6c6963795f6d617070696e675f666e944e8c11706f6c69636965735f746f5f747261696e944e758c096e756d5f61746f6d73944b338c05765f6d696e9447c01c0000000000008c05765f6d61789447401c0000000000008c056e6f69737994898c067369676d613094473fe00000000000008c076475656c696e6794888c08646f75626c655f7194888c0768696464656e73945d944d0002618c066e5f73746570944b018c167363686564756c655f6d61785f74696d657374657073944aa086010068e9473fb999999999999a68ea473f947ae147ae147b8c1a7461726765745f6e6574776f726b5f7570646174655f66726571944a20a107008c06736f66745f7194898c0c736f66746d61785f74656d7094473ff00000000000008c0f706172616d657465725f6e6f69736594898c0b6275666665725f73697a65944a80841e008c127072696f726974697a65645f7265706c617994888c187072696f726974697a65645f7265706c61795f616c70686194473fe33333333333338c177072696f726974697a65645f7265706c61795f6265746194473fd999999999999a8c17626574615f616e6e65616c696e675f6672616374696f6e94473fc999999999999a8c1d66696e616c5f7072696f726974697a65645f7265706c61795f6265746194473fd999999999999a8c167072696f726974697a65645f7265706c61795f65707394473eb0c6f7a0b5ed8d8c0b6c725f7363686564756c65944e8c0c6164616d5f657073696c6f6e94473f00624dd2f1a9fc8c12677261645f6e6f726d5f636c697070696e67944b288c0f6c6561726e696e675f737461727473944d50c38c167065725f776f726b65725f6578706c6f726174696f6e94888c1a776f726b65725f736964655f7072696f726974697a6174696f6e9488758c1274696d655f73696e63655f726573746f7265944740e1d29c370f00008c1774696d6573746570735f73696e63655f726573746f7265944a314ff6058c18697465726174696f6e735f73696e63655f726573746f7265944d03048c0470657266947d94288c106370755f7574696c5f70657263656e74946817681d4308ac7dc3da3724544094869452948c1072616d5f7574696c5f70657263656e74946817681d430888b56f58fbce524094869452948c116770755f7574696c5f70657263656e7430946817681d4308935631691593c63f94869452948c127672616d5f7574696c5f70657263656e7430946817681d430817c4049bf0af993f9486945294758c136e756d5f6865616c7468795f776f726b657273944b188c08747269616c5f6964948c086562333934343132948c0e6578706572696d656e745f746167948c0130947575628c186e65776573745f6d656d6f72795f636865636b706f696e7494680b2981947d9428680e8c066d656d6f72799468104e68127d9475628c115f626573745f636865636b706f696e7473945d942868008c0951756575654974656d9493942981947d94288c087072696f72697479944df4016810680b2981947d9428680e680f68108ca02f686f6d652f6361726c2f7261795f726573756c74732f636c75737465722d617065782d64656661756c742d6e737465702d312d6c61726765722d657073696c6f6e2d6770752f4c6567616c416374696f6e417065785f48616e6162695f65623339343431325f323032302d30332d32345f31392d34342d3437617078725f315f712f636865636b706f696e745f3530302f636865636b706f696e742d3530309468127d94288c12657069736f64655f7265776172645f6d6178946817681d4308000000000000314094869452948c12657069736f64655f7265776172645f6d696e946817681d4308000000000000000094869452948c13657069736f64655f7265776172645f6d65616e946817681d4308ec875ecb6a13284094869452948c10657069736f64655f6c656e5f6d65616e946817681d430829f042692a59504094869452948c12657069736f6465735f746869735f69746572944df5018c11706f6c6963795f7265776172645f6d696e947d948c11706f6c6963795f7265776172645f6d6178947d948c12706f6c6963795f7265776172645f6d65616e947d948c0e637573746f6d5f6d657472696373947d948c0c73616d706c65725f70657266947d94288c106d65616e5f656e765f776169745f6d73946817681d4308ba8c60fd2706454094869452948c126d65616e5f70726f63657373696e675f6d73946817681d4308effcd9324d002c4094869452948c116d65616e5f696e666572656e63655f6d73946817681d430804f02c69035617409486945294758c146f66665f706f6c6963795f657374696d61746f72947d948c04696e666f947d94288c0f6d696e5f6578706c6f726174696f6e944700000000000000008c0f6d61785f6578706c6f726174696f6e94473fd999999999999a8c126e756d5f7461726765745f75706461746573944bdd8c116e756d5f73746570735f747261696e6564944a00c49a068c116e756d5f73746570735f73616d706c6564944a85eaea028c1173616d706c655f7468726f756768707574944700000000000000008c10747261696e5f7468726f756768707574944700000000000000008c106e756d5f7765696768745f73796e6373944a15b001008c136e756d5f73616d706c65735f64726f70706564944d9f1c8c0d6c6561726e65725f7175657565947d94288c0a73697a655f636f756e74944abdf413008c0973697a655f6d65616e94473fdae147ae147ae18c0873697a655f73746494473fe55024816d41c98c0e73697a655f7175616e74696c6573945d9428470000000000000000470000000000000000470000000000000000473ff19999999999a047400000000000000065758c0e7265706c61795f73686172645f30947d94288c116164645f62617463685f74696d655f6d73946817681d4308b4c876be9f8a474094869452948c0e7265706c61795f74696d655f6d73946817681d4308986e1283c0ca604094869452948c197570646174655f7072696f7269746965735f74696d655f6d73946817681d43082b8716d9cebf564094869452948c15706f6c6963795f64656661756c745f706f6c696379947d94288c0b61646465645f636f756e74944acb23bb008c0d73616d706c65645f636f756e74944a0090a9018c0e6573745f73697a655f6279746573944a841d2f538c0b6e756d5f656e7472696573944a20a1070075758c076c6561726e6572947d948c0e64656661756c745f706f6c696379947d94288c066375725f6c72946817681d4308000000e04d62403f94869452948c0d6d65616e5f74645f6572726f7294681768794304ede5064094869452948c06715f6c6f737394681768794304f819ce3d94869452948c056d6f64656c947d947573758c1374696d6573746570735f746869735f69746572944acf7a01008c04646f6e6594898c0f74696d6573746570735f746f74616c944a85eaea028c0e657069736f6465735f746f74616c944ad4db03008c12747261696e696e675f697465726174696f6e944df4018c0d6578706572696d656e745f6964948c206565346135633264386365633437323162323039626330363866666361383835948c0464617465948c13323032302d30332d32355f30302d34332d3538948c0974696d657374616d70944a4ea97a5e8c1074696d655f746869735f697465725f739447404183404e0000008c0c74696d655f746f74616c5f73944740d17ac5e2cc00008c03706964944ded058c08686f73746e616d65948c1a7261792d617065782d6770752d686561642d3436353935383239948c076e6f64655f6970948c0d31302e3132382e31352e323232948c06636f6e666967947d94288c0b6e756d5f776f726b657273944b188c136e756d5f656e76735f7065725f776f726b6572944b088c1173616d706c655f62617463685f73697a65944b328c0a62617463685f6d6f6465948c117472756e636174655f657069736f646573948c086e756d5f67707573944b018c10747261696e5f62617463685f73697a65944d00028c056d6f64656c947d94288c0c636f6e765f66696c74657273944e8c0f636f6e765f61637469766174696f6e948c0472656c75948c1066636e65745f61637469766174696f6e948c0472656c75948c0d66636e65745f68696464656e73945d944d0002618c0c667265655f6c6f675f73746494898c0f6e6f5f66696e616c5f6c696e65617294898c0f76665f73686172655f6c617965727394888c087573655f6c73746d94898c0b6d61785f7365715f6c656e944b148c0e6c73746d5f63656c6c5f73697a65944d00018c1b6c73746d5f7573655f707265765f616374696f6e5f72657761726494898c0b73746174655f7368617065944e8c0a6672616d65737461636b94888c0364696d944b548c09677261797363616c6594898c097a65726f5f6d65616e94888c13637573746f6d5f70726570726f636573736f72948c214f726967696e616c537061636553616d706c696e6750726570726f636573736f72948c0c637573746f6d5f6d6f64656c948c0948616e6162695f4643948c12637573746f6d5f616374696f6e5f64697374944e8c0e637573746f6d5f6f7074696f6e73947d94758c096f7074696d697a6572947d94288c156d61785f7765696768745f73796e635f64656c6179944d90018c186e756d5f7265706c61795f6275666665725f736861726473944b048c0564656275679489758c0567616d6d6194473fefae147ae147ae8c07686f72697a6f6e944e8c0c736f66745f686f72697a6f6e94898c0e6e6f5f646f6e655f61745f656e6494898c0a656e765f636f6e666967947d94288c06636f6c6f7273944b058c0572616e6b73944b058c07706c6179657273944b048c0968616e645f73697a65944b048c166d61785f696e666f726d6174696f6e5f746f6b656e73944b088c0f6d61785f6c6966655f746f6b656e73944b038c106f62736572766174696f6e5f74797065944b018c0d7475726e5f737461636b696e67944b00758c03656e76948c0648616e616269948c116e6f726d616c697a655f616374696f6e7394898c0c636c69705f72657761726473944e8c0c636c69705f616374696f6e7394888c1170726570726f636573736f725f70726566948c08646565706d696e64948c026c7294473f40624dd2f1a9fc8c076d6f6e69746f7294898c096c6f675f6c6576656c948c045741524e948c0963616c6c6261636b73947d94288c106f6e5f657069736f64655f7374617274944e8c0f6f6e5f657069736f64655f73746570944e8c0e6f6e5f657069736f64655f656e64944e8c0d6f6e5f73616d706c655f656e64944e8c0f6f6e5f747261696e5f726573756c74944e8c136f6e5f706f737470726f636573735f7472616a944e758c1669676e6f72655f776f726b65725f6661696c7572657394888c0d6c6f675f7379735f757361676594888c05656167657294898c0d65616765725f74726163696e6794898c136e6f5f65616765725f6f6e5f776f726b65727394898c136576616c756174696f6e5f696e74657276616c944e8c176576616c756174696f6e5f6e756d5f657069736f646573944b0a8c116576616c756174696f6e5f636f6e666967947d94288c146578706c6f726174696f6e5f6672616374696f6e944b008c156578706c6f726174696f6e5f66696e616c5f657073944b00758c0c73616d706c655f6173796e6394898c126f62736572766174696f6e5f66696c746572948c084e6f46696c746572948c1373796e6368726f6e697a655f66696c7465727394888c0f74665f73657373696f6e5f61726773947d94288c1c696e7472615f6f705f706172616c6c656c69736d5f74687265616473944b028c1c696e7465725f6f705f706172616c6c656c69736d5f74687265616473944b028c0b6770755f6f7074696f6e73947d948c0c616c6c6f775f67726f7774689488738c146c6f675f6465766963655f706c6163656d656e7494898c0c6465766963655f636f756e74947d948c03435055944b01738c14616c6c6f775f736f66745f706c6163656d656e749488758c156c6f63616c5f74665f73657373696f6e5f61726773947d94286a360200004b086a370200004b08758c15636f6d70726573735f6f62736572766174696f6e7394888c17636f6c6c6563745f6d6574726963735f74696d656f7574944bb48c1a6d6574726963735f736d6f6f7468696e675f657069736f646573944b648c1272656d6f74655f776f726b65725f656e767394898c1872656d6f74655f656e765f62617463685f776169745f6d73944b008c0f6d696e5f697465725f74696d655f73944b1e8c1774696d6573746570735f7065725f697465726174696f6e944da8618c0473656564944e8c136e756d5f637075735f7065725f776f726b6572944b018c136e756d5f677075735f7065725f776f726b6572944b008c1b637573746f6d5f7265736f75726365735f7065725f776f726b6572947d948c136e756d5f637075735f666f725f647269766572944b068c066d656d6f7279944b008c136f626a6563745f73746f72655f6d656d6f7279944b008c116d656d6f72795f7065725f776f726b6572944b008c1e6f626a6563745f73746f72655f6d656d6f72795f7065725f776f726b6572944b008c05696e707574948c0773616d706c6572948c10696e7075745f6576616c756174696f6e945d94288c026973948c0377697394658c12706f737470726f636573735f696e7075747394898c1373687566666c655f6275666665725f73697a65944b008c066f7574707574944e8c176f75747075745f636f6d70726573735f636f6c756d6e73945d94288c036f6273948c076e65775f6f627394658c146f75747075745f6d61785f66696c655f73697a65944a000000048c0a6d756c74696167656e74947d94288c08706f6c6963696573947d948c11706f6c6963795f6d617070696e675f666e944e8c11706f6c69636965735f746f5f747261696e944e758c096e756d5f61746f6d73944b338c05765f6d696e9447c01c0000000000008c05765f6d61789447401c0000000000008c056e6f69737994898c067369676d613094473fe00000000000008c076475656c696e6794888c08646f75626c655f7194888c0768696464656e73945d944d0002618c066e5f73746570944b018c167363686564756c655f6d61785f74696d657374657073944aa08601006a2e020000473fb999999999999a6a2f020000473f947ae147ae147b8c1a7461726765745f6e6574776f726b5f7570646174655f66726571944a20a107008c06736f66745f7194898c0c736f66746d61785f74656d7094473ff00000000000008c0f706172616d657465725f6e6f69736594898c0b6275666665725f73697a65944a80841e008c127072696f726974697a65645f7265706c617994888c187072696f726974697a65645f7265706c61795f616c70686194473fe33333333333338c177072696f726974697a65645f7265706c61795f6265746194473fd999999999999a8c17626574615f616e6e65616c696e675f6672616374696f6e94473fc999999999999a8c1d66696e616c5f7072696f726974697a65645f7265706c61795f6265746194473fd999999999999a8c167072696f726974697a65645f7265706c61795f65707394473eb0c6f7a0b5ed8d8c0b6c725f7363686564756c65944e8c0c6164616d5f657073696c6f6e94473f00624dd2f1a9fc8c12677261645f6e6f726d5f636c697070696e67944b288c0f6c6561726e696e675f737461727473944d50c38c167065725f776f726b65725f6578706c6f726174696f6e94888c1a776f726b65725f736964655f7072696f726974697a6174696f6e9488758c1274696d655f73696e63655f726573746f7265944740d17ac5e2cc00008c1774696d6573746570735f73696e63655f726573746f7265944a85eaea028c18697465726174696f6e735f73696e63655f726573746f7265944df4018c0470657266947d94288c106370755f7574696c5f70657263656e74946817681d4308f28b25bf58f2534094869452948c1072616d5f7574696c5f70657263656e74946817681d4308f807192a3b6c524094869452948c116770755f7574696c5f70657263656e7430946817681d4308d8822dd8822dc83f94869452948c127672616d5f7574696c5f70657263656e7430946817681d430817c4049bf0af993f9486945294758c136e756d5f6865616c7468795f776f726b657273944b186a540100006a550100006a560100006a5701000075756275626a600100002981947d94286a630100004de8036810680b2981947d9428680e680f68108ca22f686f6d652f6361726c2f7261795f726573756c74732f636c75737465722d617065782d64656661756c742d6e737465702d312d6c61726765722d657073696c6f6e2d6770752f4c6567616c416374696f6e417065785f48616e6162695f65623339343431325f323032302d30332d32345f31392d34342d3437617078725f315f712f636865636b706f696e745f313030302f636865636b706f696e742d313030309468127d94288c12657069736f64655f7265776172645f6d6178946817681d4308000000000000344094869452948c12657069736f64655f7265776172645f6d696e946817681d4308000000000000000094869452948c13657069736f64655f7265776172645f6d65616e946817681d430828904acecb222c4094869452948c10657069736f64655f6c656e5f6d65616e946817681d4308437e56c67bad4f4094869452948c12657069736f6465735f746869735f69746572944d03028c11706f6c6963795f7265776172645f6d696e947d948c11706f6c6963795f7265776172645f6d6178947d948c12706f6c6963795f7265776172645f6d65616e947d948c0e637573746f6d5f6d657472696373947d948c0c73616d706c65725f70657266947d94288c106d65616e5f656e765f776169745f6d73946817681d4308a1896d175051454094869452948c126d65616e5f70726f63657373696e675f6d73946817681d430876e0e4e6fb8f2c4094869452948c116d65616e5f696e666572656e63655f6d73946817681d430834291638baad17409486945294758c146f66665f706f6c6963795f657374696d61746f72947d948c04696e666f947d94288c0f6d696e5f6578706c6f726174696f6e944700000000000000008c0f6d61785f6578706c6f726174696f6e94473fd999999999999a8c126e756d5f7461726765745f75706461746573944db9018c116e756d5f73746570735f747261696e6564944a001c290d8c116e756d5f73746570735f73616d706c6564944a4b64ce058c1173616d706c655f7468726f756768707574944700000000000000008c10747261696e5f7468726f7567687075749447409470e353f7ced98c106e756d5f7765696768745f73796e6373944a315b03008c136e756d5f73616d706c65735f64726f70706564944d9f1c8c0d6c6561726e65725f7175657565947d94288c0a73697a655f636f756e74944aec3b17008c0973697a655f6d65616e94473ff051eb851eb8528c0873697a655f73746494473ff35489a0c856df8c0e73697a655f7175616e74696c6573945d9428470000000000000000470000000000000000473ff000000000000047400800000000000047401000000000000065758c0e7265706c61795f73686172645f30947d94288c116164645f62617463685f74696d655f6d73946817681d430804560e2db2cd464094869452948c0e7265706c61795f74696d655f6d73946817681d430846b6f3fdd4905f4094869452948c197570646174655f7072696f7269746965735f74696d655f6d73946817681d43083f355eba49645a4094869452948c15706f6c6963795f64656661756c745f706f6c696379947d94288c0b61646465645f636f756e74944a3f4674018c0d73616d706c65645f636f756e74944a00f24f038c0e6573745f73697a655f6279746573944a841d2f538c0b6e756d5f656e7472696573944a20a1070075758c076c6561726e6572947d948c0e64656661756c745f706f6c696379947d94288c066375725f6c72946817681d4308000000e04d62403f94869452948c0d6d65616e5f74645f6572726f7294681768794304363a0a4094869452948c06715f6c6f7373946817687943044791943d94869452948c056d6f64656c947d947573758c1374696d6573746570735f746869735f69746572944a7a7901008c04646f6e6594898c0f74696d6573746570735f746f74616c944a4b64ce058c0e657069736f6465735f746f74616c944a40b107008c12747261696e696e675f697465726174696f6e944de8038c0d6578706572696d656e745f6964948c206565346135633264386365633437323162323039626330363866666361383835948c0464617465948c13323032302d30332d32355f30352d33382d3233948c0974696d657374616d70944a4fee7a5e8c1074696d655f746869735f697465725f73944740416e4a180000008c0c74696d655f746f74616c5f73944740e15bdcb61580008c03706964944ded058c08686f73746e616d65948c1a7261792d617065782d6770752d686561642d3436353935383239948c076e6f64655f6970948c0d31302e3132382e31352e323232948c06636f6e666967947d94288c0b6e756d5f776f726b657273944b188c136e756d5f656e76735f7065725f776f726b6572944b088c1173616d706c655f62617463685f73697a65944b328c0a62617463685f6d6f6465948c117472756e636174655f657069736f646573948c086e756d5f67707573944b018c10747261696e5f62617463685f73697a65944d00028c056d6f64656c947d94288c0c636f6e765f66696c74657273944e8c0f636f6e765f61637469766174696f6e948c0472656c75948c1066636e65745f61637469766174696f6e948c0472656c75948c0d66636e65745f68696464656e73945d944d0002618c0c667265655f6c6f675f73746494898c0f6e6f5f66696e616c5f6c696e65617294898c0f76665f73686172655f6c617965727394888c087573655f6c73746d94898c0b6d61785f7365715f6c656e944b148c0e6c73746d5f63656c6c5f73697a65944d00018c1b6c73746d5f7573655f707265765f616374696f6e5f72657761726494898c0b73746174655f7368617065944e8c0a6672616d65737461636b94888c0364696d944b548c09677261797363616c6594898c097a65726f5f6d65616e94888c13637573746f6d5f70726570726f636573736f72948c214f726967696e616c537061636553616d706c696e6750726570726f636573736f72948c0c637573746f6d5f6d6f64656c948c0948616e6162695f4643948c12637573746f6d5f616374696f6e5f64697374944e8c0e637573746f6d5f6f7074696f6e73947d94758c096f7074696d697a6572947d94288c156d61785f7765696768745f73796e635f64656c6179944d90018c186e756d5f7265706c61795f6275666665725f736861726473944b048c0564656275679489758c0567616d6d6194473fefae147ae147ae8c07686f72697a6f6e944e8c0c736f66745f686f72697a6f6e94898c0e6e6f5f646f6e655f61745f656e6494898c0a656e765f636f6e666967947d94288c06636f6c6f7273944b058c0572616e6b73944b058c07706c6179657273944b048c0968616e645f73697a65944b048c166d61785f696e666f726d6174696f6e5f746f6b656e73944b088c0f6d61785f6c6966655f746f6b656e73944b038c106f62736572766174696f6e5f74797065944b018c0d7475726e5f737461636b696e67944b00758c03656e76948c0648616e616269948c116e6f726d616c697a655f616374696f6e7394898c0c636c69705f72657761726473944e8c0c636c69705f616374696f6e7394888c1170726570726f636573736f725f70726566948c08646565706d696e64948c026c7294473f40624dd2f1a9fc8c076d6f6e69746f7294898c096c6f675f6c6576656c948c045741524e948c0963616c6c6261636b73947d94288c106f6e5f657069736f64655f7374617274944e8c0f6f6e5f657069736f64655f73746570944e8c0e6f6e5f657069736f64655f656e64944e8c0d6f6e5f73616d706c655f656e64944e8c0f6f6e5f747261696e5f726573756c74944e8c136f6e5f706f737470726f636573735f7472616a944e758c1669676e6f72655f776f726b65725f6661696c7572657394888c0d6c6f675f7379735f757361676594888c05656167657294898c0d65616765725f74726163696e6794898c136e6f5f65616765725f6f6e5f776f726b65727394898c136576616c756174696f6e5f696e74657276616c944e8c176576616c756174696f6e5f6e756d5f657069736f646573944b0a8c116576616c756174696f6e5f636f6e666967947d94288c146578706c6f726174696f6e5f6672616374696f6e944b008c156578706c6f726174696f6e5f66696e616c5f657073944b00758c0c73616d706c655f6173796e6394898c126f62736572766174696f6e5f66696c746572948c084e6f46696c746572948c1373796e6368726f6e697a655f66696c7465727394888c0f74665f73657373696f6e5f61726773947d94288c1c696e7472615f6f705f706172616c6c656c69736d5f74687265616473944b028c1c696e7465725f6f705f706172616c6c656c69736d5f74687265616473944b028c0b6770755f6f7074696f6e73947d948c0c616c6c6f775f67726f7774689488738c146c6f675f6465766963655f706c6163656d656e7494898c0c6465766963655f636f756e74947d948c03435055944b01738c14616c6c6f775f736f66745f706c6163656d656e749488758c156c6f63616c5f74665f73657373696f6e5f61726773947d94286a6d0300004b086a6e0300004b08758c15636f6d70726573735f6f62736572766174696f6e7394888c17636f6c6c6563745f6d6574726963735f74696d656f7574944bb48c1a6d6574726963735f736d6f6f7468696e675f657069736f646573944b648c1272656d6f74655f776f726b65725f656e767394898c1872656d6f74655f656e765f62617463685f776169745f6d73944b008c0f6d696e5f697465725f74696d655f73944b1e8c1774696d6573746570735f7065725f697465726174696f6e944da8618c0473656564944e8c136e756d5f637075735f7065725f776f726b6572944b018c136e756d5f677075735f7065725f776f726b6572944b008c1b637573746f6d5f7265736f75726365735f7065725f776f726b6572947d948c136e756d5f637075735f666f725f647269766572944b068c066d656d6f7279944b008c136f626a6563745f73746f72655f6d656d6f7279944b008c116d656d6f72795f7065725f776f726b6572944b008c1e6f626a6563745f73746f72655f6d656d6f72795f7065725f776f726b6572944b008c05696e707574948c0773616d706c6572948c10696e7075745f6576616c756174696f6e945d94288c026973948c0377697394658c12706f737470726f636573735f696e7075747394898c1373687566666c655f6275666665725f73697a65944b008c066f7574707574944e8c176f75747075745f636f6d70726573735f636f6c756d6e73945d94288c036f6273948c076e65775f6f627394658c146f75747075745f6d61785f66696c655f73697a65944a000000048c0a6d756c74696167656e74947d94288c08706f6c6963696573947d948c11706f6c6963795f6d617070696e675f666e944e8c11706f6c69636965735f746f5f747261696e944e758c096e756d5f61746f6d73944b338c05765f6d696e9447c01c0000000000008c05765f6d61789447401c0000000000008c056e6f69737994898c067369676d613094473fe00000000000008c076475656c696e6794888c08646f75626c655f7194888c0768696464656e73945d944d0002618c066e5f73746570944b018c167363686564756c655f6d61785f74696d657374657073944aa08601006a65030000473fb999999999999a6a66030000473f947ae147ae147b8c1a7461726765745f6e6574776f726b5f7570646174655f66726571944a20a107008c06736f66745f7194898c0c736f66746d61785f74656d7094473ff00000000000008c0f706172616d657465725f6e6f69736594898c0b6275666665725f73697a65944a80841e008c127072696f726974697a65645f7265706c617994888c187072696f726974697a65645f7265706c61795f616c70686194473fe33333333333338c177072696f726974697a65645f7265706c61795f6265746194473fd999999999999a8c17626574615f616e6e65616c696e675f6672616374696f6e94473fc999999999999a8c1d66696e616c5f7072696f726974697a65645f7265706c61795f6265746194473fd999999999999a8c167072696f726974697a65645f7265706c61795f65707394473eb0c6f7a0b5ed8d8c0b6c725f7363686564756c65944e8c0c6164616d5f657073696c6f6e94473f00624dd2f1a9fc8c12677261645f6e6f726d5f636c697070696e67944b288c0f6c6561726e696e675f737461727473944d50c38c167065725f776f726b65725f6578706c6f726174696f6e94888c1a776f726b65725f736964655f7072696f726974697a6174696f6e9488758c1274696d655f73696e63655f726573746f7265944740e15bdcb61580008c1774696d6573746570735f73696e63655f726573746f7265944a4b64ce058c18697465726174696f6e735f73696e63655f726573746f7265944de8038c0470657266947d94288c106370755f7574696c5f70657263656e74946817681d43082401dfbc9a18544094869452948c1072616d5f7574696c5f70657263656e74946817681d4308b8fd4186cace524094869452948c116770755f7574696c5f70657263656e7430946817681d43084ae61ced565ac73f94869452948c127672616d5f7574696c5f70657263656e7430946817681d430817c4049bf0af993f9486945294758c136e756d5f6865616c7468795f776f726b657273944b186a540100006a550100006a560100006a5701000075756275626a600100002981947d94286a630100004d03046810680c7562658c0b5f6d656d62657273686970948f94286a640100006a9b020000680c9075622e"
+      },
+      "restoring_from": null,
+      "num_failures": 0,
+      "num_consecutive_start_attempts": 0,
+      "results": "80044e2e",
+      "best_result": "80044e2e",
+      "param_config": "80044e2e",
+      "extra_arg": "80044e2e",
+      "_nonjson_fields": [
+        "loggers",
+        "sync_to_driver_fn",
+        "results",
+        "best_result",
+        "param_config",
+        "extra_arg"
+      ],
+      "__logger_started__": false
+    }
+  ],
+  "runner_data": {
+    "_global_time_limit": Infinity,
+    "_total_time": 36500.881721019745,
+    "_iteration": 1028,
+    "_verbose": true,
+    "_server_port": 4321,
+    "_local_checkpoint_dir": "/home/carl/ray_results/cluster-apex-default-nstep-1-larger-epsilon-gpu",
+    "_remote_checkpoint_dir": "gs://ray-cluster-out/cluster-apex-default-nstep-1-larger-epsilon-gpu",
+    "_resumed": false,
+    "_start_time": 1585079087.7120972,
+    "_last_checkpoint_time": 1585115654.2098892,
+    "_checkpoint_period": 10,
+    "_session_str": "2020-03-24_19-44-47",
+    "checkpoint_file": "/home/carl/ray_results/cluster-apex-default-nstep-1-larger-epsilon-gpu/experiment_state-2020-03-24_19-44-47.json",
+    "launch_web_server": false
+  },
+  "stats": {
+    "start_time": 1585079087.7120972,
+    "timestamp": 1585115654.2098892
+  }
+}
