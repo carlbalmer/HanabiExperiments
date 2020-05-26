@@ -7,10 +7,10 @@ provider:
     type: gcp
     region: us-central1
     availability_zone: us-central1-c
-    project_id: hanabi-ma-thesis
+    project_id:
 
 auth:
-    ssh_user: carl
+    ssh_user: ubuntu
 
 head_node:
     machineType: custom-6-39936
